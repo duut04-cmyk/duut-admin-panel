@@ -1,15 +1,13 @@
 import type { OrchestrationRecord } from "@/data/orchestrationTypes";
-import type { PlatformMetrics as PlatformMetricsType } from "@/data/orchestrationMetrics";
-import {
-  formatDecisionTime,
-  formatPercent,
-  getDeliveredCount,
-} from "@/data/orchestrationMetrics";
+import type { DashboardMetrics } from "@/data/dashboardMetrics";
+import { resolveOverviewTrend } from "@/data/overviewDisplay";
+import { formatDecisionTime, formatPercent } from "@/data/orchestrationMetrics";
 import OverviewMetricCard, {
-  BookingIcon,
-  ClockIcon,
   DeliveredIcon,
-  DeliveriesIcon,
+  InProgressIcon,
+  PackageIcon,
+  StopwatchIcon,
+  TicketIcon,
 } from "./OverviewMetricCard";
 import {
   getCumulativeDeliveredSparkline,
@@ -19,56 +17,75 @@ import {
 } from "./sparklineUtils";
 
 type PlatformMetricsProps = {
-  metrics: PlatformMetricsType;
+  metrics: DashboardMetrics;
   records: OrchestrationRecord[];
+  className?: string;
 };
 
 export default function PlatformMetrics({
   metrics,
   records,
+  className = "",
 }: PlatformMetricsProps) {
-  const deliveredCount = getDeliveredCount(records);
-  const deliveredRate =
-    metrics.totalDeliveries === 0
-      ? 0
-      : (deliveredCount / metrics.totalDeliveries) * 100;
-
   return (
-    <section aria-labelledby="platform-metrics-heading">
+    <section
+      aria-labelledby="platform-metrics-heading"
+      className={className}
+    >
       <h2 id="platform-metrics-heading" className="sr-only">
         Platform metrics
       </h2>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid min-w-0 grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
         <OverviewMetricCard
           title="Total Deliveries"
-          value={metrics.totalDeliveries}
-          supportingText="All delivery requests"
+          value={metrics.totalDeliveries.toLocaleString()}
+          trend={resolveOverviewTrend(
+            "totalDeliveries",
+            metrics.trends.totalDeliveries,
+          )}
           theme="orange"
-          icon={<DeliveriesIcon />}
+          icon={<PackageIcon />}
           sparklineValues={getCumulativeDeliverySparkline(records)}
         />
         <OverviewMetricCard
           title="Delivered"
-          value={deliveredCount}
-          supportingText={`${formatPercent(deliveredRate)} of total`}
+          value={metrics.deliveredCount.toLocaleString()}
+          trend={resolveOverviewTrend("delivered", metrics.trends.delivered)}
           theme="green"
           icon={<DeliveredIcon />}
           sparklineValues={getCumulativeDeliveredSparkline(records)}
         />
         <OverviewMetricCard
+          title="In Progress"
+          value={metrics.inProgressCount.toLocaleString()}
+          trend={resolveOverviewTrend(
+            "inProgress",
+            metrics.trends.inProgress,
+          )}
+          theme="blue"
+          icon={<InProgressIcon />}
+          sparklineValues={getCumulativeDeliverySparkline(records)}
+        />
+        <OverviewMetricCard
           title="Booking Success Rate"
           value={formatPercent(metrics.bookingSuccessRate)}
-          supportingText={`${metrics.successfulBookings} successful bookings`}
-          theme="blue"
-          icon={<BookingIcon />}
+          trend={resolveOverviewTrend(
+            "bookingSuccessRate",
+            metrics.trends.bookingSuccessRate,
+          )}
+          theme="purple"
+          icon={<TicketIcon />}
           sparklineValues={getRollingBookingSuccessSparkline(records)}
         />
         <OverviewMetricCard
           title="Avg. Orchestration Time"
           value={formatDecisionTime(metrics.averageDecisionTimeMs)}
-          supportingText={`${formatDecisionTime(metrics.fastestDecisionTimeMs)} – ${formatDecisionTime(metrics.slowestDecisionTimeMs)} range`}
-          theme="purple"
-          icon={<ClockIcon />}
+          trend={resolveOverviewTrend(
+            "avgOrchestrationTime",
+            metrics.trends.avgOrchestrationTime,
+          )}
+          theme="pink"
+          icon={<StopwatchIcon />}
           sparklineValues={getDecisionTimeSparkline(records)}
         />
       </div>

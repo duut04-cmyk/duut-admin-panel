@@ -276,7 +276,7 @@ export default function OrchestrationFunnel({
         Orchestration Funnel
       </h2>
       <p className="mt-1 text-small text-muted-foreground">
-        How Dutt evaluates and filters delivery services.
+        How Doot evaluates and filters delivery services.
       </p>
 
       <div className="mt-8 grid grid-cols-[minmax(220px,56%)_1fr] items-stretch gap-x-8 sm:gap-x-10">

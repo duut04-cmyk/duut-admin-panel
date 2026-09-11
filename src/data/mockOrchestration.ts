@@ -76,7 +76,7 @@ function buildEvents(
       deliveryId,
       type: "orchestration_started",
       timestamp: addMs(createdAt, orchestrationStartMs),
-      description: "Dutt orchestration engine started evaluating delivery services.",
+      description: "Doot orchestration engine started evaluating delivery services.",
     },
     {
       id: `${deliveryId}-evt-3`,
@@ -179,7 +179,7 @@ function buildDecision(
   const startedAt = addMs(createdAt, 400);
   return {
     deliveryId,
-    orchestrationId: `ORCH-${deliveryId.replace("DUTT-", "")}`,
+    orchestrationId: `ORCH-${deliveryId.replace("DOOT-", "")}`,
     startedAt,
     completedAt: addMs(startedAt, durationMs),
     durationMs,
@@ -232,7 +232,7 @@ function createRecord(
 const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
   createRecord(
     {
-      deliveryId: "DUTT-1042",
+      deliveryId: "DOOT-1042",
       createdAt: "2026-09-06T09:12:00.000Z",
       pickup: {
         address: "Unit 4, Andheri Industrial Estate, Andheri East",
@@ -364,7 +364,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
     },
     {
       bookingId: "BKG-1042",
-      deliveryId: "DUTT-1042",
+      deliveryId: "DOOT-1042",
       serviceId: "flashdrop",
       serviceName: "FlashDrop",
       requestedAt: "2026-08-28T09:12:02.200Z",
@@ -384,7 +384,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
 
   createRecord(
     {
-      deliveryId: "DUTT-1041",
+      deliveryId: "DOOT-1041",
       createdAt: "2026-08-31T11:30:00.000Z",
       pickup: {
         address: "Plot 18, Electronic City Phase 1",
@@ -498,7 +498,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
     },
     {
       bookingId: "BKG-1041",
-      deliveryId: "DUTT-1041",
+      deliveryId: "DOOT-1041",
       serviceId: "movex",
       serviceName: "MoveX",
       requestedAt: "2026-08-27T11:30:03.600Z",
@@ -518,7 +518,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
 
   createRecord(
     {
-      deliveryId: "DUTT-1040",
+      deliveryId: "DOOT-1040",
       createdAt: "2026-08-31T08:45:00.000Z",
       pickup: {
         address: "Warehouse B, Hinjawadi Phase 2",
@@ -649,7 +649,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
     },
     {
       bookingId: "BKG-1040",
-      deliveryId: "DUTT-1040",
+      deliveryId: "DOOT-1040",
       serviceId: "cityfleet",
       serviceName: "CityFleet",
       requestedAt: "2026-08-26T08:45:02.900Z",
@@ -669,7 +669,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
 
   createRecord(
     {
-      deliveryId: "DUTT-1039",
+      deliveryId: "DOOT-1039",
       createdAt: "2026-08-25T14:20:00.000Z",
       pickup: {
         address: "Block C, Gachibowli Tech Park",
@@ -800,7 +800,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
     },
     {
       bookingId: "BKG-1039",
-      deliveryId: "DUTT-1039",
+      deliveryId: "DOOT-1039",
       serviceId: "swiftgo",
       serviceName: "SwiftGo",
       requestedAt: "2026-08-25T14:20:06.900Z",
@@ -820,7 +820,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
 
   createRecord(
     {
-      deliveryId: "DUTT-1038",
+      deliveryId: "DOOT-1038",
       createdAt: "2026-08-31T06:15:00.000Z",
       pickup: {
         address: "Sector 62, Noida Logistics Hub",
@@ -936,7 +936,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
     },
     {
       bookingId: "BKG-1038",
-      deliveryId: "DUTT-1038",
+      deliveryId: "DOOT-1038",
       serviceId: "flashdrop",
       serviceName: "FlashDrop",
       requestedAt: "2026-08-24T06:15:01.700Z",
@@ -956,7 +956,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
 
   createRecord(
     {
-      deliveryId: "DUTT-1037",
+      deliveryId: "DOOT-1037",
       createdAt: "2026-08-31T10:00:00.000Z",
       pickup: {
         address: "Ambattur Industrial Estate, Unit 7",
@@ -1086,7 +1086,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
     },
     {
       bookingId: "BKG-1037",
-      deliveryId: "DUTT-1037",
+      deliveryId: "DOOT-1037",
       serviceId: "cityfleet",
       serviceName: "CityFleet",
       requestedAt: "2026-08-23T10:00:02.600Z",
@@ -1106,7 +1106,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
 
   createRecord(
     {
-      deliveryId: "DUTT-1036",
+      deliveryId: "DOOT-1036",
       createdAt: "2026-09-03T07:30:00.000Z",
       pickup: {
         address: "Lower Parel, Phoenix Mills Annex",
@@ -1238,7 +1238,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
     },
     {
       bookingId: "BKG-1036",
-      deliveryId: "DUTT-1036",
+      deliveryId: "DOOT-1036",
       serviceId: "cityfleet",
       serviceName: "CityFleet",
       requestedAt: "2026-08-22T07:30:03.200Z",
@@ -1258,7 +1258,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
 
   createRecord(
     {
-      deliveryId: "DUTT-1035",
+      deliveryId: "DOOT-1035",
       createdAt: "2026-09-03T13:45:00.000Z",
       pickup: {
         address: "Whitefield Tech Park, Block 3",
@@ -1372,7 +1372,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
     },
     {
       bookingId: "BKG-1035",
-      deliveryId: "DUTT-1035",
+      deliveryId: "DOOT-1035",
       serviceId: "cityfleet",
       serviceName: "CityFleet",
       requestedAt: "2026-08-21T13:45:02.900Z",
@@ -1392,7 +1392,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
 
   createRecord(
     {
-      deliveryId: "DUTT-1034",
+      deliveryId: "DOOT-1034",
       createdAt: "2026-08-22T16:10:00.000Z",
       pickup: {
         address: "Koregaon Park, Lane 5",
@@ -1522,7 +1522,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
     },
     {
       bookingId: "BKG-1034",
-      deliveryId: "DUTT-1034",
+      deliveryId: "DOOT-1034",
       serviceId: "movex",
       serviceName: "MoveX",
       requestedAt: "2026-08-20T16:10:02.700Z",
@@ -1542,7 +1542,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
 
   createRecord(
     {
-      deliveryId: "DUTT-1033",
+      deliveryId: "DOOT-1033",
       createdAt: "2026-08-19T09:00:00.000Z",
       pickup: {
         address: "Madhapur, Cyber Towers Annex",
@@ -1657,7 +1657,7 @@ const ORCHESTRATION_RECORDS: OrchestrationRecord[] = [
     },
     {
       bookingId: "BKG-1033",
-      deliveryId: "DUTT-1033",
+      deliveryId: "DOOT-1033",
       serviceId: "flashdrop",
       serviceName: "FlashDrop",
       requestedAt: "2026-08-19T09:00:01.700Z",

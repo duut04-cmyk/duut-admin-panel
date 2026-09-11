@@ -63,7 +63,7 @@ export default function OrchestrationPage() {
   return (
     <AdminShell
       title="Orchestration"
-      subtitle="Inspect how Dutt evaluates, selects, and books delivery services."
+      subtitle="Inspect how Doot evaluates, selects, and books delivery services."
     >
       <AdminContainer className="space-y-8 pb-10">
         <OrchestrationListSummary metrics={metrics} />

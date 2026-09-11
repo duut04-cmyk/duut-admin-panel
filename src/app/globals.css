@@ -8,20 +8,33 @@
 
   /* Semantic */
   --background: var(--color-white);
-  --foreground: var(--color-black);
-  --muted-foreground: rgba(10, 10, 10, 0.55);
-  --border: rgba(10, 10, 10, 0.1);
+  --foreground: #0f172a;
+  --muted-foreground: rgba(15, 23, 42, 0.55);
+  --border: rgba(15, 23, 42, 0.1);
   --surface: #f5f5f5;
+  --page-canvas: #f8fafc;
   --surface-accent: #fff7ed;
   --accent: var(--color-saffron);
   --accent-foreground: var(--color-white);
+  --link: #2563eb;
 
   /* Admin semantic */
   --admin-success: #15803d;
   --admin-warning: #b45309;
   --admin-danger: #b91c1c;
+  --admin-pink: #ec4899;
+  --nav-active-bg: #fff7ed;
+  --nav-active-text: #f97316;
+
+  /* Shell */
+  --shell-topbar-height: 56px;
+  --shell-sidebar-width: 240px;
+  --shell-right-rail-width: 340px;
 
   /* Radius */
+  --radius-control: 4px;
+  --radius-search: 4px;
+  --radius-card: 12px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -54,16 +67,24 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-surface: var(--surface);
+  --color-page-canvas: var(--page-canvas);
   --color-surface-accent: var(--surface-accent);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-link: var(--link);
   --color-white: var(--color-white);
   --color-black: var(--color-black);
   --color-saffron: var(--color-saffron);
   --color-admin-success: var(--admin-success);
   --color-admin-warning: var(--admin-warning);
   --color-admin-danger: var(--admin-danger);
+  --color-admin-pink: var(--admin-pink);
+  --color-nav-active-bg: var(--nav-active-bg);
+  --color-nav-active-text: var(--nav-active-text);
 
+  --radius-control: var(--radius-control);
+  --radius-search: var(--radius-search);
+  --radius-card: var(--radius-card);
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);

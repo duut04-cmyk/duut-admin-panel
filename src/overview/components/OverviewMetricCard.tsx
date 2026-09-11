@@ -1,9 +1,10 @@
 "use client";
 
 import { useId, type ReactNode } from "react";
+import type { MetricTrend } from "@/data/dashboardMetrics";
 import { buildSparklinePath } from "./sparklineUtils";
 
-export type MetricTheme = "orange" | "green" | "blue" | "purple";
+export type MetricTheme = "orange" | "green" | "blue" | "purple" | "pink";
 
 const themeStyles: Record<
   MetricTheme,
@@ -13,54 +14,122 @@ const themeStyles: Record<
     stroke: string;
     fillStart: string;
     fillEnd: string;
+    trendPositive: string;
+    trendNegative: string;
   }
 > = {
   orange: {
     iconBg: "bg-orange-100",
     iconColor: "text-orange-500",
     stroke: "#f97316",
-    fillStart: "rgba(249, 115, 22, 0.22)",
+    fillStart: "rgba(249, 115, 22, 0.18)",
     fillEnd: "rgba(249, 115, 22, 0)",
+    trendPositive: "text-emerald-600",
+    trendNegative: "text-red-600",
   },
   green: {
     iconBg: "bg-emerald-100",
     iconColor: "text-emerald-600",
     stroke: "#10b981",
-    fillStart: "rgba(16, 185, 129, 0.22)",
+    fillStart: "rgba(16, 185, 129, 0.18)",
     fillEnd: "rgba(16, 185, 129, 0)",
+    trendPositive: "text-emerald-600",
+    trendNegative: "text-red-600",
   },
   blue: {
     iconBg: "bg-blue-100",
     iconColor: "text-blue-600",
     stroke: "#3b82f6",
-    fillStart: "rgba(59, 130, 246, 0.22)",
+    fillStart: "rgba(59, 130, 246, 0.18)",
     fillEnd: "rgba(59, 130, 246, 0)",
+    trendPositive: "text-emerald-600",
+    trendNegative: "text-red-600",
   },
   purple: {
     iconBg: "bg-violet-100",
     iconColor: "text-violet-600",
     stroke: "#8b5cf6",
-    fillStart: "rgba(139, 92, 246, 0.22)",
+    fillStart: "rgba(139, 92, 246, 0.18)",
     fillEnd: "rgba(139, 92, 246, 0)",
+    trendPositive: "text-emerald-600",
+    trendNegative: "text-red-600",
+  },
+  pink: {
+    iconBg: "bg-pink-100",
+    iconColor: "text-admin-pink",
+    stroke: "#ec4899",
+    fillStart: "rgba(236, 72, 153, 0.18)",
+    fillEnd: "rgba(236, 72, 153, 0)",
+    trendPositive: "text-emerald-600",
+    trendNegative: "text-admin-pink",
   },
 };
 
 const SPARKLINE_WIDTH = 300;
-const SPARKLINE_HEIGHT = 44;
+const SPARKLINE_HEIGHT = 36;
 
 type OverviewMetricCardProps = {
   title: string;
   value: ReactNode;
   supportingText?: string;
+  trend?: MetricTrend;
   theme: MetricTheme;
   icon: ReactNode;
   sparklineValues: number[];
 };
 
+function TrendArrow({ up }: { up: boolean }) {
+  return (
+    <svg
+      className="h-3 w-3 shrink-0"
+      viewBox="0 0 12 12"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      aria-hidden="true"
+    >
+      {up ? (
+        <path d="M6 9V3M6 3L3 6M6 3l3 3" strokeLinecap="round" strokeLinejoin="round" />
+      ) : (
+        <path d="M6 3v6M6 9L3 6M6 9l3-3" strokeLinecap="round" strokeLinejoin="round" />
+      )}
+    </svg>
+  );
+}
+
+function MetricTrendLine({
+  trend,
+  theme,
+}: {
+  trend: MetricTrend;
+  theme: MetricTheme;
+}) {
+  const styles = themeStyles[theme];
+  const isUp = trend.direction === "positive";
+  const colorClass =
+    trend.direction === "neutral"
+      ? "text-muted-foreground"
+      : isUp
+        ? styles.trendPositive
+        : styles.trendNegative;
+
+  const displayValue = trend.value.replace(/^[+-]/, "");
+
+  return (
+    <p className={`mt-2 flex flex-wrap items-center gap-1 text-caption font-medium ${colorClass}`}>
+      {trend.direction !== "neutral" && <TrendArrow up={isUp} />}
+      <span>
+        {displayValue} vs. last 30 days
+      </span>
+    </p>
+  );
+}
+
 export default function OverviewMetricCard({
   title,
   value,
   supportingText,
+  trend,
   theme,
   icon,
   sparklineValues,
@@ -74,30 +143,31 @@ export default function OverviewMetricCard({
   );
 
   return (
-    <article className="flex flex-col rounded-xl border border-border/80 bg-background shadow-sm">
-      <div className="flex flex-col px-5 pb-5 pt-5">
-        <div className="flex items-center gap-3">
+    <article className="flex flex-col rounded-card border border-border/60 bg-background shadow-sm">
+      <div className="flex flex-col px-4 pb-3 pt-4">
+        <div className="flex items-center gap-2.5">
           <span
-            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${styles.iconBg} ${styles.iconColor}`}
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${styles.iconBg} ${styles.iconColor}`}
             aria-hidden="true"
           >
             {icon}
           </span>
-          <p className="text-body font-semibold text-foreground">{title}</p>
+          <p className="text-small font-medium text-muted-foreground">{title}</p>
         </div>
 
-        <p className="mt-4 text-[2rem] font-bold leading-none tracking-tight text-foreground">
+        <p className="mt-3 text-[1.75rem] font-bold leading-none tracking-tight text-foreground">
           {value}
         </p>
 
-        {supportingText && (
-          <p className="mt-2 text-small text-muted-foreground">{supportingText}</p>
+        {trend && <MetricTrendLine trend={trend} theme={theme} />}
+        {!trend && supportingText && (
+          <p className="mt-2 text-caption text-muted-foreground">{supportingText}</p>
         )}
 
-        <div className="mt-4 w-full" aria-hidden="true">
+        <div className="mt-3 w-full" aria-hidden="true">
           <svg
             viewBox={`0 0 ${SPARKLINE_WIDTH} ${SPARKLINE_HEIGHT}`}
-            className="block h-11 w-full"
+            className="block h-9 w-full"
             preserveAspectRatio="none"
           >
             <defs>
@@ -119,7 +189,7 @@ export default function OverviewMetricCard({
             <circle
               cx={lastPoint.x}
               cy={lastPoint.y}
-              r="3"
+              r="2.5"
               fill={styles.stroke}
               vectorEffect="non-scaling-stroke"
             />
@@ -130,10 +200,21 @@ export default function OverviewMetricCard({
   );
 }
 
-export function DeliveriesIcon() {
+export function PackageIcon() {
   return (
-    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-      <path d="M3 5a2 2 0 0 1 2-2h2.5l1 2H15a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5z" />
+    <svg
+      className="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      aria-hidden="true"
+    >
+      <path
+        d="M3 6l7-3 7 3v8l-7 3-7-3V6z"
+        strokeLinejoin="round"
+      />
+      <path d="M10 3v15M3 6l7 4 7-4" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -153,23 +234,7 @@ export function DeliveredIcon() {
   );
 }
 
-export function BookingIcon() {
-  return (
-    <svg
-      className="h-5 w-5"
-      viewBox="0 0 20 20"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      aria-hidden="true"
-    >
-      <rect x="4" y="3" width="12" height="14" rx="1.5" />
-      <path d="M7 8h6M7 11h4" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-export function ClockIcon() {
+export function InProgressIcon() {
   return (
     <svg
       className="h-5 w-5"
@@ -181,6 +246,41 @@ export function ClockIcon() {
     >
       <circle cx="10" cy="10" r="7" />
       <path d="M10 6.5V10l2.5 2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function TicketIcon() {
+  return (
+    <svg
+      className="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      aria-hidden="true"
+    >
+      <path
+        d="M5 5h10a1 1 0 0 1 1 1v2a1.5 1.5 0 0 0 0 3v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1.5 1.5 0 0 0 0-3V6a1 1 0 0 1 1-1z"
+        strokeLinejoin="round"
+      />
+      <path d="M10 7v6" strokeLinecap="round" strokeDasharray="2 2" />
+    </svg>
+  );
+}
+
+export function StopwatchIcon() {
+  return (
+    <svg
+      className="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="11" r="6" />
+      <path d="M10 8v3.5l2 1.5M8 3h4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

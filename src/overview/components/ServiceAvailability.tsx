@@ -15,7 +15,7 @@ export default function ServiceAvailability({
     <section aria-labelledby="service-availability-heading">
       <AdminSectionHeader
         title="Service availability"
-        description="Fictional delivery services evaluated by Dutt orchestration."
+        description="Fictional delivery services evaluated by Doot orchestration."
       />
 
       <AdminCard className="mt-4 px-4 md:px-5">

@@ -155,7 +155,7 @@ export default function OrchestrationExplanation() {
         id="orchestration-explanation-heading"
         className="text-body font-semibold tracking-tight text-foreground md:text-subheading"
       >
-        How Dutt Orchestrates Deliveries
+        How Doot Orchestrates Deliveries
       </h2>
       <p className="mt-1 text-small leading-relaxed text-muted-foreground">
         Our 5-step process to deliver the best experience

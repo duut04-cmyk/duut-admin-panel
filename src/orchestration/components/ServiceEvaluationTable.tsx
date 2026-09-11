@@ -56,7 +56,7 @@ export default function ServiceEvaluationTable({
     <section aria-labelledby="service-evaluation-heading">
       <AdminSectionHeader
         title="Service evaluation"
-        description="Every service Dutt evaluated for this delivery."
+        description="Every service Doot evaluated for this delivery."
       />
 
       <div className="mt-4 space-y-3 md:hidden">

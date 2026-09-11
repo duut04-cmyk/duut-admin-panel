@@ -90,7 +90,7 @@ export function OverviewToolbar({
             type="button"
             aria-label="Open navigation menu"
             onClick={onMenuClick}
-            className="mt-1 inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-foreground shadow-sm transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:hidden"
+            className="mt-1 inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-control border border-border bg-background text-foreground shadow-sm transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:hidden"
           >
             <svg
               className="h-5 w-5"
@@ -109,7 +109,7 @@ export function OverviewToolbar({
             Overview
           </h1>
           <p className="mt-1.5 max-w-xl text-body text-muted-foreground">
-            Real-time visibility into Dutt&apos;s delivery orchestration
+            Real-time visibility into Doot&apos;s delivery orchestration
             performance.
           </p>
         </div>
@@ -122,7 +122,7 @@ export function OverviewToolbar({
           aria-label="Refresh overview data"
           onClick={onRefresh}
           disabled={refreshing}
-          className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-foreground shadow-sm transition-colors hover:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/25 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-control border border-border bg-background text-foreground shadow-sm transition-colors hover:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/25 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <RefreshIcon />
         </button>

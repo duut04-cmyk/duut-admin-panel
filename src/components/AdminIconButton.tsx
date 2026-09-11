@@ -6,7 +6,7 @@ type AdminIconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const baseClasses =
-  "inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-md text-foreground transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/30 disabled:cursor-not-allowed disabled:opacity-40";
+  "inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-control text-foreground transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/30 disabled:cursor-not-allowed disabled:opacity-40";
 
 export default function AdminIconButton({
   icon,

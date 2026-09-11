@@ -85,7 +85,7 @@ export default function OrchestrationFilters({
           <Input
             id="orchestration-search"
             type="search"
-            placeholder="DUTT-1042"
+            placeholder="DOOT-1042"
             value={filters.search}
             onChange={(event) => update({ search: event.target.value })}
             aria-label="Search by delivery ID"

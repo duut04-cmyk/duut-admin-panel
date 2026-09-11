@@ -61,7 +61,7 @@ export default function AdminCustomSelect({
         aria-expanded={open}
         aria-controls={listboxId}
         onClick={() => setOpen((current) => !current)}
-        className="flex h-10 w-full cursor-pointer items-center justify-between gap-2 rounded-md border border-border bg-background px-3 text-small text-foreground transition-colors hover:border-foreground/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/25"
+        className="flex h-10 w-full cursor-pointer items-center justify-between gap-2 rounded-control border border-border bg-background px-3 text-small text-foreground transition-colors hover:border-foreground/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/25"
       >
         <span className="truncate">{selected?.label ?? "Select"}</span>
         <svg

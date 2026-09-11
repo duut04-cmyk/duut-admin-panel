@@ -165,7 +165,7 @@ export default function DeliveriesOverTime({
             Daily delivery requests
           </p>
         </div>
-        <span className="inline-flex items-center rounded-md border border-border bg-transparent px-4 py-2 text-small font-semibold text-foreground">
+        <span className="inline-flex items-center rounded-control border border-border bg-transparent px-4 py-2 text-small font-semibold text-foreground">
           Total: {metrics.totalDeliveries}
         </span>
       </div>

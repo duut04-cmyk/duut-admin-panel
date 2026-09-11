@@ -54,7 +54,7 @@ export default function DecisionFactors({ factors }: DecisionFactorsProps) {
         ))}
 
         <p className="border-t border-border pt-4 text-small text-muted-foreground">
-          Dutt evaluates multiple parameters rather than selecting purely on price.
+          Doot evaluates multiple parameters rather than selecting purely on price.
           Each orchestration decision combines availability, compatibility, price,
           ETA, and service quality into a weighted score.
         </p>

@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Dutt Operations",
-  description: "Dutt admin operations platform.",
+  title: "Doot Operations",
+  description: "Doot admin operations platform.",
 };
 
 export default function RootLayout({

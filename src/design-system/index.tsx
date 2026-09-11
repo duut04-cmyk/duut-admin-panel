@@ -68,7 +68,7 @@ export default function AdminDesignSystem() {
         <ShowcaseSection title="Section header">
           <AdminSectionHeader
             title="Operations performance"
-            description="How Dutt is performing across recent delivery activity."
+            description="How Doot is performing across recent delivery activity."
             action={
               <Link
                 href="#"
@@ -134,7 +134,7 @@ export default function AdminDesignSystem() {
         <ShowcaseSection title="Data rows">
           <AdminCard className="p-0 px-4 md:px-5">
             <AdminDataRow
-              primary="DUTT-1042"
+              primary="DOOT-1042"
               secondary="Mumbai → Mumbai"
               metadata="2.5 kg"
               status={<AdminStatus variant="active" label="In transit" />}
@@ -221,7 +221,7 @@ export default function AdminDesignSystem() {
         <ShowcaseSection title="Empty state">
           <AdminEmptyState
             title="No deliveries yet"
-            description="Delivery activity will appear here once requests start coming through Dutt."
+            description="Delivery activity will appear here once requests start coming through Doot."
           />
         </ShowcaseSection>
 
@@ -252,7 +252,7 @@ export default function AdminDesignSystem() {
         <ShowcaseSection title="Callouts">
           <div className="space-y-3">
             <AdminCallout variant="neutral">
-              Dutt evaluated 612 delivery options across 148 delivery requests.
+              Doot evaluated 612 delivery options across 148 delivery requests.
             </AdminCallout>
             <AdminCallout variant="accent" title="Orchestration insight">
               4.1 average options per delivery in the selected period.

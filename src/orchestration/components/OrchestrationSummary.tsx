@@ -67,7 +67,7 @@ export default function OrchestrationSummary({
     <section aria-labelledby="orchestration-detail-summary-heading">
       <AdminSectionHeader
         title="Orchestration summary"
-        description="What Dutt did for this delivery."
+        description="What Doot did for this delivery."
       />
 
       <AdminCard className="mt-4 space-y-6 p-5 md:p-6">

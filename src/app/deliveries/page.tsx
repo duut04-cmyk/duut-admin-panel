@@ -1,5 +1,10 @@
+import { Suspense } from "react";
 import Deliveries from "@/deliveries";
 
 export default function DeliveriesPage() {
-  return <Deliveries />;
+  return (
+    <Suspense fallback={null}>
+      <Deliveries />
+    </Suspense>
+  );
 }

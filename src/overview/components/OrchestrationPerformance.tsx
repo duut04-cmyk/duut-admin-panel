@@ -22,7 +22,7 @@ export default function OrchestrationPerformance({
     <section aria-labelledby="orchestration-performance-heading">
       <AdminSectionHeader
         title="Orchestration performance"
-        description="How Dutt evaluates, filters, scores, and books delivery services."
+        description="How Doot evaluates, filters, scores, and books delivery services."
       />
 
       <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
@@ -39,7 +39,7 @@ export default function OrchestrationPerformance({
       </div>
 
       <p className="mt-6 text-center text-small text-muted-foreground">
-        Across {metrics.totalDeliveries} deliveries, Dutt evaluated{" "}
+        Across {metrics.totalDeliveries} deliveries, Doot evaluated{" "}
         {metrics.totalServicesEvaluated} service options and selected the best
         eligible option for each request.
       </p>

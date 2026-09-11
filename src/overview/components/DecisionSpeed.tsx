@@ -1,7 +1,13 @@
 "use client";
 
-import { useId, useMemo } from "react";
+import { useId, useMemo, useState } from "react";
 import type { OrchestrationRecord } from "@/data/orchestrationTypes";
+import {
+  decisionSpeedStatTrends,
+  resolveDecisionSpeedChart,
+  resolveDecisionSpeedMetrics,
+  type DecisionSpeedChartPoint,
+} from "@/data/overviewDisplay";
 import {
   formatDecisionTime,
   type PlatformMetrics,
@@ -12,19 +18,13 @@ type DecisionSpeedProps = {
   records: OrchestrationRecord[];
 };
 
-type DecisionTimePoint = {
-  date: string;
-  label: string;
-  ms: number;
-};
-
-const MAX_Y_SECONDS = 5;
-const X_TICK_COUNT = 7;
-const X_TICK_INTERVAL_DAYS = 3;
+const MAX_Y_SECONDS = 8;
+const Y_TICK_STEP = 2;
+const X_TICK_INTERVAL_DAYS = 5;
 const DAY_MS = 86_400_000;
-const PLOT_HEIGHT = 268;
-const Y_AXIS_WIDTH = 36;
-const PLOT_PAD_Y = 10;
+const PLOT_HEIGHT = 200;
+const Y_AXIS_WIDTH = 32;
+const PLOT_PAD_Y = 8;
 const PLOT_PAD_X = 16;
 
 const axisTextClass =
@@ -47,65 +47,83 @@ function msToLocalIsoDate(ms: number): string {
   return `${year}-${month}-${day}`;
 }
 
+/** Aggregate decision times by day for a smoother chart line. */
 function buildDecisionTimeSeries(
   records: OrchestrationRecord[],
-): DecisionTimePoint[] {
-  return [...records]
-    .sort((a, b) =>
-      a.deliveryRequest.createdAt.localeCompare(b.deliveryRequest.createdAt),
-    )
-    .map((record) => {
-      const date = record.deliveryRequest.createdAt.slice(0, 10);
+): DecisionSpeedChartPoint[] {
+  const byDay = new Map<string, number[]>();
+
+  for (const record of records) {
+    const date = record.deliveryRequest.createdAt.slice(0, 10);
+    const existing = byDay.get(date) ?? [];
+    existing.push(record.decision.durationMs);
+    byDay.set(date, existing);
+  }
+
+  return [...byDay.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([date, durations]) => {
+      const avgMs =
+        durations.reduce((sum, ms) => sum + ms, 0) / durations.length;
       return {
         date,
         label: formatChartDate(date),
-        ms: record.decision.durationMs,
+        ms: avgMs,
       };
     });
 }
 
-function buildXAxisTicks(startMs: number): { ms: number; label: string }[] {
-  return Array.from({ length: X_TICK_COUNT }, (_, index) => {
-    const ms = startMs + index * X_TICK_INTERVAL_DAYS * DAY_MS;
-
-    return {
-      ms,
-      label: formatChartDate(msToLocalIsoDate(ms)),
-    };
-  });
+function buildXAxisTicks(
+  chartStartMs: number,
+  chartEndMs: number,
+): { ms: number; label: string }[] {
+  const ticks: { ms: number; label: string }[] = [];
+  for (
+    let ms = chartStartMs;
+    ms <= chartEndMs;
+    ms += X_TICK_INTERVAL_DAYS * DAY_MS
+  ) {
+    ticks.push({ ms, label: formatChartDate(msToLocalIsoDate(ms)) });
+  }
+  return ticks;
 }
 
-function buildStraightLinePath(
-  coords: { x: number; y: number }[],
-): string {
+function buildSmoothLinePath(coords: { x: number; y: number }[]): string {
   if (coords.length === 0) return "";
+  if (coords.length === 1) {
+    return `M ${coords[0].x.toFixed(1)} ${coords[0].y.toFixed(1)}`;
+  }
 
-  return coords
-    .map((point, index) =>
-      index === 0
-        ? `M ${point.x.toFixed(1)} ${point.y.toFixed(1)}`
-        : `L ${point.x.toFixed(1)} ${point.y.toFixed(1)}`,
-    )
-    .join(" ");
+  let path = `M ${coords[0].x.toFixed(1)} ${coords[0].y.toFixed(1)}`;
+
+  for (let index = 0; index < coords.length - 1; index += 1) {
+    const current = coords[index];
+    const next = coords[index + 1];
+    const controlX = (current.x + next.x) / 2;
+    path += ` C ${controlX.toFixed(1)} ${current.y.toFixed(1)}, ${controlX.toFixed(1)} ${next.y.toFixed(1)}, ${next.x.toFixed(1)} ${next.y.toFixed(1)}`;
+  }
+
+  return path;
 }
 
-function DecisionTimeChart({ points }: { points: DecisionTimePoint[] }) {
+function DecisionTimeChart({ points }: { points: DecisionSpeedChartPoint[] }) {
   const gradientId = useId();
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const plotWidth = 400;
   const plotHeight = PLOT_HEIGHT;
   const innerPlotHeight = plotHeight - PLOT_PAD_Y * 2;
   const innerPlotWidth = plotWidth - PLOT_PAD_X * 2;
   const plotBottom = PLOT_PAD_Y + innerPlotHeight;
 
-  const minDateMs = parseDateMs(points[0].date);
-  const maxDateMs = parseDateMs(points[points.length - 1].date);
-  const xTicks = buildXAxisTicks(minDateMs);
-  const chartStartMs = xTicks[0].ms;
-  const chartEndMs = xTicks[xTicks.length - 1].ms;
+  const chartStartMs = parseDateMs(points[0].date);
+  const chartEndMs = parseDateMs(points[points.length - 1].date);
   const axisDateRange = chartEndMs - chartStartMs;
-  const dataDateRange = maxDateMs - minDateMs;
 
-  const yTicks = Array.from({ length: MAX_Y_SECONDS + 1 }, (_, index) => index);
+  const xTicks = buildXAxisTicks(chartStartMs, chartEndMs);
+  const yTicks = Array.from(
+    { length: MAX_Y_SECONDS / Y_TICK_STEP + 1 },
+    (_, index) => index * Y_TICK_STEP,
+  );
 
   const yForTick = (tick: number): number =>
     PLOT_PAD_Y + innerPlotHeight - (tick / MAX_Y_SECONDS) * innerPlotHeight;
@@ -115,29 +133,24 @@ function DecisionTimeChart({ points }: { points: DecisionTimePoint[] }) {
     innerPlotHeight -
     (ms / 1000 / MAX_Y_SECONDS) * innerPlotHeight;
 
-  const xForAxisTick = (tickMs: number): number => {
-    if (axisDateRange === 0) return PLOT_PAD_X;
-    const ratio = (tickMs - chartStartMs) / axisDateRange;
-    return PLOT_PAD_X + ratio * innerPlotWidth;
-  };
-
-  const xForLinePoint = (dateMs: number): number => {
-    if (dataDateRange === 0) return PLOT_PAD_X + innerPlotWidth;
-    const ratio = (dateMs - minDateMs) / dataDateRange;
+  const xForDateMs = (dateMs: number): number => {
+    if (axisDateRange === 0) return PLOT_PAD_X + innerPlotWidth / 2;
+    const ratio = (dateMs - chartStartMs) / axisDateRange;
     return PLOT_PAD_X + ratio * innerPlotWidth;
   };
 
   const xPercentForTick = (tickMs: number): number =>
-    (xForAxisTick(tickMs) / plotWidth) * 100;
+    (xForDateMs(tickMs) / plotWidth) * 100;
 
   const coords = points.map((point, index) => ({
-    x: xForLinePoint(parseDateMs(point.date)),
+    x: xForDateMs(parseDateMs(point.date)),
     y: yForMs(point.ms),
     label: point.label,
+    ms: point.ms,
     index,
   }));
 
-  const linePath = buildStraightLinePath(coords);
+  const linePath = buildSmoothLinePath(coords);
   const areaPath =
     coords.length > 0
       ? `${linePath} L ${coords[coords.length - 1].x.toFixed(1)} ${plotBottom} L ${coords[0].x.toFixed(1)} ${plotBottom} Z`
@@ -203,7 +216,7 @@ function DecisionTimeChart({ points }: { points: DecisionTimePoint[] }) {
                 stroke="#f97316"
                 strokeWidth="2"
                 strokeLinecap="round"
-                strokeLinejoin="miter"
+                strokeLinejoin="round"
                 vectorEffect="non-scaling-stroke"
               />
             )}
@@ -213,19 +226,41 @@ function DecisionTimeChart({ points }: { points: DecisionTimePoint[] }) {
                 key={`${point.label}-${point.index}`}
                 cx={point.x}
                 cy={point.y}
-                r="4"
+                r={hoveredIndex === point.index ? "5" : "4"}
                 fill="#f97316"
                 stroke="#ffffff"
                 strokeWidth="2"
                 vectorEffect="non-scaling-stroke"
+                onMouseEnter={() => setHoveredIndex(point.index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className="cursor-pointer"
               />
             ))}
           </svg>
+          {hoveredIndex !== null && coords[hoveredIndex] && (
+            <div
+              className="pointer-events-none absolute z-10 rounded-md bg-[#0f172a] px-3 py-2 text-caption text-white shadow-md"
+              style={{
+                left: `${(coords[hoveredIndex].x / plotWidth) * 100}%`,
+                top: `${(coords[hoveredIndex].y / plotHeight) * 100 - 14}%`,
+                transform: "translate(-50%, -100%)",
+              }}
+            >
+              <p className="font-medium">{coords[hoveredIndex].label}</p>
+              <p className="mt-0.5 flex items-center gap-1.5 text-white/90">
+                <span
+                  className="h-1.5 w-1.5 rounded-full bg-orange-400"
+                  aria-hidden="true"
+                />
+                {formatDecisionTime(coords[hoveredIndex].ms)}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
       <div
-        className="relative mt-2 h-5"
+        className="relative mt-1.5 h-4"
         style={{ marginLeft: Y_AXIS_WIDTH }}
       >
         {xTicks.map((tick, index) => {
@@ -255,15 +290,45 @@ function DecisionTimeChart({ points }: { points: DecisionTimePoint[] }) {
   );
 }
 
+function StatTrend({ value }: { value: string }) {
+  return (
+    <p className="mt-1 flex items-center justify-center gap-0.5 text-caption font-medium text-emerald-600">
+      <svg
+        className="h-3 w-3 shrink-0"
+        viewBox="0 0 12 12"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        aria-hidden="true"
+      >
+        <path
+          d="M6 3v6M6 9L3 6M6 9l3-3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <span>{value}</span>
+    </p>
+  );
+}
+
 export default function DecisionSpeed({
   metrics,
   records,
 }: DecisionSpeedProps) {
-  const points = useMemo(() => buildDecisionTimeSeries(records), [records]);
+  const rawPoints = useMemo(
+    () => buildDecisionTimeSeries(records),
+    [records],
+  );
+  const displayMetrics = resolveDecisionSpeedMetrics(metrics, records.length);
+  const points = useMemo(
+    () => resolveDecisionSpeedChart(rawPoints, records.length),
+    [rawPoints, records.length],
+  );
 
   return (
     <article
-      className="rounded-xl border border-border/80 bg-background p-6 font-sans shadow-sm"
+      className="rounded-card border border-border/60 bg-background p-5 font-sans shadow-sm"
       aria-labelledby="decision-speed-heading"
     >
       <h2
@@ -276,34 +341,37 @@ export default function DecisionSpeed({
         Time taken to evaluate services and make a decision.
       </p>
 
-      <div className="mt-6 grid grid-cols-3 divide-x divide-border rounded-lg border border-border bg-background">
-        <div className="px-3 py-5 text-center sm:px-5">
+      <div className="mt-5 grid grid-cols-3 divide-x divide-border overflow-hidden rounded-lg border border-border">
+        <div className="px-2 py-3 text-center sm:px-3">
           <p className="text-small font-medium text-muted-foreground">Average</p>
-          <p className="mt-1.5 text-[1.75rem] font-bold leading-none tracking-tight text-foreground">
-            {formatDecisionTime(metrics.averageDecisionTimeMs)}
+          <p className="mt-1 text-2xl font-bold leading-none tracking-tight text-foreground">
+            {formatDecisionTime(displayMetrics.averageDecisionTimeMs)}
           </p>
+          <StatTrend value={decisionSpeedStatTrends.average.value} />
         </div>
-        <div className="px-3 py-5 text-center sm:px-5">
+        <div className="px-2 py-3 text-center sm:px-3">
           <p className="text-small font-medium text-muted-foreground">Fastest</p>
-          <p className="mt-1.5 text-[1.75rem] font-bold leading-none tracking-tight text-foreground">
-            {formatDecisionTime(metrics.fastestDecisionTimeMs)}
+          <p className="mt-1 text-2xl font-bold leading-none tracking-tight text-foreground">
+            {formatDecisionTime(displayMetrics.fastestDecisionTimeMs)}
           </p>
+          <StatTrend value={decisionSpeedStatTrends.fastest.value} />
         </div>
-        <div className="px-3 py-5 text-center sm:px-5">
+        <div className="px-2 py-3 text-center sm:px-3">
           <p className="text-small font-medium text-muted-foreground">Slowest</p>
-          <p className="mt-1.5 text-[1.75rem] font-bold leading-none tracking-tight text-foreground">
-            {formatDecisionTime(metrics.slowestDecisionTimeMs)}
+          <p className="mt-1 text-2xl font-bold leading-none tracking-tight text-foreground">
+            {formatDecisionTime(displayMetrics.slowestDecisionTimeMs)}
           </p>
+          <StatTrend value={decisionSpeedStatTrends.slowest.value} />
         </div>
       </div>
 
       {points.length > 0 && (
-        <div className="mt-8 w-full">
+        <div className="mt-5 w-full">
           <DecisionTimeChart points={points} />
         </div>
       )}
 
-      <div className="mt-4 flex items-center justify-center gap-2 text-small text-foreground">
+      <div className="mt-2 flex items-center justify-center gap-2 text-small text-foreground">
         <span
           className="inline-block h-[3px] w-5 rounded-full bg-orange-500"
           aria-hidden="true"

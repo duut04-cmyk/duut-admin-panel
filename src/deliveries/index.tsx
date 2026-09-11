@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { filterRecordsByDateRange, getAllOrchestrations } from "@/data";
 import AdminContainer from "@/components/AdminContainer";
 import AdminShell from "@/components/AdminShell";
@@ -20,7 +21,12 @@ const defaultFilters: DeliveryFilterState = {
 };
 
 export default function DeliveriesPage() {
-  const [filters, setFilters] = useState<DeliveryFilterState>(defaultFilters);
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get("search") ?? "";
+  const [filters, setFilters] = useState<DeliveryFilterState>({
+    ...defaultFilters,
+    search: initialSearch,
+  });
 
   const allRecords = useMemo(() => getAllOrchestrations(), []);
 

@@ -17,7 +17,7 @@ export default function SelectionReason({
     <section aria-labelledby="selection-reason-heading">
       <AdminSectionHeader
         title="Why this service?"
-        description={`Why Dutt selected ${selectedServiceName}.`}
+        description={`Why Doot selected ${selectedServiceName}.`}
       />
 
       <AdminCallout variant="accent" className="mt-4">

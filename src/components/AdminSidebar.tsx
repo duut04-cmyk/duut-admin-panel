@@ -3,14 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/common/components/Logo";
-import { ADMIN_SHELL_HEADER } from "./layout";
 import AdminIconButton, { CloseIcon } from "./AdminIconButton";
-
-const navItems = [
-  { label: "Overview", href: "/overview" },
-  { label: "Deliveries", href: "/deliveries" },
-  { label: "Orchestration", href: "/orchestration" },
-];
+import { ADMIN_SHELL_SIDEBAR_WIDTH } from "./layout";
+import { navGroups } from "./navConfig";
+import SidebarHelpCard from "./SidebarHelpCard";
 
 type AdminSidebarProps = {
   open: boolean;
@@ -27,19 +23,14 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
 
   const sidebarContent = (
     <>
-      <div className={`flex justify-between px-5 ${ADMIN_SHELL_HEADER}`}>
-        <div>
-          <Link
-            href="/overview"
-            onClick={onClose}
-            className="inline-block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/30"
-          >
-            <Logo className="text-xl" />
-          </Link>
-          <p className="mt-1 text-caption font-semibold uppercase tracking-wide text-muted-foreground">
-            Operations
-          </p>
-        </div>
+      <div className="flex items-center justify-between px-5 pt-6 pb-4">
+        <Link
+          href="/overview"
+          onClick={onClose}
+          className="inline-block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/30"
+        >
+          <Logo className="text-2xl" />
+        </Link>
         <AdminIconButton
           icon={<CloseIcon />}
           label="Close navigation menu"
@@ -48,55 +39,53 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
         />
       </div>
 
-      <nav className="flex-1 px-3 py-4" aria-label="Admin navigation">
-        <ul className="space-y-1">
-          {navItems.map((item) => {
-            const active = isActive(item.href);
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={onClose}
-                  className={`block rounded-md px-3 py-2.5 text-small font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
-                    active
-                      ? "bg-surface-accent text-foreground"
-                      : "text-muted-foreground hover:bg-surface hover:text-foreground"
-                  }`}
-                  aria-current={active ? "page" : undefined}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+      <nav className="flex-1 overflow-y-auto px-3" aria-label="Admin navigation">
+        {navGroups.map((group) => (
+          <div key={group.label} className="mb-6">
+            <p className="mb-2 px-3 text-caption font-semibold uppercase tracking-wide text-muted-foreground">
+              {group.label}
+            </p>
+            <ul className="space-y-0.5">
+              {group.items.map((item) => {
+                const active = isActive(item.href);
+                const Icon = item.icon;
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={onClose}
+                      className={`flex items-center gap-3 rounded-r-[var(--radius-control)] py-2.5 pl-3 pr-3 text-small font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                        active
+                          ? "-ml-3 border-l-[3px] border-accent bg-nav-active-bg text-nav-active-text"
+                          : "text-muted-foreground hover:bg-surface hover:text-foreground"
+                      }`}
+                      aria-current={active ? "page" : undefined}
+                    >
+                      <Icon
+                        className={`h-5 w-5 shrink-0 ${active ? "text-nav-active-text" : ""}`}
+                      />
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
 
-      <div className="border-t border-border px-5 py-4">
-        <div className="flex items-center gap-3">
-          <span
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-caption font-bold text-accent-foreground"
-            aria-hidden="true"
-          >
-            AO
-          </span>
-          <div>
-            <p className="text-small font-semibold text-foreground">Admin</p>
-            <p className="text-caption text-muted-foreground">Operations</p>
-          </div>
-        </div>
+      <div className="border-t border-border px-4 py-4">
+        <SidebarHelpCard />
       </div>
     </>
   );
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-background lg:flex">
+      <aside className={`hidden shrink-0 flex-col border-r border-border bg-background lg:flex ${ADMIN_SHELL_SIDEBAR_WIDTH}`}>
         {sidebarContent}
       </aside>
 
-      {/* Mobile overlay */}
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden" role="presentation">
           <button

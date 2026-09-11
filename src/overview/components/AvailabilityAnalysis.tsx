@@ -22,7 +22,7 @@ export default function AvailabilityAnalysis({
     <section aria-labelledby="availability-analysis-heading">
       <AdminSectionHeader
         title="Availability analysis"
-        description="Dutt checks service availability before selecting a provider — incompatible or unavailable options are filtered out."
+        description="Doot checks service availability before selecting a provider — incompatible or unavailable options are filtered out."
       />
 
       <AdminCard className="mt-4 space-y-5 p-5 md:p-6">

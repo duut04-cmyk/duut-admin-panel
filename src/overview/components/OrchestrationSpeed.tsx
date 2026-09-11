@@ -21,7 +21,7 @@ export default function OrchestrationSpeed({
     <section aria-labelledby="orchestration-speed-heading">
       <AdminSectionHeader
         title="Orchestration speed"
-        description="How quickly Dutt evaluates services and reaches a booking decision."
+        description="How quickly Doot evaluates services and reaches a booking decision."
       />
 
       <div className="mt-4 grid gap-3 sm:grid-cols-3">

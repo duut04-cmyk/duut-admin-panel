@@ -12,7 +12,7 @@ export default function AdminContainer({
 }: AdminContainerProps) {
   return (
     <div
-      className={`w-full py-6 lg:py-8 ${ADMIN_SHELL_CONTENT_PADDING} ${className}`}
+      className={`w-full py-4 lg:py-6 ${ADMIN_SHELL_CONTENT_PADDING} ${className}`}
     >
       {children}
     </div>

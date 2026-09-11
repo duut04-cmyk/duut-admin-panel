@@ -56,8 +56,8 @@ export default function OrchestrationOverview({
   return (
     <section aria-labelledby="orchestration-overview-heading">
       <AdminSectionHeader
-        title="Dutt orchestration"
-        description="Every delivery is evaluated across multiple available services before Dutt selects and books the best option."
+        title="Doot orchestration"
+        description="Every delivery is evaluated across multiple available services before Doot selects and books the best option."
       />
 
       <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4">
@@ -103,7 +103,7 @@ export default function OrchestrationOverview({
       </div>
 
       <AdminCallout variant="neutral" className="mt-6">
-        Dutt evaluated {metrics.totalServicesEvaluated} service options across{" "}
+        Doot evaluated {metrics.totalServicesEvaluated} service options across{" "}
         {metrics.totalDeliveries} deliveries, with{" "}
         {formatPercent(metrics.availabilityRate)} of evaluations resulting in an
         available option.

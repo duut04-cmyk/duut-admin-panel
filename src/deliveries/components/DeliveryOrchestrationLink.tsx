@@ -20,7 +20,7 @@ export default function DeliveryOrchestrationLink({
     <section aria-labelledby="delivery-orchestration-link-heading">
       <AdminSectionHeader
         title="Orchestration decision"
-        description="How Dutt evaluated and selected a service for this delivery."
+        description="How Doot evaluated and selected a service for this delivery."
       />
 
       <AdminCallout variant="accent" className="mt-4">

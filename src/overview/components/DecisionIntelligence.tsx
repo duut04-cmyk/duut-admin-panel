@@ -22,7 +22,7 @@ export default function DecisionIntelligence({
   return (
     <section aria-labelledby="decision-intelligence-heading">
       <AdminSectionHeader
-        title="How Dutt makes a decision"
+        title="How Doot makes a decision"
         description="Every delivery is evaluated against availability, compatibility, timing, price, and service performance before booking."
       />
 

@@ -6,7 +6,7 @@ type AdminSelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
 };
 
 const selectClasses =
-  "h-10 w-full min-w-0 cursor-pointer appearance-none rounded-md border border-border bg-background px-3 pr-9 text-small text-foreground transition-colors hover:border-foreground/25 focus:border-foreground focus:ring-1 focus:ring-foreground/10 focus:outline-none disabled:cursor-not-allowed disabled:bg-surface disabled:opacity-60";
+  "h-10 w-full min-w-0 cursor-pointer appearance-none rounded-control border border-border bg-background px-3 pr-9 text-small text-foreground transition-colors hover:border-foreground/25 focus:border-foreground focus:ring-1 focus:ring-foreground/10 focus:outline-none disabled:cursor-not-allowed disabled:bg-surface disabled:opacity-60";
 
 export default function AdminSelect({
   label,
