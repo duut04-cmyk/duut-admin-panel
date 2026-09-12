@@ -1,8 +1,5 @@
 import type { PlatformMetrics } from "@/data/orchestrationMetrics";
-import {
-  formatDecisionTime,
-  formatPercent,
-} from "@/data/orchestrationMetrics";
+import { formatDecisionTime, formatPercent } from "@/data/orchestrationMetrics";
 import AdminMetricCard from "@/ui/AdminMetricCard";
 
 type OrchestrationListSummaryProps = {

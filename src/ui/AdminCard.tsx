@@ -6,11 +6,7 @@ type AdminCardProps = {
   className?: string;
 };
 
-export default function AdminCard({
-  children,
-  title,
-  className = "",
-}: AdminCardProps) {
+export default function AdminCard({ children, title, className = "" }: AdminCardProps) {
   return (
     <section
       className={`rounded-lg border border-border bg-background p-5 shadow-sm ${className}`}

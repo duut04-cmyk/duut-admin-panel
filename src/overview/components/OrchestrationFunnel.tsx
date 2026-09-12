@@ -93,7 +93,6 @@ function clampRadius(
   );
 }
 
-
 function getSegmentEdges(
   index: number,
   segmentHeight: number,

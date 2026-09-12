@@ -31,13 +31,9 @@ export default function AdminMetricCard({
       </p>
       {(supportingText || trend) && (
         <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1">
-          {trend && (
-            <AdminTrend value={trend.value} direction={trend.direction} />
-          )}
+          {trend && <AdminTrend value={trend.value} direction={trend.direction} />}
           {supportingText && (
-            <span className="text-caption text-muted-foreground">
-              {supportingText}
-            </span>
+            <span className="text-caption text-muted-foreground">{supportingText}</span>
           )}
         </div>
       )}

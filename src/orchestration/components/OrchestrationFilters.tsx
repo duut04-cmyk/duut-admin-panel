@@ -124,9 +124,7 @@ export default function OrchestrationFilters({
           label="Outcome"
           value={filters.outcome}
           options={outcomeOptions}
-          onChange={(value) =>
-            update({ outcome: value as OutcomeFilter })
-          }
+          onChange={(value) => update({ outcome: value as OutcomeFilter })}
         />
       </div>
     </section>

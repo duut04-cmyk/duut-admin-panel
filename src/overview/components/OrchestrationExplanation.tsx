@@ -31,11 +31,7 @@ function CheckNetworkIcon({ className }: { className?: string }) {
       strokeWidth="1.75"
       aria-hidden="true"
     >
-      <path
-        d="M9 11l3 3L22 4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M9 11l3 3L22 4" strokeLinecap="round" strokeLinejoin="round" />
       <path
         d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
         strokeLinecap="round"
@@ -102,8 +98,7 @@ const STEPS = [
   {
     key: "understand",
     title: "Understand Request",
-    description:
-      "We analyze pickup, drop, package, timing and special requirements.",
+    description: "We analyze pickup, drop, package, timing and special requirements.",
     iconBg: "bg-[#fff7ed]",
     iconColor: "text-[#f97316]",
     Icon: UnderstandIcon,
@@ -111,8 +106,7 @@ const STEPS = [
   {
     key: "check",
     title: "Check Network",
-    description:
-      "We check multiple delivery services and driver availability.",
+    description: "We check multiple delivery services and driver availability.",
     iconBg: "bg-[#f0fdf4]",
     iconColor: "text-[#15803d]",
     Icon: CheckNetworkIcon,
@@ -137,8 +131,7 @@ const STEPS = [
   {
     key: "book",
     title: "Book & Track",
-    description:
-      "We book the service and monitor the delivery till completion.",
+    description: "We book the service and monitor the delivery till completion.",
     iconBg: "bg-[#faf5ff]",
     iconColor: "text-[#9333ea]",
     Icon: BookTrackIcon,
@@ -177,9 +170,7 @@ export default function OrchestrationExplanation() {
                 {step.description}
               </p>
             </div>
-            {index < STEPS.length - 1 && (
-              <FlowArrow className="lg:self-center" />
-            )}
+            {index < STEPS.length - 1 && <FlowArrow className="lg:self-center" />}
           </li>
         ))}
       </ol>

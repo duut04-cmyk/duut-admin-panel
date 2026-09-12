@@ -1,11 +1,5 @@
 type AdminStatusVariant =
-  | "operational"
-  | "active"
-  | "pending"
-  | "success"
-  | "failed"
-  | "cancelled"
-  | "warning";
+  "operational" | "active" | "pending" | "success" | "failed" | "cancelled" | "warning";
 
 type AdminStatusProps = {
   variant: AdminStatusVariant;

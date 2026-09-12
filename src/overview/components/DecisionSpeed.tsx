@@ -8,10 +8,7 @@ import {
   resolveDecisionSpeedMetrics,
   type DecisionSpeedChartPoint,
 } from "@/data/overviewDisplay";
-import {
-  formatDecisionTime,
-  type PlatformMetrics,
-} from "@/data/orchestrationMetrics";
+import { formatDecisionTime, type PlatformMetrics } from "@/data/orchestrationMetrics";
 
 type DecisionSpeedProps = {
   metrics: PlatformMetrics;
@@ -27,8 +24,7 @@ const Y_AXIS_WIDTH = 32;
 const PLOT_PAD_Y = 8;
 const PLOT_PAD_X = 16;
 
-const axisTextClass =
-  "font-sans text-small font-normal leading-none text-foreground";
+const axisTextClass = "font-sans text-small font-normal leading-none text-foreground";
 
 function formatChartDate(isoDate: string): string {
   const date = new Date(`${isoDate}T00:00:00`);
@@ -63,8 +59,7 @@ function buildDecisionTimeSeries(
   return [...byDay.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([date, durations]) => {
-      const avgMs =
-        durations.reduce((sum, ms) => sum + ms, 0) / durations.length;
+      const avgMs = durations.reduce((sum, ms) => sum + ms, 0) / durations.length;
       return {
         date,
         label: formatChartDate(date),
@@ -78,11 +73,7 @@ function buildXAxisTicks(
   chartEndMs: number,
 ): { ms: number; label: string }[] {
   const ticks: { ms: number; label: string }[] = [];
-  for (
-    let ms = chartStartMs;
-    ms <= chartEndMs;
-    ms += X_TICK_INTERVAL_DAYS * DAY_MS
-  ) {
+  for (let ms = chartStartMs; ms <= chartEndMs; ms += X_TICK_INTERVAL_DAYS * DAY_MS) {
     ticks.push({ ms, label: formatChartDate(msToLocalIsoDate(ms)) });
   }
   return ticks;
@@ -129,9 +120,7 @@ function DecisionTimeChart({ points }: { points: DecisionSpeedChartPoint[] }) {
     PLOT_PAD_Y + innerPlotHeight - (tick / MAX_Y_SECONDS) * innerPlotHeight;
 
   const yForMs = (ms: number): number =>
-    PLOT_PAD_Y +
-    innerPlotHeight -
-    (ms / 1000 / MAX_Y_SECONDS) * innerPlotHeight;
+    PLOT_PAD_Y + innerPlotHeight - (ms / 1000 / MAX_Y_SECONDS) * innerPlotHeight;
 
   const xForDateMs = (dateMs: number): number => {
     if (axisDateRange === 0) return PLOT_PAD_X + innerPlotWidth / 2;
@@ -259,10 +248,7 @@ function DecisionTimeChart({ points }: { points: DecisionSpeedChartPoint[] }) {
         </div>
       </div>
 
-      <div
-        className="relative mt-1.5 h-4"
-        style={{ marginLeft: Y_AXIS_WIDTH }}
-      >
+      <div className="relative mt-1.5 h-4" style={{ marginLeft: Y_AXIS_WIDTH }}>
         {xTicks.map((tick, index) => {
           const percent = xPercentForTick(tick.ms);
           const isFirst = index === 0;
@@ -301,25 +287,15 @@ function StatTrend({ value }: { value: string }) {
         strokeWidth="1.5"
         aria-hidden="true"
       >
-        <path
-          d="M6 3v6M6 9L3 6M6 9l3-3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+        <path d="M6 3v6M6 9L3 6M6 9l3-3" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
       <span>{value}</span>
     </p>
   );
 }
 
-export default function DecisionSpeed({
-  metrics,
-  records,
-}: DecisionSpeedProps) {
-  const rawPoints = useMemo(
-    () => buildDecisionTimeSeries(records),
-    [records],
-  );
+export default function DecisionSpeed({ metrics, records }: DecisionSpeedProps) {
+  const rawPoints = useMemo(() => buildDecisionTimeSeries(records), [records]);
   const displayMetrics = resolveDecisionSpeedMetrics(metrics, records.length);
   const points = useMemo(
     () => resolveDecisionSpeedChart(rawPoints, records.length),

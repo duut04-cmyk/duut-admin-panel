@@ -1,10 +1,7 @@
 import type { ReactNode } from "react";
 import type { DateRangeKey } from "@/data/orchestrationMetrics";
 import type { DeliveryFunnelMetrics } from "@/data/dashboardMetrics";
-import {
-  formatFunnelPercent,
-  resolveFunnelDisplay,
-} from "@/data/overviewDisplay";
+import { formatFunnelPercent, resolveFunnelDisplay } from "@/data/overviewDisplay";
 import DashboardCardDateRange from "./DashboardCardDateRange";
 
 type DeliveryFunnelProps = {
@@ -73,7 +70,14 @@ function SegmentIcon({
   const className = "h-4 w-4";
   if (type === "requests") {
     return (
-      <svg className={className} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <svg
+        className={className}
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        aria-hidden="true"
+      >
         <path d="M5 3h10v14H5z" strokeLinejoin="round" />
         <path d="M8 7h4M8 10h4M8 13h2" strokeLinecap="round" />
       </svg>
@@ -81,16 +85,33 @@ function SegmentIcon({
   }
   if (type === "matched") {
     return (
-      <svg className={className} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <svg
+        className={className}
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        aria-hidden="true"
+      >
         <circle cx="7" cy="7" r="2.5" />
         <circle cx="13" cy="7" r="2.5" />
-        <path d="M3 16c0-2.5 1.8-4 4-4s4 1.5 4 4M13 12c2.2 0 4 1.5 4 4" strokeLinecap="round" />
+        <path
+          d="M3 16c0-2.5 1.8-4 4-4s4 1.5 4 4M13 12c2.2 0 4 1.5 4 4"
+          strokeLinecap="round"
+        />
       </svg>
     );
   }
   if (type === "quoted") {
     return (
-      <svg className={className} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <svg
+        className={className}
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        aria-hidden="true"
+      >
         <path
           d="M4 4h6l4 4v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"
           strokeLinejoin="round"
@@ -101,14 +122,28 @@ function SegmentIcon({
   }
   if (type === "confirmed") {
     return (
-      <svg className={className} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <svg
+        className={className}
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        aria-hidden="true"
+      >
         <circle cx="10" cy="10" r="7" />
         <path d="M7 10l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
   }
   return (
-    <svg className={className} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+    <svg
+      className={className}
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      aria-hidden="true"
+    >
       <path d="M2 8h12l2 4v4H2V8z" strokeLinejoin="round" />
       <circle cx="6" cy="16" r="1.5" fill="currentColor" stroke="none" />
       <circle cx="14" cy="16" r="1.5" fill="currentColor" stroke="none" />
@@ -199,8 +234,7 @@ function VerticalFunnelGraphic({ segments }: { segments: SegmentDef[] }) {
       {segments.map((segment, index) => {
         const topWidth = FUNNEL_WIDTH * TAPER_WIDTHS[index];
         const bottomWidth =
-          FUNNEL_WIDTH *
-          (TAPER_WIDTHS[index + 1] ?? TAPER_WIDTHS[index] * 0.92);
+          FUNNEL_WIDTH * (TAPER_WIDTHS[index + 1] ?? TAPER_WIDTHS[index] * 0.92);
 
         return (
           <div
@@ -247,10 +281,7 @@ function RateLegend({
   legendPositions: number[];
 }) {
   return (
-    <div
-      className="relative min-w-0 flex-1 pl-5"
-      style={{ height: funnelHeight }}
-    >
+    <div className="relative min-w-0 flex-1 pl-5" style={{ height: funnelHeight }}>
       <span
         className="absolute bottom-3 left-[5px] top-3 w-px bg-border/30"
         aria-hidden="true"

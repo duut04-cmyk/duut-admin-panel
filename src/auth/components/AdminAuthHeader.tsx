@@ -1,13 +1,15 @@
-import Logo from "@/common/components/Logo";
+import DootWordmark from "./DootWordmark";
 
 export default function AdminAuthHeader() {
   return (
-    <header className="mb-8 space-y-1 text-center">
-      <Logo className="text-heading" />
-      <p className="text-caption font-semibold uppercase tracking-wide text-muted-foreground">
-        Operations
+    <header className="mb-7 text-center">
+      <DootWordmark variant="sans" className="text-[2rem] leading-none" />
+      <h1 className="mt-5 text-[1.625rem] font-bold leading-tight tracking-tight text-foreground">
+        Welcome back!
+      </h1>
+      <p className="mt-2 text-[14px] text-muted-foreground">
+        Sign in to your Doot admin workspace
       </p>
-      <p className="text-small text-muted-foreground">Admin workspace</p>
     </header>
   );
 }

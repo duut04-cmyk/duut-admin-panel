@@ -1,9 +1,5 @@
 export type LiveActivityType =
-  | "completed"
-  | "created"
-  | "assigned"
-  | "in_progress"
-  | "request_received";
+  "completed" | "created" | "assigned" | "in_progress" | "request_received";
 
 export type LiveActivityEvent = {
   id: string;

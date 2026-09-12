@@ -20,9 +20,7 @@ type OrchestrationDetailProps = {
   deliveryId: string;
 };
 
-export default function OrchestrationDetail({
-  deliveryId,
-}: OrchestrationDetailProps) {
+export default function OrchestrationDetail({ deliveryId }: OrchestrationDetailProps) {
   const record = getOrchestrationByDeliveryId(deliveryId);
 
   if (!record) {
@@ -61,10 +59,7 @@ export default function OrchestrationDetail({
           <DeliveryRequestSummary deliveryRequest={deliveryRequest} />
         </div>
 
-        <ServiceEvaluationTable
-          evaluations={evaluations}
-          decision={decision}
-        />
+        <ServiceEvaluationTable evaluations={evaluations} decision={decision} />
 
         <div className="grid gap-8 lg:grid-cols-2">
           <DecisionScore

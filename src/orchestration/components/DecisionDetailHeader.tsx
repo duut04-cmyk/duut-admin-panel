@@ -7,9 +7,7 @@ type DecisionDetailHeaderProps = {
   record: OrchestrationRecord;
 };
 
-export default function DecisionDetailHeader({
-  record,
-}: DecisionDetailHeaderProps) {
+export default function DecisionDetailHeader({ record }: DecisionDetailHeaderProps) {
   const { deliveryRequest } = record;
   const status = deliveryRequest.status;
 

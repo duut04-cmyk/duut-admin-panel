@@ -7,11 +7,7 @@ type AdminHeaderProps = {
   actions?: ReactNode;
 };
 
-export default function AdminHeader({
-  title,
-  subtitle,
-  actions,
-}: AdminHeaderProps) {
+export default function AdminHeader({ title, subtitle, actions }: AdminHeaderProps) {
   return (
     <header
       className={`bg-background ${ADMIN_SHELL_CONTENT_PADDING} ${ADMIN_PAGE_HEADER}`}
@@ -27,9 +23,7 @@ export default function AdminHeader({
             </p>
           )}
         </div>
-        {actions && (
-          <div className="flex shrink-0 items-center">{actions}</div>
-        )}
+        {actions && <div className="flex shrink-0 items-center">{actions}</div>}
       </div>
     </header>
   );

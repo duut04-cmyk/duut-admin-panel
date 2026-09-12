@@ -8,9 +8,7 @@ export function FlowStep({ value, label, highlight = false }: FlowStepProps) {
   return (
     <div
       className={`flex flex-col items-center rounded-lg border px-4 py-5 text-center sm:px-5 ${
-        highlight
-          ? "border-accent/40 bg-surface-accent"
-          : "border-border bg-background"
+        highlight ? "border-accent/40 bg-surface-accent" : "border-border bg-background"
       }`}
     >
       <p className="text-[1.5rem] font-bold tracking-tight text-foreground md:text-[1.75rem]">

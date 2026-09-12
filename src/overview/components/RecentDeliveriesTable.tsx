@@ -2,14 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import type {
-  DeliveryLocation,
-  OrchestrationRecord,
-} from "@/data/orchestrationTypes";
-import {
-  formatCurrency,
-  getRecordAmount,
-} from "@/data/dashboardMetrics";
+import type { DeliveryLocation, OrchestrationRecord } from "@/data/orchestrationTypes";
+import { formatCurrency, getRecordAmount } from "@/data/dashboardMetrics";
 import ServiceLogo from "@/components/ServiceLogo";
 
 type RecentDeliveriesTableProps = {
@@ -17,17 +11,9 @@ type RecentDeliveriesTableProps = {
 };
 
 type DisplayStatus =
-  | "Delivered"
-  | "In Progress"
-  | "Picked Up"
-  | "Cancelled"
-  | "Failed"
-  | "Booked";
+  "Delivered" | "In Progress" | "Picked Up" | "Cancelled" | "Failed" | "Booked";
 
-const statusStyles: Record<
-  DisplayStatus,
-  { pill: string; dot: string }
-> = {
+const statusStyles: Record<DisplayStatus, { pill: string; dot: string }> = {
   Delivered: {
     pill: "bg-emerald-50 text-emerald-700",
     dot: "bg-emerald-500",
@@ -85,9 +71,7 @@ function formatLocationLabel(location: DeliveryLocation): {
 } {
   const title = location.address;
   const label =
-    location.city ||
-    location.address.split(",")[0]?.trim() ||
-    location.address;
+    location.city || location.address.split(",")[0]?.trim() || location.address;
 
   return { label, title };
 }
@@ -119,10 +103,7 @@ function StatusPill({ status }: { status: DisplayStatus }) {
     <span
       className={`inline-flex items-center gap-1.5 rounded-pill px-2.5 py-0.5 text-caption font-medium ${styles.pill}`}
     >
-      <span
-        className={`h-1.5 w-1.5 rounded-full ${styles.dot}`}
-        aria-hidden="true"
-      />
+      <span className={`h-1.5 w-1.5 rounded-full ${styles.dot}`} aria-hidden="true" />
       {status}
     </span>
   );
@@ -136,12 +117,7 @@ const CANCELLABLE_STATUSES = new Set<DisplayStatus>([
 
 function HorizontalMoreIcon() {
   return (
-    <svg
-      className="h-4 w-4"
-      viewBox="0 0 16 16"
-      fill="currentColor"
-      aria-hidden="true"
-    >
+    <svg className="h-4 w-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
       <circle cx="3" cy="8" r="1.25" />
       <circle cx="8" cy="8" r="1.25" />
       <circle cx="13" cy="8" r="1.25" />
@@ -330,9 +306,7 @@ function RecentDeliveryCard({ record }: { record: OrchestrationRecord }) {
         </div>
         <div>
           <dt className="text-caption text-muted-foreground">ETA / Delivered</dt>
-          <dd className="mt-0.5 text-muted-foreground">
-            {getEtaOrDelivered(record)}
-          </dd>
+          <dd className="mt-0.5 text-muted-foreground">{getEtaOrDelivered(record)}</dd>
         </div>
         <div>
           <dt className="text-caption text-muted-foreground">Amount</dt>
@@ -351,9 +325,7 @@ function RecentDeliveryCard({ record }: { record: OrchestrationRecord }) {
   );
 }
 
-export default function RecentDeliveriesTable({
-  records,
-}: RecentDeliveriesTableProps) {
+export default function RecentDeliveriesTable({ records }: RecentDeliveriesTableProps) {
   return (
     <section aria-labelledby="recent-deliveries-table-heading">
       <article className="overflow-hidden rounded-card border border-border/60 bg-background shadow-sm">
@@ -428,9 +400,7 @@ export default function RecentDeliveriesTable({
                         </td>
                         <td className="px-4 py-3.5 md:px-5">
                           <div className="flex min-w-0 items-center gap-2">
-                            <ServiceLogo
-                              serviceName={decision.selectedServiceName}
-                            />
+                            <ServiceLogo serviceName={decision.selectedServiceName} />
                             <span className="truncate text-foreground">
                               {decision.selectedServiceName}
                             </span>

@@ -26,12 +26,8 @@ export default function AdminCallout({
     <aside
       className={`rounded-lg border px-4 py-3.5 md:px-5 md:py-4 ${variantClasses[variant]} ${className}`}
     >
-      {title && (
-        <p className="text-small font-semibold text-foreground">{title}</p>
-      )}
-      <div
-        className={`text-small text-muted-foreground ${title ? "mt-1" : ""}`}
-      >
+      {title && <p className="text-small font-semibold text-foreground">{title}</p>}
+      <div className={`text-small text-muted-foreground ${title ? "mt-1" : ""}`}>
         {children}
       </div>
     </aside>

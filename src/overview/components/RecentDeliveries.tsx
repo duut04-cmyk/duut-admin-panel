@@ -4,11 +4,7 @@ import AdminCard from "@/ui/AdminCard";
 import AdminDataRow from "@/ui/AdminDataRow";
 import AdminSectionHeader from "@/ui/AdminSectionHeader";
 import AdminStatus from "@/ui/AdminStatus";
-import {
-  deliveryStatusLabel,
-  deliveryStatusVariant,
-  formatCreatedTime,
-} from "./utils";
+import { deliveryStatusLabel, deliveryStatusVariant, formatCreatedTime } from "./utils";
 
 type RecentDeliveriesProps = {
   records: OrchestrationRecord[];

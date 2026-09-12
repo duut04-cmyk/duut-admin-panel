@@ -1,8 +1,5 @@
 import { getAllOrchestrations } from "./mockOrchestration";
-import type {
-  OrchestrationRecord,
-  ScoreFactorKey,
-} from "./orchestrationTypes";
+import type { OrchestrationRecord, ScoreFactorKey } from "./orchestrationTypes";
 import { SCORE_FACTOR_WEIGHTS } from "./orchestrationTypes";
 
 export type PlatformMetrics = {
@@ -60,9 +57,7 @@ export function getPlatformMetrics(
   const successfulBookings = records.filter(
     (r) => r.booking.status === "confirmed",
   ).length;
-  const failedBookings = records.filter(
-    (r) => r.booking.status === "failed",
-  ).length;
+  const failedBookings = records.filter((r) => r.booking.status === "failed").length;
   const cancelledDeliveries = records.filter(
     (r) => r.deliveryRequest.status === "cancelled",
   ).length;
@@ -102,10 +97,8 @@ export function getPlatformMetrics(
       1,
     ),
     averageDecisionTimeMs: round(average(decisionTimes), 0),
-    fastestDecisionTimeMs:
-      decisionTimes.length === 0 ? 0 : Math.min(...decisionTimes),
-    slowestDecisionTimeMs:
-      decisionTimes.length === 0 ? 0 : Math.max(...decisionTimes),
+    fastestDecisionTimeMs: decisionTimes.length === 0 ? 0 : Math.min(...decisionTimes),
+    slowestDecisionTimeMs: decisionTimes.length === 0 ? 0 : Math.max(...decisionTimes),
     averageBookingResponseTimeMs: round(average(bookingResponseTimes), 0),
     availabilityRate: round(
       totalServicesEvaluated === 0
@@ -224,10 +217,8 @@ export function getServicePerformance(
           : (stats.bookingSuccesses / stats.bookingAttempts) * 100,
         1,
       ),
-      averagePrice:
-        stats.prices.length === 0 ? null : round(average(stats.prices), 0),
-      averageEtaMinutes:
-        stats.etas.length === 0 ? null : round(average(stats.etas), 0),
+      averagePrice: stats.prices.length === 0 ? null : round(average(stats.prices), 0),
+      averageEtaMinutes: stats.etas.length === 0 ? null : round(average(stats.etas), 0),
       averageResponseTimeMs: round(average(stats.responseTimes), 0),
     }))
     .sort((a, b) => b.timesEvaluated - a.timesEvaluated);
@@ -316,9 +307,7 @@ export function formatPercent(value: number): string {
   return `${value.toFixed(1)}%`;
 }
 
-export function countEligibleEvaluations(
-  records: OrchestrationRecord[],
-): number {
+export function countEligibleEvaluations(records: OrchestrationRecord[]): number {
   return records.reduce(
     (sum, record) =>
       sum +
@@ -333,9 +322,8 @@ export function countEligibleEvaluations(
 }
 
 export function getDeliveredCount(records: OrchestrationRecord[]): number {
-  return records.filter(
-    (record) => record.deliveryRequest.status === "delivered",
-  ).length;
+  return records.filter((record) => record.deliveryRequest.status === "delivered")
+    .length;
 }
 
 export type FailureAnalysisItem = {
@@ -415,9 +403,7 @@ export function getTopFailureReasons(
     label: category.label,
     count: counts[category.key],
     percent:
-      totalFailures === 0
-        ? 0
-        : round((counts[category.key] / totalFailures) * 100, 1),
+      totalFailures === 0 ? 0 : round((counts[category.key] / totalFailures) * 100, 1),
   }));
 
   return { items, totalFailures };
@@ -447,8 +433,6 @@ export function getPendingBookingCount(records: OrchestrationRecord[]): number {
   return records.filter((record) => record.booking.status === "pending").length;
 }
 
-export function getCancelledBookingCount(
-  records: OrchestrationRecord[],
-): number {
+export function getCancelledBookingCount(records: OrchestrationRecord[]): number {
   return records.filter((record) => record.booking.status === "cancelled").length;
 }

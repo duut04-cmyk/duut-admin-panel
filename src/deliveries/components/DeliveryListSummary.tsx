@@ -5,9 +5,7 @@ type DeliveryListSummaryProps = {
   metrics: DeliveryMetrics;
 };
 
-export default function DeliveryListSummary({
-  metrics,
-}: DeliveryListSummaryProps) {
+export default function DeliveryListSummary({ metrics }: DeliveryListSummaryProps) {
   return (
     <section aria-labelledby="delivery-summary-heading">
       <h2 id="delivery-summary-heading" className="sr-only">
@@ -29,11 +27,7 @@ export default function DeliveryListSummary({
           value={metrics.delivered}
           className="p-4 md:p-5"
         />
-        <AdminMetricCard
-          label="Failed"
-          value={metrics.failed}
-          className="p-4 md:p-5"
-        />
+        <AdminMetricCard label="Failed" value={metrics.failed} className="p-4 md:p-5" />
         <AdminMetricCard
           label="Cancelled"
           value={metrics.cancelled}

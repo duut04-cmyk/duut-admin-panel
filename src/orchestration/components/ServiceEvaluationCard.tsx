@@ -1,10 +1,9 @@
-import type { OrchestrationDecision, ServiceEvaluation } from "@/data/orchestrationTypes";
+import type {
+  OrchestrationDecision,
+  ServiceEvaluation,
+} from "@/data/orchestrationTypes";
 import AdminBadge from "@/ui/AdminBadge";
-import {
-  formatEta,
-  formatPrice,
-  formatScore,
-} from "./utils";
+import { formatEta, formatPrice, formatScore } from "./utils";
 
 type ServiceEvaluationCardProps = {
   evaluation: ServiceEvaluation;
@@ -26,8 +25,7 @@ function resultLabel(
   selectedServiceId: string,
 ): { label: string; variant: "accent" | "danger" | "neutral" } {
   if (!evaluation.availability) {
-    const reason =
-      evaluation.rejectionReasons[0] ?? evaluation.availabilityReason;
+    const reason = evaluation.rejectionReasons[0] ?? evaluation.availabilityReason;
     return { label: reason || "Unavailable", variant: "danger" };
   }
   if (evaluation.serviceId === selectedServiceId) {
@@ -45,8 +43,7 @@ export default function ServiceEvaluationCard({
 }: ServiceEvaluationCardProps) {
   const isSelected = evaluation.serviceId === decision.selectedServiceId;
   const result = resultLabel(evaluation, decision.selectedServiceId);
-  const overallScore =
-    isSelected ? decision.decisionScore.totalScore.toFixed(1) : "—";
+  const overallScore = isSelected ? decision.decisionScore.totalScore.toFixed(1) : "—";
 
   return (
     <article
@@ -61,9 +58,7 @@ export default function ServiceEvaluationCard({
         <div>
           <h3 className="font-semibold text-foreground">{evaluation.serviceName}</h3>
           {isSelected && (
-            <p className="mt-0.5 text-caption font-medium text-accent">
-              ✓ Selected
-            </p>
+            <p className="mt-0.5 text-caption font-medium text-accent">✓ Selected</p>
           )}
         </div>
         <AdminBadge variant={result.variant}>{result.label}</AdminBadge>
@@ -86,7 +81,9 @@ export default function ServiceEvaluationCard({
         </div>
         <div>
           <dt className="text-caption text-muted-foreground">ETA</dt>
-          <dd className="mt-0.5 tabular-nums">{formatEta(evaluation.totalEtaMinutes)}</dd>
+          <dd className="mt-0.5 tabular-nums">
+            {formatEta(evaluation.totalEtaMinutes)}
+          </dd>
         </div>
         <div>
           <dt className="text-caption text-muted-foreground">Quality</dt>

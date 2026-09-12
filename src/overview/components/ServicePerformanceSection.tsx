@@ -8,13 +8,7 @@ type ServicePerformanceSectionProps = {
   services: ServicePerformance[];
 };
 
-const SERVICE_ORDER = [
-  "flashdrop",
-  "cityfleet",
-  "movex",
-  "swiftgo",
-  "quickroute",
-];
+const SERVICE_ORDER = ["flashdrop", "cityfleet", "movex", "swiftgo", "quickroute"];
 
 const SERVICE_COLORS: Record<string, string> = {
   flashdrop: "#f97316",
@@ -111,8 +105,7 @@ export default function ServicePerformanceSection({
           <tbody>
             {rows.map((service) => {
               const isTopSelectionRate =
-                service.selectionRate > 0 &&
-                service.selectionRate === maxSelectionRate;
+                service.selectionRate > 0 && service.selectionRate === maxSelectionRate;
               const bookingSuccessFill =
                 service.bookingSuccessRate >= BOOKING_SUCCESS_THRESHOLD
                   ? "bg-[#15803d]"
@@ -148,9 +141,7 @@ export default function ServicePerformanceSection({
                     <MetricBar
                       value={service.selectionRate}
                       fillClassName={
-                        isTopSelectionRate
-                          ? "bg-[#f97316]"
-                          : "bg-muted-foreground/30"
+                        isTopSelectionRate ? "bg-[#f97316]" : "bg-muted-foreground/30"
                       }
                     />
                   </td>

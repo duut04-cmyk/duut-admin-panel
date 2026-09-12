@@ -66,8 +66,8 @@ export default function AdminForgotPasswordModal({
             Check your email
           </h2>
           <p className="text-small text-muted-foreground">
-            If an account exists for this email, we&apos;ve sent instructions to
-            reset your password.
+            If an account exists for this email, we&apos;ve sent instructions to reset
+            your password.
           </p>
           <Button
             type="button"

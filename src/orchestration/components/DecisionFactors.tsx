@@ -32,9 +32,7 @@ export default function DecisionFactors({ decisionScore }: DecisionFactorsProps)
         {contributions.map(({ key, factor, percent }) => (
           <div key={key}>
             <div className="mb-2 flex items-center justify-between gap-3 text-small">
-              <span className="font-medium text-foreground">
-                {FACTOR_LABELS[key]}
-              </span>
+              <span className="font-medium text-foreground">{FACTOR_LABELS[key]}</span>
               <span className="shrink-0 tabular-nums text-muted-foreground">
                 {percent.toFixed(1)}%
               </span>
@@ -53,7 +51,8 @@ export default function DecisionFactors({ decisionScore }: DecisionFactorsProps)
               />
             </div>
             <p className="mt-1 text-caption text-muted-foreground">
-              Score {factor.score.toFixed(0)} · weighted {factor.weightedScore.toFixed(1)}
+              Score {factor.score.toFixed(0)} · weighted{" "}
+              {factor.weightedScore.toFixed(1)}
             </p>
           </div>
         ))}

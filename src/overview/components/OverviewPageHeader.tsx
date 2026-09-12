@@ -109,8 +109,7 @@ export function OverviewToolbar({
             Overview
           </h1>
           <p className="mt-1.5 max-w-xl text-body text-muted-foreground">
-            Real-time visibility into Doot&apos;s delivery orchestration
-            performance.
+            Real-time visibility into Doot&apos;s delivery orchestration performance.
           </p>
         </div>
       </div>

@@ -32,10 +32,7 @@ export default function DecisionScore({
           aria-label={`Decision score ${decisionScore.totalScore} out of 100`}
         >
           {decisionScore.totalScore.toFixed(1)}
-          <span className="text-body-lg font-medium text-muted-foreground">
-            {" "}
-            / 100
-          </span>
+          <span className="text-body-lg font-medium text-muted-foreground"> / 100</span>
         </p>
 
         <dl className="mt-6 space-y-3 border-t border-border pt-5">

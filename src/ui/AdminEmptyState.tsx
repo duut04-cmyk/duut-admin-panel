@@ -40,9 +40,7 @@ export default function AdminEmptyState({
       </div>
       <h3 className="text-body font-semibold text-foreground">{title}</h3>
       {description && (
-        <p className="mt-2 max-w-sm text-small text-muted-foreground">
-          {description}
-        </p>
+        <p className="mt-2 max-w-sm text-small text-muted-foreground">{description}</p>
       )}
       {action && <div className="mt-5">{action}</div>}
     </div>

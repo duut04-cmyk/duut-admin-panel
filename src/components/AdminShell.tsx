@@ -4,7 +4,7 @@ import { useState, type ReactNode } from "react";
 import AdminHeader from "./AdminHeader";
 import AdminSidebar from "./AdminSidebar";
 import AdminTopBar from "./AdminTopBar";
-import { ADMIN_SHELL_CONTENT_PADDING } from "./layout";
+import { ADMIN_SHELL_CONTENT_PADDING, ADMIN_SHELL_MAIN_OFFSET } from "./layout";
 
 type AdminShellProps = {
   title?: string;
@@ -33,26 +33,17 @@ export default function AdminShell({
   const showPageHeader = !customHeader && (title || subtitle || actions);
 
   return (
-    <div className="flex min-h-screen overflow-x-hidden bg-background">
-      <AdminSidebar
-        open={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
-      <div className="flex min-w-0 flex-1 flex-col">
+    <div className="min-h-screen overflow-x-hidden bg-background">
+      <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className={`flex min-h-screen min-w-0 flex-col ${ADMIN_SHELL_MAIN_OFFSET}`}>
         {!hideTopBar && <AdminTopBar onMenuClick={onMenuClick} />}
         <div className="flex min-h-0 flex-1">
           <div className="flex min-w-0 flex-1 flex-col">
             {customHeader}
             {showPageHeader && (
-              <AdminHeader
-                title={title}
-                subtitle={subtitle}
-                actions={actions}
-              />
+              <AdminHeader title={title} subtitle={subtitle} actions={actions} />
             )}
-            <main className={`flex-1 bg-background ${mainClassName}`}>
-              {children}
-            </main>
+            <main className={`flex-1 bg-background ${mainClassName}`}>{children}</main>
           </div>
           {rightRail && (
             <aside

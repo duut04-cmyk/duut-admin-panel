@@ -11,8 +11,7 @@ export default function DeliveryVolumeChart({
   totalDeliveries,
 }: DeliveryVolumeChartProps) {
   const maxCount = Math.max(...volume.map((point) => point.count), 1);
-  const averagePerDay =
-    volume.length === 0 ? 0 : totalDeliveries / volume.length;
+  const averagePerDay = volume.length === 0 ? 0 : totalDeliveries / volume.length;
 
   const peak = volume.reduce(
     (best, point) => (point.count > best.count ? point : best),
@@ -29,8 +28,7 @@ export default function DeliveryVolumeChart({
   const padding = { top: 16, right: 16, bottom: 32, left: 32 };
   const innerWidth = chartWidth - padding.left - padding.right;
   const innerHeight = chartHeight - padding.top - padding.bottom;
-  const barWidth =
-    volume.length === 0 ? 0 : innerWidth / volume.length - 8;
+  const barWidth = volume.length === 0 ? 0 : innerWidth / volume.length - 8;
 
   return (
     <AdminChartCard
@@ -50,10 +48,7 @@ export default function DeliveryVolumeChart({
             >
               {volume.map((point, index) => {
                 const barHeight = (point.count / maxCount) * innerHeight;
-                const x =
-                  padding.left +
-                  index * (innerWidth / volume.length) +
-                  4;
+                const x = padding.left + index * (innerWidth / volume.length) + 4;
                 const y = padding.top + innerHeight - barHeight;
 
                 return (

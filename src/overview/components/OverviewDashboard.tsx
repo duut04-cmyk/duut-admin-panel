@@ -36,15 +36,9 @@ export default function OverviewDashboard() {
     [allRecords, dateRange],
   );
 
-  const funnel = useMemo(
-    () => getDeliveryFunnelMetrics(records),
-    [records],
-  );
+  const funnel = useMemo(() => getDeliveryFunnelMetrics(records), [records]);
 
-  const topServices = useMemo(
-    () => getTopServiceCategories(records),
-    [records],
-  );
+  const topServices = useMemo(() => getTopServiceCategories(records), [records]);
 
   const recentRecords = useMemo(
     () =>
@@ -62,10 +56,7 @@ export default function OverviewDashboard() {
     <AdminShell
       mainClassName="bg-background"
       customHeader={
-        <DashboardPageHeader
-          dateRange={dateRange}
-          onDateRangeChange={setDateRange}
-        />
+        <DashboardPageHeader dateRange={dateRange} onDateRangeChange={setDateRange} />
       }
     >
       <AdminContainer className="space-y-6 bg-background pb-10 pt-0 lg:space-y-6">

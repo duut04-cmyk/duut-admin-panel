@@ -28,9 +28,7 @@ function eventVariant(
   }
 }
 
-export default function OrchestrationTimeline({
-  events,
-}: OrchestrationTimelineProps) {
+export default function OrchestrationTimeline({ events }: OrchestrationTimelineProps) {
   const sorted = [...events].sort(
     (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
   );

@@ -102,8 +102,7 @@ export default function DeliveriesOverTime({
   const yMax = computeYMax(maxCount);
   const yTicks = Array.from({ length: yMax + 1 }, (_, index) => index);
 
-  const minDateMs =
-    volume.length > 0 ? parseDateMs(volume[0].date) : 0;
+  const minDateMs = volume.length > 0 ? parseDateMs(volume[0].date) : 0;
 
   const xTicks = buildXAxisTicks(minDateMs);
   const chartStartMs = xTicks[0].ms;
@@ -234,10 +233,7 @@ export default function DeliveriesOverTime({
             </div>
           </div>
 
-          <div
-            className="relative mt-3 h-6"
-            style={{ marginLeft: Y_AXIS_WIDTH }}
-          >
+          <div className="relative mt-3 h-6" style={{ marginLeft: Y_AXIS_WIDTH }}>
             {xTicks.map((tick, index) => {
               const percent = xPercentForTick(tick.ms);
               const isFirst = index === 0;

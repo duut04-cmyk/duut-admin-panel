@@ -55,10 +55,7 @@ export default function OrchestrationPage() {
       );
   }, [allRecords, filters]);
 
-  const metrics = useMemo(
-    () => getPlatformMetrics(filteredRecords),
-    [filteredRecords],
-  );
+  const metrics = useMemo(() => getPlatformMetrics(filteredRecords), [filteredRecords]);
 
   return (
     <AdminShell

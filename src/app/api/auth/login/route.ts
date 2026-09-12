@@ -33,8 +33,7 @@ export async function POST(request: Request) {
   await delay(500);
 
   const success =
-    email.toLowerCase() === adminEmail.toLowerCase() &&
-    password === adminPassword;
+    email.toLowerCase() === adminEmail.toLowerCase() && password === adminPassword;
 
   return NextResponse.json({ success });
 }

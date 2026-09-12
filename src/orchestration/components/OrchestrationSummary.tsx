@@ -3,10 +3,7 @@ import { formatDecisionTime } from "@/data/orchestrationMetrics";
 import AdminBadge from "@/ui/AdminBadge";
 import AdminCard from "@/ui/AdminCard";
 import AdminSectionHeader from "@/ui/AdminSectionHeader";
-import {
-  bookingStatusLabel,
-  countEligibleServices,
-} from "./utils";
+import { bookingStatusLabel, countEligibleServices } from "./utils";
 
 type FlowStepProps = {
   value: number | string;
@@ -18,9 +15,7 @@ function FlowStep({ value, label, highlight = false }: FlowStepProps) {
   return (
     <div
       className={`flex flex-col items-center rounded-lg border px-3 py-4 text-center sm:px-4 ${
-        highlight
-          ? "border-accent/40 bg-surface-accent"
-          : "border-border bg-background"
+        highlight ? "border-accent/40 bg-surface-accent" : "border-border bg-background"
       }`}
     >
       <p className="text-body font-bold tabular-nums text-foreground sm:text-[1.25rem]">
@@ -56,9 +51,7 @@ type OrchestrationSummaryProps = {
   record: OrchestrationRecord;
 };
 
-export default function OrchestrationSummary({
-  record,
-}: OrchestrationSummaryProps) {
+export default function OrchestrationSummary({ record }: OrchestrationSummaryProps) {
   const { decision, booking } = record;
   const eligible = countEligibleServices(record.evaluations);
   const unavailable = decision.servicesEvaluated - decision.availableOptions;
@@ -78,11 +71,7 @@ export default function OrchestrationSummary({
           <FlowArrow />
           <FlowStep value={eligible} label="Eligible" />
           <FlowArrow />
-          <FlowStep
-            value={decision.selectedServiceName}
-            label="Selected"
-            highlight
-          />
+          <FlowStep value={decision.selectedServiceName} label="Selected" highlight />
           <FlowArrow />
           <FlowStep
             value={bookingStatusLabel(booking.status)}

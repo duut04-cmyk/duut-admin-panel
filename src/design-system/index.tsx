@@ -56,10 +56,7 @@ export default function AdminDesignSystem() {
   ];
 
   return (
-    <AdminShell
-      title="Design system"
-      subtitle="Admin UI primitives — development only"
-    >
+    <AdminShell title="Design system" subtitle="Admin UI primitives — development only">
       <AdminContainer className="space-y-10">
         <p className="text-caption font-medium uppercase tracking-wider text-muted-foreground">
           Development only — component showcase, not a dashboard
@@ -138,7 +135,9 @@ export default function AdminDesignSystem() {
               secondary="Mumbai → Mumbai"
               metadata="2.5 kg"
               status={<AdminStatus variant="active" label="In transit" />}
-              trailing={<span className="text-caption text-muted-foreground">Today</span>}
+              trailing={
+                <span className="text-caption text-muted-foreground">Today</span>
+              }
             />
             <AdminDataRow
               primary="Decision #8821"

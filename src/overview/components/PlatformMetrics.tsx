@@ -28,10 +28,7 @@ export default function PlatformMetrics({
   className = "",
 }: PlatformMetricsProps) {
   return (
-    <section
-      aria-labelledby="platform-metrics-heading"
-      className={className}
-    >
+    <section aria-labelledby="platform-metrics-heading" className={className}>
       <h2 id="platform-metrics-heading" className="sr-only">
         Platform metrics
       </h2>
@@ -58,10 +55,7 @@ export default function PlatformMetrics({
         <OverviewMetricCard
           title="In Progress"
           value={metrics.inProgressCount.toLocaleString()}
-          trend={resolveOverviewTrend(
-            "inProgress",
-            metrics.trends.inProgress,
-          )}
+          trend={resolveOverviewTrend("inProgress", metrics.trends.inProgress)}
           theme="blue"
           icon={<InProgressIcon />}
           sparklineValues={getCumulativeDeliverySparkline(records)}
