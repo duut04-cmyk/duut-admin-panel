@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import AdminAuth from "@/auth";
 
 export default function LoginPage() {
-  redirect("/");
+  return <AdminAuth />;
 }

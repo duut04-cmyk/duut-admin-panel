@@ -4,6 +4,9 @@ export const ADMIN_SHELL_TOPBAR_HEIGHT = "h-14";
 
 export const ADMIN_SHELL_SIDEBAR_WIDTH = "w-[240px]";
 
+/** Offset main content when desktop sidebar is fixed. */
+export const ADMIN_SHELL_MAIN_OFFSET = "lg:pl-[240px]";
+
 export const ADMIN_SHELL_RIGHT_RAIL_WIDTH = "w-[340px]";
 
 export const ADMIN_DASHBOARD_RAIL_GRID = "xl:grid-cols-[minmax(0,1fr)_340px]";

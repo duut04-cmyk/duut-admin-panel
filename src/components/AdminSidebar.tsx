@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Logo from "@/common/components/Logo";
+import DootWordmark from "@/auth/components/DootWordmark";
 import AdminIconButton, { CloseIcon } from "./AdminIconButton";
 import { ADMIN_SHELL_SIDEBAR_WIDTH } from "./layout";
 import { navGroups } from "./navConfig";
@@ -23,13 +23,13 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
 
   const sidebarContent = (
     <>
-      <div className="flex items-center justify-between px-5 pt-6 pb-4">
+      <div className="flex shrink-0 items-center justify-between px-5 pt-6 pb-4">
         <Link
           href="/overview"
           onClick={onClose}
           className="inline-block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/30"
         >
-          <Logo className="text-2xl" />
+          <DootWordmark variant="sans" className="text-2xl leading-none" />
         </Link>
         <AdminIconButton
           icon={<CloseIcon />}
@@ -74,7 +74,7 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
         ))}
       </nav>
 
-      <div className="border-t border-border px-4 py-4">
+      <div className="shrink-0 border-t border-border px-4 py-4">
         <SidebarHelpCard />
       </div>
     </>
@@ -82,7 +82,9 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
 
   return (
     <>
-      <aside className={`hidden shrink-0 flex-col border-r border-border bg-background lg:flex ${ADMIN_SHELL_SIDEBAR_WIDTH}`}>
+      <aside
+        className={`fixed inset-y-0 left-0 z-30 hidden flex-col border-r border-border bg-background lg:flex ${ADMIN_SHELL_SIDEBAR_WIDTH}`}
+      >
         {sidebarContent}
       </aside>
 
