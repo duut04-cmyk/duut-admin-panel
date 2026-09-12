@@ -23,13 +23,7 @@ const CENTER = VIEW_SIZE / 2;
 const CHART_DISPLAY_SIZE = 296;
 const CONTENT_MIN_HEIGHT = 296;
 
-const SERVICE_ORDER = [
-  "flashdrop",
-  "cityfleet",
-  "movex",
-  "swiftgo",
-  "quickroute",
-];
+const SERVICE_ORDER = ["flashdrop", "cityfleet", "movex", "swiftgo", "quickroute"];
 
 const SERVICE_COLORS: Record<string, string> = {
   flashdrop: "#f97316",
@@ -121,18 +115,11 @@ export default function SelectedServicesDistribution({
     >((accumulated, segment) => {
       const sweep = total === 0 ? 0 : (segment.count / total) * 360;
       const startAngle =
-        accumulated.length === 0
-          ? 0
-          : accumulated[accumulated.length - 1].endAngle;
+        accumulated.length === 0 ? 0 : accumulated[accumulated.length - 1].endAngle;
       const endAngle = startAngle + sweep;
       const midAngle = startAngle + sweep / 2;
       const labelRadius = (INNER_RADIUS + OUTER_RADIUS) / 2;
-      const labelPos = polarToCartesianFromTop(
-        CENTER,
-        CENTER,
-        labelRadius,
-        midAngle,
-      );
+      const labelPos = polarToCartesianFromTop(CENTER, CENTER, labelRadius, midAngle);
       const segmentPct = pct(segment.count);
 
       accumulated.push({
@@ -161,16 +148,12 @@ export default function SelectedServicesDistribution({
       legendItems,
       arcs: builtArcs,
       totalSelections: total,
-      ariaLabel: legendItems
-        .map((item) => `${item.label}: ${item.count}`)
-        .join(", "),
+      ariaLabel: legendItems.map((item) => `${item.label}: ${item.count}`).join(", "),
     };
   }, [services]);
 
   const sharePct = (count: number) =>
-    totalSelections === 0
-      ? 0
-      : Math.round((count / totalSelections) * 1000) / 10;
+    totalSelections === 0 ? 0 : Math.round((count / totalSelections) * 1000) / 10;
 
   return (
     <article
@@ -200,12 +183,7 @@ export default function SelectedServicesDistribution({
             aria-label={ariaLabel}
           >
             {totalSelections === 0 ? (
-              <circle
-                cx={CENTER}
-                cy={CENTER}
-                r={OUTER_RADIUS}
-                fill="#e2e8f0"
-              />
+              <circle cx={CENTER} cy={CENTER} r={OUTER_RADIUS} fill="#e2e8f0" />
             ) : (
               arcs.map((arc) =>
                 arc.path ? (
@@ -268,9 +246,7 @@ export default function SelectedServicesDistribution({
 
           <p className="pt-4 text-body text-muted-foreground">
             Total selections:{" "}
-            <span className="font-semibold text-foreground">
-              {totalSelections}
-            </span>
+            <span className="font-semibold text-foreground">{totalSelections}</span>
           </p>
         </div>
       </div>

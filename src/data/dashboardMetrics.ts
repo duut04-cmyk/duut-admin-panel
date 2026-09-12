@@ -143,8 +143,7 @@ export function getDeliveryFunnelMetrics(
   ).length;
   const delivered = getDeliveredCount(records);
 
-  const matchRate =
-    totalRequests === 0 ? 0 : (matched / totalRequests) * 100;
+  const matchRate = totalRequests === 0 ? 0 : (matched / totalRequests) * 100;
   const quoteRate = matched === 0 ? 0 : (quoted / matched) * 100;
   const confirmationRate = quoted === 0 ? 0 : (confirmed / quoted) * 100;
   const deliveryRate = confirmed === 0 ? 0 : (delivered / confirmed) * 100;
@@ -167,9 +166,7 @@ export function getRecordAmount(record: OrchestrationRecord): number {
     (evaluation) => evaluation.serviceId === record.decision.selectedServiceId,
   );
   if (selected?.price != null) return selected.price;
-  const priced = record.evaluations.find(
-    (evaluation) => evaluation.price !== null,
-  );
+  const priced = record.evaluations.find((evaluation) => evaluation.price !== null);
   return priced?.price ?? 0;
 }
 
@@ -200,12 +197,7 @@ export type TopServiceCategory = {
 export function getTopServiceCategories(
   records: OrchestrationRecord[],
 ): TopServiceCategory[] {
-  const categories: PackageCategory[] = [
-    "Medicine",
-    "Food",
-    "Documents",
-    "Other",
-  ];
+  const categories: PackageCategory[] = ["Medicine", "Food", "Documents", "Other"];
   const counts = new Map<PackageCategory, number>();
   categories.forEach((category) => counts.set(category, 0));
 

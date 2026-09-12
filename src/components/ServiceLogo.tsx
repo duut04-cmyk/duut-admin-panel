@@ -3,19 +3,18 @@ type ServiceLogoProps = {
   className?: string;
 };
 
-const serviceStyles: Record<string, { bg: string; text: string; abbr: string }> =
-  {
-    FlashDrop: { bg: "bg-orange-100", text: "text-orange-600", abbr: "FD" },
-    MoveX: { bg: "bg-blue-100", text: "text-blue-600", abbr: "MX" },
-    CityFleet: { bg: "bg-violet-100", text: "text-violet-600", abbr: "CF" },
-    SwiftGo: { bg: "bg-emerald-100", text: "text-emerald-600", abbr: "SG" },
-    QuickRoute: { bg: "bg-sky-100", text: "text-sky-600", abbr: "QR" },
-    "Doot Logistics": {
-      bg: "bg-orange-100",
-      text: "text-orange-600",
-      abbr: "DL",
-    },
-  };
+const serviceStyles: Record<string, { bg: string; text: string; abbr: string }> = {
+  FlashDrop: { bg: "bg-orange-100", text: "text-orange-600", abbr: "FD" },
+  MoveX: { bg: "bg-blue-100", text: "text-blue-600", abbr: "MX" },
+  CityFleet: { bg: "bg-violet-100", text: "text-violet-600", abbr: "CF" },
+  SwiftGo: { bg: "bg-emerald-100", text: "text-emerald-600", abbr: "SG" },
+  QuickRoute: { bg: "bg-sky-100", text: "text-sky-600", abbr: "QR" },
+  "Doot Logistics": {
+    bg: "bg-orange-100",
+    text: "text-orange-600",
+    abbr: "DL",
+  },
+};
 
 function getStyle(serviceName: string) {
   return (
@@ -27,10 +26,7 @@ function getStyle(serviceName: string) {
   );
 }
 
-export default function ServiceLogo({
-  serviceName,
-  className = "",
-}: ServiceLogoProps) {
+export default function ServiceLogo({ serviceName, className = "" }: ServiceLogoProps) {
   const style = getStyle(serviceName);
 
   return (

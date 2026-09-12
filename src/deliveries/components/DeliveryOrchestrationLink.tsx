@@ -27,9 +27,8 @@ export default function DeliveryOrchestrationLink({
         <div className="space-y-3">
           <p className="text-small text-foreground">
             {decision.servicesEvaluated} services evaluated ·{" "}
-            {decision.availableOptions} available ·{" "}
-            {decision.selectedServiceName} selected ·{" "}
-            {score.toFixed(1)}/100 · Booking{" "}
+            {decision.availableOptions} available · {decision.selectedServiceName}{" "}
+            selected · {score.toFixed(1)}/100 · Booking{" "}
             {bookingStatusLabel(booking.status).toLowerCase()} · Decision in{" "}
             {formatDecisionTime(decision.durationMs)}
           </p>

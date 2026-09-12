@@ -8,13 +8,7 @@ type DeliveryRequestSummaryProps = {
   deliveryRequest: DeliveryRequest;
 };
 
-function InfoGroup({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}) {
+function InfoGroup({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div>
       <h3 className="text-caption font-semibold uppercase tracking-wide text-muted-foreground">
@@ -50,9 +44,15 @@ export default function DeliveryRequestSummary({
       <AdminCard className="mt-4 space-y-6 p-5 md:p-6">
         <InfoGroup title="Route">
           <InfoRow label="Pickup" value={`${pickup.address}, ${pickup.city}`} />
-          <InfoRow label="Pickup contact" value={`${pickup.contactName} · ${pickup.contactPhone}`} />
+          <InfoRow
+            label="Pickup contact"
+            value={`${pickup.contactName} · ${pickup.contactPhone}`}
+          />
           <InfoRow label="Drop" value={`${drop.address}, ${drop.city}`} />
-          <InfoRow label="Drop contact" value={`${drop.contactName} · ${drop.contactPhone}`} />
+          <InfoRow
+            label="Drop contact"
+            value={`${drop.contactName} · ${drop.contactPhone}`}
+          />
         </InfoGroup>
 
         <InfoGroup title="Package">
@@ -65,7 +65,10 @@ export default function DeliveryRequestSummary({
         <InfoGroup title="Requirements">
           <InfoRow
             label="Delivery type"
-            value={requirements.deliveryType.charAt(0).toUpperCase() + requirements.deliveryType.slice(1)}
+            value={
+              requirements.deliveryType.charAt(0).toUpperCase() +
+              requirements.deliveryType.slice(1)
+            }
           />
           <InfoRow
             label="Requested timing"

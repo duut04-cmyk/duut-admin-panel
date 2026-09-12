@@ -28,9 +28,7 @@ export default function AdminDataRow({
       <div className="min-w-0 flex-1">
         <div className="text-small font-semibold text-foreground">{primary}</div>
         {secondary && (
-          <div className="mt-0.5 text-small text-muted-foreground">
-            {secondary}
-          </div>
+          <div className="mt-0.5 text-small text-muted-foreground">{secondary}</div>
         )}
       </div>
 

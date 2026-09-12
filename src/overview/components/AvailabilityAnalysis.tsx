@@ -8,11 +8,8 @@ type AvailabilityAnalysisProps = {
   metrics: PlatformMetrics;
 };
 
-export default function AvailabilityAnalysis({
-  metrics,
-}: AvailabilityAnalysisProps) {
-  const unavailable =
-    metrics.totalServicesEvaluated - metrics.totalAvailableOptions;
+export default function AvailabilityAnalysis({ metrics }: AvailabilityAnalysisProps) {
+  const unavailable = metrics.totalServicesEvaluated - metrics.totalAvailableOptions;
   const unavailableRate =
     metrics.totalServicesEvaluated === 0
       ? 0

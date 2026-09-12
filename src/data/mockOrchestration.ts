@@ -10,16 +10,14 @@ import type {
 } from "./orchestrationTypes";
 import { SCORE_FACTOR_WEIGHTS } from "./orchestrationTypes";
 
-function buildDecisionScore(
-  scores: Record<ScoreFactorKey, number>,
-): DecisionScore {
+function buildDecisionScore(scores: Record<ScoreFactorKey, number>): DecisionScore {
   const factors = {} as DecisionScore["factors"];
   let totalScore = 0;
 
   (Object.keys(SCORE_FACTOR_WEIGHTS) as ScoreFactorKey[]).forEach((key) => {
     const weight = SCORE_FACTOR_WEIGHTS[key];
     const score = scores[key];
-    const weightedScore = Math.round((score * weight) / 100 * 10) / 10;
+    const weightedScore = Math.round(((score * weight) / 100) * 10) / 10;
     factors[key] = { weight, score, weightedScore };
     totalScore += weightedScore;
   });
@@ -1698,15 +1696,11 @@ export function getRecentOrchestrations(limit: number): OrchestrationRecord[] {
     .slice(0, limit);
 }
 
-export function getServiceEvaluations(
-  deliveryId: string,
-): ServiceEvaluation[] {
+export function getServiceEvaluations(deliveryId: string): ServiceEvaluation[] {
   return getOrchestrationByDeliveryId(deliveryId)?.evaluations ?? [];
 }
 
-export function getDecision(
-  deliveryId: string,
-): OrchestrationDecision | undefined {
+export function getDecision(deliveryId: string): OrchestrationDecision | undefined {
   return getOrchestrationByDeliveryId(deliveryId)?.decision;
 }
 

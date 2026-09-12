@@ -108,14 +108,8 @@ export default function BookingOutcomesChart({
   records,
 }: BookingOutcomesChartProps) {
   const labelId = useId();
-  const pendingCount = useMemo(
-    () => getPendingBookingCount(records),
-    [records],
-  );
-  const cancelledCount = useMemo(
-    () => getCancelledBookingCount(records),
-    [records],
-  );
+  const pendingCount = useMemo(() => getPendingBookingCount(records), [records]);
+  const cancelledCount = useMemo(() => getCancelledBookingCount(records), [records]);
   const segments = useMemo(
     () => buildSegments(metrics, pendingCount, cancelledCount),
     [metrics, pendingCount, cancelledCount],
@@ -140,18 +134,11 @@ export default function BookingOutcomesChart({
   >((accumulated, segment) => {
     const sweep = total === 0 ? 0 : (segment.count / total) * 360;
     const startAngle =
-      accumulated.length === 0
-        ? 0
-        : accumulated[accumulated.length - 1].endAngle;
+      accumulated.length === 0 ? 0 : accumulated[accumulated.length - 1].endAngle;
     const endAngle = startAngle + sweep;
     const midAngle = startAngle + sweep / 2;
     const labelRadius = (INNER_RADIUS + OUTER_RADIUS) / 2;
-    const labelPos = polarToCartesianFromTop(
-      CENTER,
-      CENTER,
-      labelRadius,
-      midAngle,
-    );
+    const labelPos = polarToCartesianFromTop(CENTER, CENTER, labelRadius, midAngle);
     const segmentPct = pct(segment.count);
 
     accumulated.push({
@@ -208,12 +195,7 @@ export default function BookingOutcomesChart({
             aria-label={ariaLabel}
           >
             {total === 0 ? (
-              <circle
-                cx={CENTER}
-                cy={CENTER}
-                r={OUTER_RADIUS}
-                fill="#e2e8f0"
-              />
+              <circle cx={CENTER} cy={CENTER} r={OUTER_RADIUS} fill="#e2e8f0" />
             ) : (
               arcs.map((arc) =>
                 arc.path ? (
@@ -281,9 +263,7 @@ export default function BookingOutcomesChart({
           </ul>
 
           <div className="pt-4">
-            <p className="text-body text-muted-foreground">
-              Booking success rate
-            </p>
+            <p className="text-body text-muted-foreground">Booking success rate</p>
             <p className="mt-1 text-subheading font-semibold tabular-nums text-foreground">
               {formatPercent(metrics.bookingSuccessRate)}
             </p>

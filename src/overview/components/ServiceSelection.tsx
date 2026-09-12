@@ -18,9 +18,7 @@ export default function ServiceSelection({ services }: ServiceSelectionProps) {
     .map((service) => ({
       ...service,
       share:
-        totalSelections === 0
-          ? 0
-          : (service.timesSelected / totalSelections) * 100,
+        totalSelections === 0 ? 0 : (service.timesSelected / totalSelections) * 100,
     }))
     .sort((a, b) => b.timesSelected - a.timesSelected);
 
@@ -42,9 +40,7 @@ export default function ServiceSelection({ services }: ServiceSelectionProps) {
           items.map((item) => (
             <div key={item.serviceId}>
               <div className="mb-2 flex items-center justify-between gap-3 text-small">
-                <span className="font-medium text-foreground">
-                  {item.serviceName}
-                </span>
+                <span className="font-medium text-foreground">{item.serviceName}</span>
                 <span className="shrink-0 tabular-nums text-muted-foreground">
                   {item.timesSelected} · {formatPercent(item.share)}
                 </span>

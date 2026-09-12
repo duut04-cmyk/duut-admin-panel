@@ -5,10 +5,7 @@ import {
   type LiveActivityType,
 } from "@/data/mockLiveActivity";
 
-const iconStyles: Record<
-  LiveActivityType,
-  { bg: string; text: string }
-> = {
+const iconStyles: Record<LiveActivityType, { bg: string; text: string }> = {
   completed: { bg: "bg-emerald-100", text: "text-emerald-600" },
   created: { bg: "bg-blue-100", text: "text-blue-600" },
   assigned: { bg: "bg-orange-100", text: "text-orange-600" },
@@ -82,22 +79,20 @@ export default function LiveActivityFeed() {
           Live Activity
         </h2>
         <span className="inline-flex items-center gap-1.5 rounded-pill bg-emerald-50 px-2.5 py-0.5 text-caption font-medium text-admin-success">
-          <span className="h-1.5 w-1.5 rounded-full bg-admin-success" aria-hidden="true" />
+          <span
+            className="h-1.5 w-1.5 rounded-full bg-admin-success"
+            aria-hidden="true"
+          />
           Live
         </span>
       </div>
 
       <ul className="space-y-1 px-5 pb-2 pt-1">
         {mockLiveActivity.map((event) => (
-          <li
-            key={event.id}
-            className="flex items-start gap-3 py-3"
-          >
+          <li key={event.id} className="flex items-start gap-3 py-3">
             <ActivityIcon type={event.type} />
             <div className="min-w-0 flex-1">
-              <p className="text-small font-medium text-foreground">
-                {event.message}
-              </p>
+              <p className="text-small font-medium text-foreground">{event.message}</p>
               <p className="mt-0.5 text-caption text-muted-foreground">
                 {event.deliveryId} • {event.category}
               </p>

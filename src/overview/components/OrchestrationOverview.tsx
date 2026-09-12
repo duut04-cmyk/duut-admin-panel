@@ -1,8 +1,5 @@
 import type { PlatformMetrics } from "@/data/orchestrationMetrics";
-import {
-  formatDecisionTime,
-  formatPercent,
-} from "@/data/orchestrationMetrics";
+import { formatDecisionTime, formatPercent } from "@/data/orchestrationMetrics";
 import AdminCallout from "@/ui/AdminCallout";
 import AdminProgress from "@/ui/AdminProgress";
 import AdminSectionHeader from "@/ui/AdminSectionHeader";
@@ -48,9 +45,7 @@ type OrchestrationOverviewProps = {
   metrics: PlatformMetrics;
 };
 
-export default function OrchestrationOverview({
-  metrics,
-}: OrchestrationOverviewProps) {
+export default function OrchestrationOverview({ metrics }: OrchestrationOverviewProps) {
   const decisionsMade = metrics.totalDeliveries;
 
   return (

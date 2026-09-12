@@ -2,10 +2,7 @@ import Link from "next/link";
 import type { BookingStatus } from "@/data/orchestrationTypes";
 import type { OrchestrationRecord } from "@/data/orchestrationTypes";
 import { formatDecisionTime } from "@/data/orchestrationMetrics";
-import {
-  bookingStatusLabel,
-  formatRoute,
-} from "@/orchestration/components/utils";
+import { bookingStatusLabel, formatRoute } from "@/orchestration/components/utils";
 
 type RecentDecisionsProps = {
   records: OrchestrationRecord[];
@@ -60,9 +57,7 @@ export default function RecentDecisions({ records }: RecentDecisionsProps) {
           <>
             <div className="flex-1 overflow-x-auto">
               <table className="w-full min-w-[600px] text-left text-small">
-                <caption className="sr-only">
-                  Recent orchestration decisions
-                </caption>
+                <caption className="sr-only">Recent orchestration decisions</caption>
                 <thead>
                   <tr className="border-b border-border/60 text-caption font-semibold text-muted-foreground">
                     <th scope="col" className="pb-3 pr-4 font-semibold">

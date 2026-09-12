@@ -66,9 +66,7 @@ export default function FailureAnalysis({
 
             <p className="mt-auto pt-4 text-right text-small text-muted-foreground">
               Total failures:{" "}
-              <span className="font-semibold text-foreground">
-                {totalFailures}
-              </span>
+              <span className="font-semibold text-foreground">{totalFailures}</span>
             </p>
           </>
         )}

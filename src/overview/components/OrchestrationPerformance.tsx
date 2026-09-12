@@ -26,10 +26,7 @@ export default function OrchestrationPerformance({
       />
 
       <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
-        <FlowStep
-          value={metrics.totalServicesEvaluated}
-          label="Services evaluated"
-        />
+        <FlowStep value={metrics.totalServicesEvaluated} label="Services evaluated" />
         <FlowArrow />
         <FlowStep value={metrics.totalAvailableOptions} label="Available" />
         <FlowArrow />
@@ -40,8 +37,8 @@ export default function OrchestrationPerformance({
 
       <p className="mt-6 text-center text-small text-muted-foreground">
         Across {metrics.totalDeliveries} deliveries, Doot evaluated{" "}
-        {metrics.totalServicesEvaluated} service options and selected the best
-        eligible option for each request.
+        {metrics.totalServicesEvaluated} service options and selected the best eligible
+        option for each request.
       </p>
     </section>
   );

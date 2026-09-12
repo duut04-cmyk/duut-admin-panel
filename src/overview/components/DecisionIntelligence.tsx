@@ -11,9 +11,7 @@ type DecisionIntelligenceProps = {
   record: OrchestrationRecord;
 };
 
-export default function DecisionIntelligence({
-  record,
-}: DecisionIntelligenceProps) {
+export default function DecisionIntelligence({ record }: DecisionIntelligenceProps) {
   const { deliveryRequest, decision, booking } = record;
   const eligible = countEligibleServices(record.evaluations);
   const deliveryId = deliveryRequest.deliveryId;
@@ -31,9 +29,7 @@ export default function DecisionIntelligence({
           <p className="text-caption font-semibold uppercase tracking-wide text-muted-foreground">
             Representative delivery
           </p>
-          <p className="mt-1 text-body font-semibold text-foreground">
-            {deliveryId}
-          </p>
+          <p className="mt-1 text-body font-semibold text-foreground">{deliveryId}</p>
           <p className="mt-0.5 text-small text-muted-foreground">
             {deliveryRequest.pickup.city} → {deliveryRequest.drop.city} ·{" "}
             {deliveryRequest.requirements.deliveryType} ·{" "}
@@ -42,20 +38,13 @@ export default function DecisionIntelligence({
         </div>
 
         <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
-          <FlowStep
-            value={decision.servicesEvaluated}
-            label="Services evaluated"
-          />
+          <FlowStep value={decision.servicesEvaluated} label="Services evaluated" />
           <FlowArrow />
           <FlowStep value={decision.availableOptions} label="Available" />
           <FlowArrow />
           <FlowStep value={eligible} label="Eligible scored" />
           <FlowArrow />
-          <FlowStep
-            value={decision.selectedServiceName}
-            label="Selected"
-            highlight
-          />
+          <FlowStep value={decision.selectedServiceName} label="Selected" highlight />
           <FlowArrow />
           <FlowStep
             value={bookingStatusLabel(booking.status)}

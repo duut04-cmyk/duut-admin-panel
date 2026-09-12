@@ -9,10 +9,7 @@ type BookingOutcomesProps = {
   records: OrchestrationRecord[];
 };
 
-export default function BookingOutcomes({
-  metrics,
-  records,
-}: BookingOutcomesProps) {
+export default function BookingOutcomes({ metrics, records }: BookingOutcomesProps) {
   const total = metrics.totalDeliveries;
   const pendingCount = getPendingBookingCount(records);
 
@@ -89,7 +86,9 @@ export default function BookingOutcomes({
               </span>
               <span className="tabular-nums text-muted-foreground">
                 {segment.count}{" "}
-                <span className="text-foreground">({formatPercent(pct(segment.count))})</span>
+                <span className="text-foreground">
+                  ({formatPercent(pct(segment.count))})
+                </span>
               </span>
             </li>
           ))}

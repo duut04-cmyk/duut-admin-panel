@@ -1,13 +1,12 @@
-import type { OrchestrationDecision, ServiceEvaluation } from "@/data/orchestrationTypes";
+import type {
+  OrchestrationDecision,
+  ServiceEvaluation,
+} from "@/data/orchestrationTypes";
 import AdminBadge from "@/ui/AdminBadge";
 import AdminCard from "@/ui/AdminCard";
 import AdminSectionHeader from "@/ui/AdminSectionHeader";
 import ServiceEvaluationCard from "./ServiceEvaluationCard";
-import {
-  formatEta,
-  formatPrice,
-  formatScore,
-} from "./utils";
+import { formatEta, formatPrice, formatScore } from "./utils";
 
 type ServiceEvaluationTableProps = {
   evaluations: ServiceEvaluation[];
@@ -26,7 +25,9 @@ function compatibilityLabel(evaluation: ServiceEvaluation): string {
 
 function availabilityLabel(evaluation: ServiceEvaluation): string {
   if (evaluation.availability) return "Available";
-  return evaluation.rejectionReasons[0] ?? evaluation.availabilityReason ?? "Unavailable";
+  return (
+    evaluation.rejectionReasons[0] ?? evaluation.availabilityReason ?? "Unavailable"
+  );
 }
 
 function resultContent(
@@ -74,24 +75,36 @@ export default function ServiceEvaluationTable({
           <caption className="sr-only">Service evaluations</caption>
           <thead>
             <tr className="border-b border-border text-caption font-semibold uppercase tracking-wide text-muted-foreground">
-              <th scope="col" className="py-3 pr-4 font-semibold">Service</th>
-              <th scope="col" className="py-3 pr-4 font-semibold">Availability</th>
-              <th scope="col" className="py-3 pr-4 font-semibold">Compatibility</th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">Price</th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">ETA</th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">Quality</th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">Score</th>
-              <th scope="col" className="py-3 font-semibold">Result</th>
+              <th scope="col" className="py-3 pr-4 font-semibold">
+                Service
+              </th>
+              <th scope="col" className="py-3 pr-4 font-semibold">
+                Availability
+              </th>
+              <th scope="col" className="py-3 pr-4 font-semibold">
+                Compatibility
+              </th>
+              <th scope="col" className="py-3 pr-4 text-right font-semibold">
+                Price
+              </th>
+              <th scope="col" className="py-3 pr-4 text-right font-semibold">
+                ETA
+              </th>
+              <th scope="col" className="py-3 pr-4 text-right font-semibold">
+                Quality
+              </th>
+              <th scope="col" className="py-3 pr-4 text-right font-semibold">
+                Score
+              </th>
+              <th scope="col" className="py-3 font-semibold">
+                Result
+              </th>
             </tr>
           </thead>
           <tbody>
             {evaluations.map((evaluation) => {
-              const isSelected =
-                evaluation.serviceId === decision.selectedServiceId;
-              const result = resultContent(
-                evaluation,
-                decision.selectedServiceId,
-              );
+              const isSelected = evaluation.serviceId === decision.selectedServiceId;
+              const result = resultContent(evaluation, decision.selectedServiceId);
               const overallScore = isSelected
                 ? decision.decisionScore.totalScore.toFixed(1)
                 : "—";

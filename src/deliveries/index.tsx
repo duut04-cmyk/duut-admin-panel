@@ -55,10 +55,7 @@ export default function DeliveriesPage() {
       );
   }, [allRecords, filters]);
 
-  const metrics = useMemo(
-    () => getDeliveryMetrics(filteredRecords),
-    [filteredRecords],
-  );
+  const metrics = useMemo(() => getDeliveryMetrics(filteredRecords), [filteredRecords]);
 
   return (
     <AdminShell

@@ -63,9 +63,7 @@ export default function OrchestrationRow({
           </div>
           <div>
             <dt className="text-caption text-muted-foreground">Score</dt>
-            <dd className="mt-0.5 tabular-nums font-medium">
-              {score.toFixed(1)}
-            </dd>
+            <dd className="mt-0.5 tabular-nums font-medium">{score.toFixed(1)}</dd>
           </div>
           <div>
             <dt className="text-caption text-muted-foreground">Decision time</dt>

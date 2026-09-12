@@ -10,8 +10,7 @@ export default function SelectionReason({
   reason,
   selectedServiceName,
 }: SelectionReasonProps) {
-  const displayReason =
-    reason?.trim() || "Selection reason not available.";
+  const displayReason = reason?.trim() || "Selection reason not available.";
 
   return (
     <section aria-labelledby="selection-reason-heading">

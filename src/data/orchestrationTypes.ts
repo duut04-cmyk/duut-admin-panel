@@ -26,12 +26,7 @@ export type DeliveryEventType =
   | "failed";
 
 export type ScoreFactorKey =
-  | "availability"
-  | "packageFit"
-  | "requirementFit"
-  | "price"
-  | "eta"
-  | "serviceQuality";
+  "availability" | "packageFit" | "requirementFit" | "price" | "eta" | "serviceQuality";
 
 export type DeliveryLocation = {
   address: string;

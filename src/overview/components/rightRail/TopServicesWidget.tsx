@@ -1,8 +1,5 @@
 import type { DateRangeKey } from "@/data/orchestrationMetrics";
-import type {
-  PackageCategory,
-  TopServiceCategory,
-} from "@/data/dashboardMetrics";
+import type { PackageCategory, TopServiceCategory } from "@/data/dashboardMetrics";
 import {
   formatTopServicePercent,
   resolveTopServicesDisplay,

@@ -122,9 +122,7 @@ export default function DeliveryFilters({
           label="Outcome"
           value={filters.outcome}
           options={outcomeOptions}
-          onChange={(value) =>
-            update({ outcome: value as OutcomeFilter })
-          }
+          onChange={(value) => update({ outcome: value as OutcomeFilter })}
         />
       </div>
     </section>

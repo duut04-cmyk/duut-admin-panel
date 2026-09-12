@@ -24,9 +24,7 @@ function LocationBlock({
       <h3 className="text-caption font-semibold uppercase tracking-wide text-muted-foreground">
         {title}
       </h3>
-      <p className="mt-2 text-small font-medium text-foreground">
-        {address}
-      </p>
+      <p className="mt-2 text-small font-medium text-foreground">{address}</p>
       <p className="mt-0.5 text-small text-muted-foreground">{city}</p>
       <p className="mt-3 text-small text-muted-foreground">
         {contactName} · {contactPhone}
@@ -62,7 +60,11 @@ export default function DeliveryRoute({ deliveryRequest }: DeliveryRouteProps) {
             stroke="currentColor"
             strokeWidth="1.75"
           >
-            <path d="M10 4v12M6 14l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M10 4v12M6 14l4 4 4-4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </div>
 

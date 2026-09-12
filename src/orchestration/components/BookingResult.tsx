@@ -25,9 +25,7 @@ export default function BookingResult({ booking }: BookingResultProps) {
       >
         {isFailed && (
           <div className="mb-4 rounded-md border border-admin-danger/20 bg-surface px-4 py-3">
-            <p className="text-small font-semibold text-admin-danger">
-              Booking failed
-            </p>
+            <p className="text-small font-semibold text-admin-danger">Booking failed</p>
             {booking.failureReason && (
               <p className="mt-1 text-small text-muted-foreground">
                 {booking.failureReason}

@@ -26,7 +26,11 @@ export default function AdminFilter({
           : "border-border bg-background text-muted-foreground hover:border-foreground/20 hover:text-foreground"
       } ${className}`}
     >
-      {icon && <span className="shrink-0" aria-hidden="true">{icon}</span>}
+      {icon && (
+        <span className="shrink-0" aria-hidden="true">
+          {icon}
+        </span>
+      )}
       {label}
     </button>
   );

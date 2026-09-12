@@ -134,9 +134,7 @@ export function getRollingBookingSuccessSparkline(
   });
 }
 
-export function getDecisionTimeSparkline(
-  records: OrchestrationRecord[],
-): number[] {
+export function getDecisionTimeSparkline(records: OrchestrationRecord[]): number[] {
   const times = sortRecords(records).map((record) => record.decision.durationMs);
   return times.length > 0 ? times : [0];
 }

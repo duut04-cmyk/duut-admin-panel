@@ -97,13 +97,7 @@ function TrendArrow({ up }: { up: boolean }) {
   );
 }
 
-function MetricTrendLine({
-  trend,
-  theme,
-}: {
-  trend: MetricTrend;
-  theme: MetricTheme;
-}) {
+function MetricTrendLine({ trend, theme }: { trend: MetricTrend; theme: MetricTheme }) {
   const styles = themeStyles[theme];
   const isUp = trend.direction === "positive";
   const colorClass =
@@ -116,11 +110,11 @@ function MetricTrendLine({
   const displayValue = trend.value.replace(/^[+-]/, "");
 
   return (
-    <p className={`mt-2 flex flex-wrap items-center gap-1 text-caption font-medium ${colorClass}`}>
+    <p
+      className={`mt-2 flex flex-wrap items-center gap-1 text-caption font-medium ${colorClass}`}
+    >
       {trend.direction !== "neutral" && <TrendArrow up={isUp} />}
-      <span>
-        {displayValue} vs. last 30 days
-      </span>
+      <span>{displayValue} vs. last 30 days</span>
     </p>
   );
 }
@@ -210,10 +204,7 @@ export function PackageIcon() {
       strokeWidth="1.75"
       aria-hidden="true"
     >
-      <path
-        d="M3 6l7-3 7 3v8l-7 3-7-3V6z"
-        strokeLinejoin="round"
-      />
+      <path d="M3 6l7-3 7 3v8l-7 3-7-3V6z" strokeLinejoin="round" />
       <path d="M10 3v15M3 6l7 4 7-4" strokeLinejoin="round" />
     </svg>
   );

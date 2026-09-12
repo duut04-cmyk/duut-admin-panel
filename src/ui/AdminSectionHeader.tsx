@@ -27,9 +27,7 @@ export default function AdminSectionHeader({
           </p>
         )}
       </div>
-      {action && (
-        <div className="flex shrink-0 items-center">{action}</div>
-      )}
+      {action && <div className="flex shrink-0 items-center">{action}</div>}
     </div>
   );
 }

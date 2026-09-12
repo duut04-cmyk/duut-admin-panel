@@ -6,9 +6,7 @@ type DeliveryDetailHeaderProps = {
   record: OrchestrationRecord;
 };
 
-export default function DeliveryDetailHeader({
-  record,
-}: DeliveryDetailHeaderProps) {
+export default function DeliveryDetailHeader({ record }: DeliveryDetailHeaderProps) {
   const { deliveryRequest } = record;
 
   return (

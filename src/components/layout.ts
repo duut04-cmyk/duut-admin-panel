@@ -12,8 +12,7 @@ export const ADMIN_SHELL_RIGHT_RAIL_WIDTH = "w-[340px]";
 export const ADMIN_DASHBOARD_RAIL_GRID = "xl:grid-cols-[minmax(0,1fr)_340px]";
 
 /** Horizontal inset for page headers and main content — must stay in sync. */
-export const ADMIN_SHELL_CONTENT_PADDING =
-  "px-4 sm:px-6 lg:px-8";
+export const ADMIN_SHELL_CONTENT_PADDING = "px-4 sm:px-6 lg:px-8";
 
 /** Page title block below global top bar (no bottom border — top bar owns divider). */
 export const ADMIN_PAGE_HEADER =

@@ -24,12 +24,7 @@ export default function Checkbox({
       htmlFor={id}
       className={`inline-flex cursor-pointer items-center gap-2 ${className}`}
     >
-      <input
-        id={id}
-        type="checkbox"
-        className="peer sr-only"
-        {...props}
-      />
+      <input id={id} type="checkbox" className="peer sr-only" {...props} />
       <span
         className="flex h-4 w-4 shrink-0 items-center justify-center rounded-[3px] border border-border bg-background transition-colors peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent/40 peer-checked:[&>svg]:opacity-100"
         aria-hidden="true"

@@ -8,9 +8,7 @@ type ServiceAvailabilityProps = {
   services: ServicePerformance[];
 };
 
-export default function ServiceAvailability({
-  services,
-}: ServiceAvailabilityProps) {
+export default function ServiceAvailability({ services }: ServiceAvailabilityProps) {
   return (
     <section aria-labelledby="service-availability-heading">
       <AdminSectionHeader

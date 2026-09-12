@@ -14,10 +14,7 @@ type DeliveryRowProps = {
   variant?: "table" | "card";
 };
 
-export default function DeliveryRow({
-  record,
-  variant = "table",
-}: DeliveryRowProps) {
+export default function DeliveryRow({ record, variant = "table" }: DeliveryRowProps) {
   const { deliveryRequest, decision, booking } = record;
   const deliveryId = deliveryRequest.deliveryId;
   const href = `/deliveries/${deliveryId}`;
