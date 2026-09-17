@@ -4,7 +4,10 @@ import AdminGlobalSearch from "./AdminGlobalSearch";
 import AdminIconButton, { MenuIcon } from "./AdminIconButton";
 import AdminNotificationsButton from "./AdminNotificationsButton";
 import AdminUserMenu from "./AdminUserMenu";
-import { ADMIN_SHELL_CONTENT_PADDING } from "./layout";
+import {
+  ADMIN_SHELL_CONTENT_PADDING,
+  ADMIN_SHELL_SIDEBAR_DRAWER_CHROME_HIDDEN,
+} from "./layout";
 
 type AdminTopBarProps = {
   onMenuClick?: () => void;
@@ -20,7 +23,7 @@ export default function AdminTopBar({ onMenuClick }: AdminTopBarProps) {
           <AdminIconButton
             icon={<MenuIcon />}
             label="Open navigation menu"
-            className="shrink-0 lg:hidden"
+            className={`shrink-0 ${ADMIN_SHELL_SIDEBAR_DRAWER_CHROME_HIDDEN}`}
             onClick={onMenuClick}
           />
         )}

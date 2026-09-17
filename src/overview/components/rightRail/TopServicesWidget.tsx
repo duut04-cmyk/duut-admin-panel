@@ -97,21 +97,23 @@ export default function TopServicesWidget({
       className="rounded-card border border-border/60 bg-background shadow-sm"
       aria-labelledby="top-services-heading"
     >
-      <div className="flex items-center justify-between gap-3 px-5 pb-2 pt-4">
+      <div className="flex flex-col gap-3 px-4 pb-2 pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-5">
         <h2
           id="top-services-heading"
           className="text-body font-semibold text-foreground"
         >
           Top Services
         </h2>
-        <DashboardCardDateRange
-          value={dateRange}
-          onChange={onDateRangeChange}
-          compact
-        />
+        <div className="w-full shrink-0 sm:w-auto">
+          <DashboardCardDateRange
+            value={dateRange}
+            onChange={onDateRangeChange}
+            compact
+          />
+        </div>
       </div>
 
-      <ul className="space-y-5 px-5 pb-4 pt-1">
+      <ul className="space-y-5 px-4 pb-4 pt-1 sm:px-5">
         {displayCategories.map((item) => {
           const theme = categoryThemes[item.category];
 

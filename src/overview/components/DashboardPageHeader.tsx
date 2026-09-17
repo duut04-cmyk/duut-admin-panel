@@ -22,11 +22,11 @@ export default function DashboardPageHeader({
     >
       <p className="text-small text-muted-foreground">{greeting} 👋</p>
 
-      <div className="mt-2 flex items-end justify-between gap-4">
-        <h1 className="text-heading-md font-bold leading-tight tracking-tight text-foreground">
+      <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+        <h1 className="min-w-0 text-heading font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
           Here&apos;s what&apos;s happening with Doot
         </h1>
-        <div className="shrink-0 pb-0.5">
+        <div className="w-full shrink-0 sm:w-auto sm:pb-0.5">
           <DashboardCardDateRange value={dateRange} onChange={onDateRangeChange} />
         </div>
       </div>

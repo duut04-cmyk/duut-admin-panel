@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@custom-variant portrait (@media (orientation: portrait));
+@custom-variant landscape (@media (orientation: landscape));
+
 :root {
   /* Brand */
   --color-white: #ffffff;
@@ -144,4 +147,22 @@ h1,
 h2,
 h3 {
   letter-spacing: -0.02em;
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

@@ -45,15 +45,19 @@ type DashboardCardDateRangeProps = {
   value: DateRangeKey;
   onChange: (value: DateRangeKey) => void;
   compact?: boolean;
+  className?: string;
 };
 
 export default function DashboardCardDateRange({
   value,
   onChange,
   compact = false,
+  className = "",
 }: DashboardCardDateRangeProps) {
   return (
-    <div className={`relative ${compact ? "min-w-[140px]" : "min-w-[168px]"}`}>
+    <div
+      className={`relative w-full sm:w-auto ${compact ? "min-w-0 sm:min-w-[140px]" : "min-w-0 sm:min-w-[168px]"} ${className}`}
+    >
       <div className="pointer-events-none absolute inset-y-0 left-2.5 z-10 flex items-center">
         <CalendarIcon />
       </div>

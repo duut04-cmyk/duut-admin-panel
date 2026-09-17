@@ -7,7 +7,8 @@ type AuthFieldInputProps = InputHTMLAttributes<HTMLInputElement> & {
   trailingSlot?: ReactNode;
 };
 
-const authInputClass = "h-12 rounded-lg pl-10 pr-4 border-border/80 bg-background";
+const authInputClass =
+  "h-12 rounded-[4px] pl-10 pr-4 border-border/80 bg-background sm:rounded-lg";
 
 export default function AuthFieldInput({
   leadingIcon,

@@ -94,40 +94,46 @@ const features = [
 
 export default function AdminLoginMarketing() {
   return (
-    <section className="relative z-10 w-full max-w-[460px]">
+    <section className="relative z-10 w-full min-w-0 max-w-[460px] portrait:max-xl:mx-auto portrait:max-xl:max-w-lg portrait:max-xl:text-center lg:landscape:max-xl:max-w-full lg:landscape:max-xl:text-left xl:max-w-[460px] xl:text-left">
       <header>
-        <DootWordmark variant="sans" className="text-[2.375rem] leading-none" />
-        <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+        <DootWordmark
+          variant="sans"
+          className="text-[2.375rem] leading-none portrait:max-xl:text-[2rem] lg:landscape:max-xl:text-[2rem] xl:text-[2.375rem]"
+        />
+        <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400 lg:landscape:max-xl:mt-1.5 lg:landscape:max-xl:whitespace-nowrap lg:landscape:max-xl:text-[10px] lg:landscape:max-xl:tracking-[0.14em] xl:mt-2 xl:text-[11px] xl:tracking-[0.16em]">
           Smart delivery orchestration
         </p>
       </header>
 
-      <div className="mt-9">
-        <h1 className="text-[2.5rem] font-bold leading-[1.12] tracking-tight text-foreground xl:text-[2.75rem]">
+      <div className="mt-9 lg:landscape:max-xl:mt-5 xl:mt-9">
+        <h1 className="text-[2.5rem] font-bold leading-[1.12] tracking-tight text-foreground portrait:max-xl:text-[1.625rem] portrait:max-xl:leading-[1.15] lg:landscape:max-xl:text-[1.875rem] lg:landscape:max-xl:leading-[1.15] xl:text-[2.5rem] 2xl:text-[2.75rem]">
           <span className="block whitespace-nowrap">Smarter deliveries.</span>
-          <span className="mt-1 block whitespace-nowrap">
+          <span className="mt-1 block whitespace-nowrap lg:landscape:max-xl:mt-0.5">
             Powered by <span className="text-accent">Doot.</span>
           </span>
         </h1>
-        <p className="mt-4 text-[16px] leading-relaxed text-muted-foreground">
+        <p className="mt-4 text-[16px] leading-relaxed text-muted-foreground lg:landscape:max-xl:mt-3 lg:landscape:max-xl:max-w-[21rem] lg:landscape:max-xl:text-[14px] lg:landscape:max-xl:leading-[1.45] lg:landscape:max-xl:line-clamp-3 xl:mt-4 xl:max-w-none xl:text-[16px] xl:leading-relaxed xl:line-clamp-none">
           One platform. Multiple delivery partners. Intelligent orchestration. Faster,
           safer and more reliable deliveries for your business.
         </p>
       </div>
 
-      <ul className="mt-8 space-y-6">
+      <ul className="mt-6 space-y-5 portrait:max-xl:mt-6 portrait:max-xl:space-y-4 lg:landscape:max-xl:mt-5 lg:landscape:max-xl:space-y-3 xl:mt-8 xl:space-y-6">
         {features.map((feature) => (
-          <li key={feature.title} className="flex gap-3.5">
+          <li
+            key={feature.title}
+            className="flex gap-3.5 text-left portrait:max-xl:gap-3 lg:landscape:max-xl:gap-2.5"
+          >
             <span
-              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg ${feature.iconBg}`}
+              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg lg:landscape:max-xl:h-10 lg:landscape:max-xl:w-10 lg:landscape:max-xl:[&_svg]:h-[18px] lg:landscape:max-xl:[&_svg]:w-[18px] xl:h-11 xl:w-11 ${feature.iconBg}`}
             >
               {feature.icon}
             </span>
-            <div className="min-w-0 pt-0.5">
-              <p className="text-[16px] font-semibold leading-tight text-foreground">
+            <div className="min-w-0 flex-1 pt-0.5 lg:landscape:max-xl:pt-0">
+              <p className="text-[16px] font-semibold leading-tight text-foreground lg:landscape:max-xl:text-[15px] xl:text-[16px]">
                 {feature.title}
               </p>
-              <p className="mt-1.5 text-[14px] leading-snug text-muted-foreground">
+              <p className="mt-1.5 text-[14px] leading-snug text-muted-foreground lg:landscape:max-xl:mt-1 lg:landscape:max-xl:max-w-[19.5rem] lg:landscape:max-xl:text-[13px] lg:landscape:max-xl:leading-[1.4] lg:landscape:max-xl:line-clamp-2 xl:mt-1.5 xl:max-w-none xl:text-[14px] xl:line-clamp-none">
                 {feature.description}
               </p>
             </div>

@@ -24,7 +24,8 @@ const Y_AXIS_WIDTH = 32;
 const PLOT_PAD_Y = 8;
 const PLOT_PAD_X = 16;
 
-const axisTextClass = "font-sans text-small font-normal leading-none text-foreground";
+const axisTextClass =
+  "font-sans text-[10px] font-normal leading-none text-foreground sm:text-small";
 
 function formatChartDate(isoDate: string): string {
   const date = new Date(`${isoDate}T00:00:00`);
@@ -146,8 +147,8 @@ function DecisionTimeChart({ points }: { points: DecisionSpeedChartPoint[] }) {
       : "";
 
   return (
-    <div className="w-full font-sans">
-      <div className="flex" style={{ height: plotHeight }}>
+    <div className="min-w-0 w-full overflow-x-hidden font-sans">
+      <div className="flex min-w-0" style={{ height: plotHeight }}>
         <div
           className="flex shrink-0 flex-col justify-between text-right"
           style={{
@@ -248,7 +249,10 @@ function DecisionTimeChart({ points }: { points: DecisionSpeedChartPoint[] }) {
         </div>
       </div>
 
-      <div className="relative mt-1.5 h-4" style={{ marginLeft: Y_AXIS_WIDTH }}>
+      <div
+        className="relative mt-1.5 h-4 overflow-hidden"
+        style={{ marginLeft: Y_AXIS_WIDTH }}
+      >
         {xTicks.map((tick, index) => {
           const percent = xPercentForTick(tick.ms);
           const isFirst = index === 0;
@@ -304,7 +308,7 @@ export default function DecisionSpeed({ metrics, records }: DecisionSpeedProps) 
 
   return (
     <article
-      className="rounded-card border border-border/60 bg-background p-5 font-sans shadow-sm"
+      className="min-w-0 rounded-card border border-border/60 bg-background p-4 font-sans shadow-sm sm:p-5"
       aria-labelledby="decision-speed-heading"
     >
       <h2
@@ -320,21 +324,21 @@ export default function DecisionSpeed({ metrics, records }: DecisionSpeedProps) 
       <div className="mt-5 grid grid-cols-3 divide-x divide-border overflow-hidden rounded-lg border border-border">
         <div className="px-2 py-3 text-center sm:px-3">
           <p className="text-small font-medium text-muted-foreground">Average</p>
-          <p className="mt-1 text-2xl font-bold leading-none tracking-tight text-foreground">
+          <p className="mt-1 text-xl font-bold leading-none tracking-tight text-foreground sm:text-2xl">
             {formatDecisionTime(displayMetrics.averageDecisionTimeMs)}
           </p>
           <StatTrend value={decisionSpeedStatTrends.average.value} />
         </div>
         <div className="px-2 py-3 text-center sm:px-3">
           <p className="text-small font-medium text-muted-foreground">Fastest</p>
-          <p className="mt-1 text-2xl font-bold leading-none tracking-tight text-foreground">
+          <p className="mt-1 text-xl font-bold leading-none tracking-tight text-foreground sm:text-2xl">
             {formatDecisionTime(displayMetrics.fastestDecisionTimeMs)}
           </p>
           <StatTrend value={decisionSpeedStatTrends.fastest.value} />
         </div>
         <div className="px-2 py-3 text-center sm:px-3">
           <p className="text-small font-medium text-muted-foreground">Slowest</p>
-          <p className="mt-1 text-2xl font-bold leading-none tracking-tight text-foreground">
+          <p className="mt-1 text-xl font-bold leading-none tracking-tight text-foreground sm:text-2xl">
             {formatDecisionTime(displayMetrics.slowestDecisionTimeMs)}
           </p>
           <StatTrend value={decisionSpeedStatTrends.slowest.value} />

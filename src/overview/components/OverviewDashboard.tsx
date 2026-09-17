@@ -59,7 +59,7 @@ export default function OverviewDashboard() {
         <DashboardPageHeader dateRange={dateRange} onDateRangeChange={setDateRange} />
       }
     >
-      <AdminContainer className="space-y-6 bg-background pb-10 pt-0 lg:space-y-6">
+      <AdminContainer className="min-w-0 space-y-6 overflow-x-hidden bg-background pb-10 pt-0 lg:space-y-6">
         {records.length === 0 ? (
           <AdminEmptyState
             title="No data for this period"
@@ -67,11 +67,11 @@ export default function OverviewDashboard() {
           />
         ) : (
           <>
-            <div className={`grid gap-6 ${ADMIN_DASHBOARD_RAIL_GRID}`}>
+            <div className={`grid min-w-0 gap-6 ${ADMIN_DASHBOARD_RAIL_GRID}`}>
               <div className="min-w-0 space-y-6">
                 <PlatformMetrics metrics={metrics} records={records} />
 
-                <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+                <div className="grid min-w-0 gap-6 md:landscape:grid-cols-2 lg:grid-cols-2 lg:items-start">
                   <DeliveryFunnel
                     funnel={funnel}
                     dateRange={dateRange}
@@ -83,7 +83,7 @@ export default function OverviewDashboard() {
                 <RecentDeliveriesTable records={recentRecords} />
               </div>
 
-              <aside className="hidden flex-col gap-6 xl:flex">
+              <aside className="flex min-w-0 flex-col gap-6 xl:sticky xl:top-20 xl:self-start">
                 <LiveActivityFeed />
                 <TopServicesWidget
                   categories={topServices}
@@ -91,15 +91,6 @@ export default function OverviewDashboard() {
                   onDateRangeChange={setDateRange}
                 />
               </aside>
-            </div>
-
-            <div className="space-y-6 xl:hidden">
-              <LiveActivityFeed />
-              <TopServicesWidget
-                categories={topServices}
-                dateRange={dateRange}
-                onDateRangeChange={setDateRange}
-              />
             </div>
           </>
         )}

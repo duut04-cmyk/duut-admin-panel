@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect } from "react";
 import {
   formatRelativeTime,
   mockLiveActivity,
@@ -66,12 +69,41 @@ function ActivityIcon({ type }: { type: LiveActivityType }) {
 }
 
 export default function LiveActivityFeed() {
+  useEffect(() => {
+    const first = mockLiveActivity[0];
+    if (!first) return;
+    const serverStyleLabel = formatRelativeTime(first.timestamp);
+    // #region agent log
+    fetch("http://127.0.0.1:7573/ingest/c4f73e7b-c72c-4f5f-9daa-652efad20daf", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Debug-Session-Id": "217f7d",
+      },
+      body: JSON.stringify({
+        sessionId: "217f7d",
+        runId: "pre-fix",
+        hypothesisId: "D",
+        location: "LiveActivityFeed.tsx:useEffect",
+        message: "LiveActivityFeed mounted on client",
+        data: {
+          firstEventId: first.id,
+          firstEventTimestamp: first.timestamp,
+          clientFormattedLabel: serverStyleLabel,
+          clientNow: Date.now(),
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
+  }, []);
+
   return (
     <article
       className="flex flex-col rounded-card border border-border/60 bg-background shadow-sm"
       aria-labelledby="live-activity-heading"
     >
-      <div className="flex items-center justify-between px-5 pb-2 pt-4">
+      <div className="flex items-center justify-between px-4 pb-2 pt-4 sm:px-5">
         <h2
           id="live-activity-heading"
           className="text-body font-semibold text-foreground"
@@ -87,24 +119,31 @@ export default function LiveActivityFeed() {
         </span>
       </div>
 
-      <ul className="space-y-1 px-5 pb-2 pt-1">
+      <ul className="space-y-1 px-4 pb-2 pt-1 sm:px-5">
         {mockLiveActivity.map((event) => (
-          <li key={event.id} className="flex items-start gap-3 py-3">
-            <ActivityIcon type={event.type} />
-            <div className="min-w-0 flex-1">
-              <p className="text-small font-medium text-foreground">{event.message}</p>
-              <p className="mt-0.5 text-caption text-muted-foreground">
-                {event.deliveryId} • {event.category}
-              </p>
+          <li
+            key={event.id}
+            className="flex flex-col gap-1 py-3 sm:flex-row sm:items-start sm:gap-3"
+          >
+            <div className="flex min-w-0 items-start gap-3">
+              <ActivityIcon type={event.type} />
+              <div className="min-w-0 flex-1">
+                <p className="text-small font-medium leading-snug text-foreground">
+                  {event.message}
+                </p>
+                <p className="mt-0.5 truncate text-caption text-muted-foreground">
+                  {event.deliveryId} • {event.category}
+                </p>
+              </div>
             </div>
-            <span className="shrink-0 pt-0.5 text-caption text-muted-foreground">
+            <span className="shrink-0 pl-12 text-caption text-muted-foreground sm:pl-0 sm:pt-0.5">
               {formatRelativeTime(event.timestamp)}
             </span>
           </li>
         ))}
       </ul>
 
-      <div className="border-t border-border/25 px-5 py-3.5">
+      <div className="border-t border-border/25 px-4 py-3.5 sm:px-5">
         <Link
           href="/deliveries"
           className="text-small font-medium text-link hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"

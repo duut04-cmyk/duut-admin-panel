@@ -32,7 +32,7 @@ export default function PlatformMetrics({
       <h2 id="platform-metrics-heading" className="sr-only">
         Platform metrics
       </h2>
-      <div className="grid min-w-0 grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
+      <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 md:[&>*:last-child]:col-span-1 xl:grid-cols-5 [&>*:last-child]:col-span-2">
         <OverviewMetricCard
           title="Total Deliveries"
           value={metrics.totalDeliveries.toLocaleString()}

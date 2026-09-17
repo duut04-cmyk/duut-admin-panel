@@ -138,7 +138,7 @@ export default function OverviewMetricCard({
 
   return (
     <article className="flex flex-col rounded-card border border-border/60 bg-background shadow-sm">
-      <div className="flex flex-col px-4 pb-3 pt-4">
+      <div className="flex flex-col px-3 pb-3 pt-3 sm:px-4 sm:pt-4">
         <div className="flex items-center gap-2.5">
           <span
             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${styles.iconBg} ${styles.iconColor}`}
@@ -146,10 +146,12 @@ export default function OverviewMetricCard({
           >
             {icon}
           </span>
-          <p className="text-small font-medium text-muted-foreground">{title}</p>
+          <p className="min-w-0 text-small font-medium leading-snug text-muted-foreground line-clamp-2 sm:line-clamp-1">
+            {title}
+          </p>
         </div>
 
-        <p className="mt-3 text-[1.75rem] font-bold leading-none tracking-tight text-foreground">
+        <p className="mt-2 text-xl font-bold leading-none tracking-tight text-foreground sm:mt-3 sm:text-[1.75rem]">
           {value}
         </p>
 

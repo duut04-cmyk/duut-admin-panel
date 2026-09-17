@@ -83,7 +83,11 @@ export default function AdminLoginForm() {
 
   return (
     <>
-      <form className="space-y-5" onSubmit={handleSubmit} noValidate>
+      <form
+        className="space-y-5 lg:landscape:max-xl:space-y-3.5 xl:space-y-5"
+        onSubmit={handleSubmit}
+        noValidate
+      >
         <div>
           <label
             htmlFor={emailId}
@@ -157,7 +161,7 @@ export default function AdminLoginForm() {
 
         <Button
           type="submit"
-          className="h-[52px] w-full gap-2 rounded-xl text-body font-semibold"
+          className="h-[52px] w-full gap-2 rounded-xl text-body font-semibold lg:landscape:max-xl:h-10 xl:h-[52px]"
           disabled={loading}
           aria-busy={loading}
         >
@@ -175,7 +179,7 @@ export default function AdminLoginForm() {
         </Button>
       </form>
 
-      <div className="relative my-6">
+      <div className="relative my-6 lg:landscape:max-xl:my-4 xl:my-6">
         <div className="absolute inset-0 flex items-center" aria-hidden="true">
           <div className="w-full border-t border-border/80" />
         </div>
@@ -189,13 +193,13 @@ export default function AdminLoginForm() {
       <Button
         type="button"
         variant="secondary"
-        className="h-[52px] w-full gap-3 rounded-lg border-border/70 text-body font-medium shadow-none"
+        className="h-[52px] w-full gap-3 rounded-lg border-border/70 text-body font-medium shadow-none lg:landscape:max-xl:h-10 xl:h-[52px]"
       >
         <GoogleIcon className="h-5 w-5" />
         Continue with Google
       </Button>
 
-      <p className="mt-6 text-center text-small text-muted-foreground">
+      <p className="mt-6 text-center text-small text-muted-foreground lg:landscape:max-xl:mt-4 lg:landscape:max-xl:text-[12px] xl:mt-6">
         Don&apos;t have an account?{" "}
         <a
           href="mailto:support@doot.com"
