@@ -280,7 +280,7 @@ function RecentDeliveryCard({ record }: { record: OrchestrationRecord }) {
   const dropoff = formatLocationLabel(deliveryRequest.drop);
 
   return (
-    <article className="min-w-0 rounded-card border border-border/60 bg-background p-4 shadow-sm">
+    <article className="min-w-0 rounded-card border border-border/60 bg-background p-3.5 shadow-sm">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <Link
@@ -289,38 +289,37 @@ function RecentDeliveryCard({ record }: { record: OrchestrationRecord }) {
           >
             {deliveryRequest.deliveryId}
           </Link>
-          <p className="mt-1 line-clamp-2 text-small text-muted-foreground">
+          <p className="mt-0.5 truncate text-small text-muted-foreground">
             {pickup.label} → {dropoff.label}
           </p>
         </div>
         <StatusPill status={displayStatus} />
       </div>
 
-      <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-small">
-        <div>
-          <dt className="text-caption text-muted-foreground">Service</dt>
-          <dd className="mt-0.5 flex min-w-0 items-center gap-2 font-medium text-foreground">
+      <div className="mt-3 flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="text-caption text-muted-foreground">Service</p>
+          <div className="mt-0.5 flex min-w-0 items-center gap-2 text-small font-medium text-foreground">
             <ServiceLogo serviceName={decision.selectedServiceName} />
             <span className="truncate">{decision.selectedServiceName}</span>
-          </dd>
+          </div>
         </div>
-        <div>
-          <dt className="text-caption text-muted-foreground">ETA / Delivered</dt>
-          <dd className="mt-0.5 text-muted-foreground">{getEtaOrDelivered(record)}</dd>
-        </div>
-        <div>
-          <dt className="text-caption text-muted-foreground">Amount</dt>
-          <dd className="mt-0.5 font-semibold text-foreground">
-            {formatCurrency(getRecordAmount(record))}
-          </dd>
-        </div>
-        <div className="flex items-end justify-end">
+
+        <div className="flex shrink-0 items-start gap-1">
+          <div className="pt-0.5 text-right">
+            <p className="text-small font-semibold tabular-nums text-foreground">
+              {formatCurrency(getRecordAmount(record))}
+            </p>
+            <p className="mt-0.5 text-caption text-muted-foreground">
+              {getEtaOrDelivered(record)}
+            </p>
+          </div>
           <RowActionsMenu
             deliveryId={deliveryRequest.deliveryId}
             status={displayStatus}
           />
         </div>
-      </dl>
+      </div>
     </article>
   );
 }
@@ -332,7 +331,7 @@ export default function RecentDeliveriesTable({ records }: RecentDeliveriesTable
         <div className="flex flex-col gap-2 border-b border-border px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5 lg:px-6">
           <h2
             id="recent-deliveries-table-heading"
-            className="min-w-0 text-body font-semibold text-foreground lg:text-subheading"
+            className="min-w-0 text-subheading font-semibold leading-snug text-foreground"
           >
             Recent Deliveries
           </h2>

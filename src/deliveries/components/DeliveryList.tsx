@@ -1,7 +1,5 @@
 import type { OrchestrationRecord } from "@/data/orchestrationTypes";
-import AdminCard from "@/ui/AdminCard";
 import AdminEmptyState from "@/ui/AdminEmptyState";
-import AdminSectionHeader from "@/ui/AdminSectionHeader";
 import DeliveryRow from "./DeliveryRow";
 
 type DeliveryListProps = {
@@ -20,60 +18,90 @@ export default function DeliveryList({ records }: DeliveryListProps) {
 
   return (
     <section aria-labelledby="delivery-list-heading">
-      <AdminSectionHeader
-        title="Deliveries"
-        description="Operational view of all delivery requests and their current status."
-      />
+      <article className="min-w-0 overflow-hidden rounded-card border border-border/60 bg-background shadow-sm">
+        <div className="border-b border-border px-4 py-4 sm:px-5 lg:px-6">
+          <h2
+            id="delivery-list-heading"
+            className="text-subheading font-semibold leading-snug text-foreground"
+          >
+            Deliveries
+          </h2>
+          <p className="mt-1 text-small text-muted-foreground">
+            Operational view of all delivery requests and their current status.
+          </p>
+        </div>
 
-      <div className="mt-4 space-y-3 md:hidden">
-        {records.map((record) => (
-          <DeliveryRow
-            key={record.deliveryRequest.deliveryId}
-            record={record}
-            variant="card"
-          />
-        ))}
-      </div>
+        <div className="space-y-3 p-4 md:hidden">
+          {records.map((record) => (
+            <DeliveryRow
+              key={record.deliveryRequest.deliveryId}
+              record={record}
+              variant="card"
+            />
+          ))}
+        </div>
 
-      <AdminCard className="mt-4 hidden overflow-x-auto px-4 md:block md:px-5">
-        <table className="w-full min-w-[900px] text-left">
-          <caption className="sr-only">Delivery records</caption>
-          <thead>
-            <tr className="border-b border-border text-caption font-semibold uppercase tracking-wide text-muted-foreground">
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Delivery
-              </th>
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Route
-              </th>
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Package
-              </th>
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Status
-              </th>
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Service
-              </th>
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Booking
-              </th>
-              <th scope="col" className="py-3 font-semibold">
-                Created
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {records.map((record) => (
-              <DeliveryRow
-                key={record.deliveryRequest.deliveryId}
-                record={record}
-                variant="table"
-              />
-            ))}
-          </tbody>
-        </table>
-      </AdminCard>
+        <div className="hidden overflow-x-auto md:block">
+          <table className="w-full min-w-[900px] text-left text-small">
+            <caption className="sr-only">Delivery records</caption>
+            <thead>
+              <tr className="border-b border-border">
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Delivery
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Route
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Package
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Service
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Booking
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Created
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {records.map((record) => (
+                <DeliveryRow
+                  key={record.deliveryRequest.deliveryId}
+                  record={record}
+                  variant="table"
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </article>
     </section>
   );
 }

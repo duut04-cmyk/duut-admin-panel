@@ -4,27 +4,22 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { filterRecordsByDateRange, getAllOrchestrations } from "@/data";
 import AdminContainer from "@/components/AdminContainer";
+import { ADMIN_LIST_PAGE_FILTERS_SECTION } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
 import DeliveryFilters, {
+  DEFAULT_DELIVERY_FILTERS,
   type DeliveryFilterState,
 } from "./components/DeliveryFilters";
 import DeliveryList from "./components/DeliveryList";
 import DeliveryListSummary from "./components/DeliveryListSummary";
+import DeliveryPageHeader from "./components/DeliveryPageHeader";
 import { getDeliveryMetrics, matchesOutcome } from "./components/utils";
-
-const defaultFilters: DeliveryFilterState = {
-  search: "",
-  deliveryStatus: "all",
-  bookingStatus: "all",
-  dateRange: "30d",
-  outcome: "all",
-};
 
 export default function DeliveriesPage() {
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get("search") ?? "";
   const [filters, setFilters] = useState<DeliveryFilterState>({
-    ...defaultFilters,
+    ...DEFAULT_DELIVERY_FILTERS,
     search: initialSearch,
   });
 
@@ -59,17 +54,27 @@ export default function DeliveriesPage() {
 
   return (
     <AdminShell
-      title="Deliveries"
-      subtitle="Monitor delivery activity, status, bookings, and outcomes."
-    >
-      <AdminContainer className="space-y-8 pb-10">
-        <DeliveryListSummary metrics={metrics} />
-        <DeliveryFilters
-          filters={filters}
-          onChange={setFilters}
-          resultCount={filteredRecords.length}
+      mainClassName="bg-background"
+      customHeader={
+        <DeliveryPageHeader
+          dateRange={filters.dateRange}
+          onDateRangeChange={(dateRange) =>
+            setFilters((current) => ({ ...current, dateRange }))
+          }
         />
-        <DeliveryList records={filteredRecords} />
+      }
+    >
+      <AdminContainer flushTop className="space-y-6 pb-10">
+        <DeliveryListSummary metrics={metrics} records={filteredRecords} />
+        <div className={ADMIN_LIST_PAGE_FILTERS_SECTION}>
+          <DeliveryFilters
+            filters={filters}
+            onChange={setFilters}
+            resultCount={filteredRecords.length}
+            periodInHeader
+          />
+          <DeliveryList records={filteredRecords} />
+        </div>
       </AdminContainer>
     </AdminShell>
   );

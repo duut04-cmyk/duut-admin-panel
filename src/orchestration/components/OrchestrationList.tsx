@@ -1,7 +1,5 @@
 import type { OrchestrationRecord } from "@/data/orchestrationTypes";
-import AdminCard from "@/ui/AdminCard";
 import AdminEmptyState from "@/ui/AdminEmptyState";
-import AdminSectionHeader from "@/ui/AdminSectionHeader";
 import OrchestrationRow from "./OrchestrationRow";
 
 type OrchestrationListProps = {
@@ -20,66 +18,102 @@ export default function OrchestrationList({ records }: OrchestrationListProps) {
 
   return (
     <section aria-labelledby="orchestration-list-heading">
-      <AdminSectionHeader
-        title="Orchestration decisions"
-        description="Each row represents one delivery evaluated across multiple services."
-      />
+      <article className="min-w-0 overflow-hidden rounded-card border border-border/60 bg-background shadow-sm">
+        <div className="border-b border-border px-4 py-4 sm:px-5 lg:px-6">
+          <h2
+            id="orchestration-list-heading"
+            className="text-subheading font-semibold leading-snug text-foreground"
+          >
+            Orchestration decisions
+          </h2>
+          <p className="mt-1 text-small text-muted-foreground">
+            Each row represents one delivery evaluated across multiple services.
+          </p>
+        </div>
 
-      <div className="mt-4 space-y-3 md:hidden">
-        {records.map((record) => (
-          <OrchestrationRow
-            key={record.deliveryRequest.deliveryId}
-            record={record}
-            variant="card"
-          />
-        ))}
-      </div>
+        <div className="space-y-3 p-4 md:hidden">
+          {records.map((record) => (
+            <OrchestrationRow
+              key={record.deliveryRequest.deliveryId}
+              record={record}
+              variant="card"
+            />
+          ))}
+        </div>
 
-      <AdminCard className="mt-4 hidden overflow-x-auto px-4 md:block md:px-5">
-        <table className="w-full min-w-[960px] text-left">
-          <caption className="sr-only">Orchestration decisions</caption>
-          <thead>
-            <tr className="border-b border-border text-caption font-semibold uppercase tracking-wide text-muted-foreground">
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Delivery ID
-              </th>
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Route
-              </th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">
-                Evaluated
-              </th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">
-                Available
-              </th>
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Selected service
-              </th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">
-                Score
-              </th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">
-                Decision time
-              </th>
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Booking
-              </th>
-              <th scope="col" className="py-3 font-semibold">
-                Delivery
-              </th>
-            </tr>
-          </thead>
-          <tbody className="group">
-            {records.map((record) => (
-              <OrchestrationRow
-                key={record.deliveryRequest.deliveryId}
-                record={record}
-                variant="table"
-              />
-            ))}
-          </tbody>
-        </table>
-      </AdminCard>
+        <div className="hidden overflow-x-auto md:block">
+          <table className="w-full min-w-[960px] text-left text-small">
+            <caption className="sr-only">Orchestration decisions</caption>
+            <thead>
+              <tr className="border-b border-border">
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Delivery ID
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Route
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-right text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Evaluated
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-right text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Available
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Selected service
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-right text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Score
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-right text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Decision time
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Booking
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
+                >
+                  Delivery
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {records.map((record) => (
+                <OrchestrationRow
+                  key={record.deliveryRequest.deliveryId}
+                  record={record}
+                  variant="table"
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </article>
     </section>
   );
 }

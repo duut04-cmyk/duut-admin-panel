@@ -71,7 +71,7 @@ export default function OverviewDashboard() {
               <div className="min-w-0 space-y-6">
                 <PlatformMetrics metrics={metrics} records={records} />
 
-                <div className="grid min-w-0 gap-6 md:landscape:grid-cols-2 lg:grid-cols-2 lg:items-start">
+                <div className="grid min-w-0 gap-6 xl:grid-cols-2 xl:items-start">
                   <DeliveryFunnel
                     funnel={funnel}
                     dateRange={dateRange}
@@ -83,13 +83,17 @@ export default function OverviewDashboard() {
                 <RecentDeliveriesTable records={recentRecords} />
               </div>
 
-              <aside className="flex min-w-0 flex-col gap-6 xl:sticky xl:top-20 xl:self-start">
-                <LiveActivityFeed />
-                <TopServicesWidget
-                  categories={topServices}
-                  dateRange={dateRange}
-                  onDateRangeChange={setDateRange}
-                />
+              <aside className="grid min-w-0 grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-1 xl:flex xl:flex-col xl:gap-6 xl:sticky xl:top-20 xl:self-start">
+                <div className="flex min-w-0 flex-col">
+                  <LiveActivityFeed />
+                </div>
+                <div className="flex min-w-0 flex-col">
+                  <TopServicesWidget
+                    categories={topServices}
+                    dateRange={dateRange}
+                    onDateRangeChange={setDateRange}
+                  />
+                </div>
               </aside>
             </div>
           </>

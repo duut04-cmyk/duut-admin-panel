@@ -1,6 +1,6 @@
 import type { DeliveryPackage as DeliveryPackageType } from "@/data/orchestrationTypes";
-import AdminCard from "@/ui/AdminCard";
 import AdminSectionHeader from "@/ui/AdminSectionHeader";
+import DeliveryDetailCard from "./DeliveryDetailCard";
 
 type DeliveryPackageProps = {
   package: DeliveryPackageType;
@@ -14,36 +14,36 @@ export default function DeliveryPackage({ package: pkg }: DeliveryPackageProps) 
         description="Package details for this delivery."
       />
 
-      <AdminCard className="mt-4 p-5 md:p-6">
-        <dl className="grid gap-4 sm:grid-cols-2">
+      <DeliveryDetailCard className="mt-4 p-4 md:p-5">
+        <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-small">
           <div>
             <dt className="text-caption text-muted-foreground">Type</dt>
             <dd className="mt-0.5 font-medium text-foreground">{pkg.type}</dd>
           </div>
           <div>
             <dt className="text-caption text-muted-foreground">Weight</dt>
-            <dd className="mt-0.5 tabular-nums">{pkg.weightKg} kg</dd>
+            <dd className="mt-0.5 tabular-nums font-medium">{pkg.weightKg} kg</dd>
           </div>
           <div>
             <dt className="text-caption text-muted-foreground">Length</dt>
-            <dd className="mt-0.5 tabular-nums">{pkg.lengthCm} cm</dd>
+            <dd className="mt-0.5 tabular-nums font-medium">{pkg.lengthCm} cm</dd>
           </div>
           <div>
             <dt className="text-caption text-muted-foreground">Width</dt>
-            <dd className="mt-0.5 tabular-nums">{pkg.widthCm} cm</dd>
+            <dd className="mt-0.5 tabular-nums font-medium">{pkg.widthCm} cm</dd>
           </div>
           <div>
             <dt className="text-caption text-muted-foreground">Height</dt>
-            <dd className="mt-0.5 tabular-nums">{pkg.heightCm} cm</dd>
+            <dd className="mt-0.5 tabular-nums font-medium">{pkg.heightCm} cm</dd>
           </div>
           <div>
             <dt className="text-caption text-muted-foreground">Volume</dt>
-            <dd className="mt-0.5 tabular-nums">
+            <dd className="mt-0.5 tabular-nums font-medium">
               {pkg.volumeCm3.toLocaleString()} cm³
             </dd>
           </div>
         </dl>
-      </AdminCard>
+      </DeliveryDetailCard>
     </section>
   );
 }

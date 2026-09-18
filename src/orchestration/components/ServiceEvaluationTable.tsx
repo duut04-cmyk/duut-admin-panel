@@ -2,9 +2,10 @@ import type {
   OrchestrationDecision,
   ServiceEvaluation,
 } from "@/data/orchestrationTypes";
-import AdminBadge from "@/ui/AdminBadge";
-import AdminCard from "@/ui/AdminCard";
+import ServiceLogo from "@/components/ServiceLogo";
 import AdminSectionHeader from "@/ui/AdminSectionHeader";
+import EvaluationResultPill from "./EvaluationResultPill";
+import OrchestrationDetailCard from "./OrchestrationDetailCard";
 import ServiceEvaluationCard from "./ServiceEvaluationCard";
 import { formatEta, formatPrice, formatScore } from "./utils";
 
@@ -60,97 +61,105 @@ export default function ServiceEvaluationTable({
         description="Every service Doot evaluated for this delivery."
       />
 
-      <div className="mt-4 space-y-3 md:hidden">
-        {evaluations.map((evaluation) => (
-          <ServiceEvaluationCard
-            key={evaluation.serviceId}
-            evaluation={evaluation}
-            decision={decision}
-          />
-        ))}
-      </div>
+      <OrchestrationDetailCard className="mt-4 min-w-0 overflow-hidden">
+        <div className="space-y-3 p-4 lg:hidden">
+          {evaluations.map((evaluation) => (
+            <ServiceEvaluationCard
+              key={evaluation.serviceId}
+              evaluation={evaluation}
+              decision={decision}
+            />
+          ))}
+        </div>
 
-      <AdminCard className="mt-4 hidden overflow-x-auto px-4 md:block md:px-5">
-        <table className="w-full min-w-[880px] text-left text-small">
-          <caption className="sr-only">Service evaluations</caption>
-          <thead>
-            <tr className="border-b border-border text-caption font-semibold uppercase tracking-wide text-muted-foreground">
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Service
-              </th>
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Availability
-              </th>
-              <th scope="col" className="py-3 pr-4 font-semibold">
-                Compatibility
-              </th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">
-                Price
-              </th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">
-                ETA
-              </th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">
-                Quality
-              </th>
-              <th scope="col" className="py-3 pr-4 text-right font-semibold">
-                Score
-              </th>
-              <th scope="col" className="py-3 font-semibold">
-                Result
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {evaluations.map((evaluation) => {
-              const isSelected = evaluation.serviceId === decision.selectedServiceId;
-              const result = resultContent(evaluation, decision.selectedServiceId);
-              const overallScore = isSelected
-                ? decision.decisionScore.totalScore.toFixed(1)
-                : "—";
+        <div className="hidden overflow-x-auto lg:block">
+          <table className="w-full min-w-[880px] text-left text-small">
+            <caption className="sr-only">Service evaluations</caption>
+            <thead>
+              <tr className="border-b border-border/60 text-caption font-semibold uppercase tracking-wide text-muted-foreground">
+                <th scope="col" className="px-5 py-3 font-semibold">
+                  Service
+                </th>
+                <th scope="col" className="px-5 py-3 font-semibold">
+                  Availability
+                </th>
+                <th scope="col" className="px-5 py-3 font-semibold">
+                  Compatibility
+                </th>
+                <th scope="col" className="px-5 py-3 text-right font-semibold">
+                  Price
+                </th>
+                <th scope="col" className="px-5 py-3 text-right font-semibold">
+                  ETA
+                </th>
+                <th scope="col" className="px-5 py-3 text-right font-semibold">
+                  Quality
+                </th>
+                <th scope="col" className="px-5 py-3 text-right font-semibold">
+                  Score
+                </th>
+                <th scope="col" className="px-5 py-3 font-semibold">
+                  Result
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {evaluations.map((evaluation) => {
+                const isSelected = evaluation.serviceId === decision.selectedServiceId;
+                const result = resultContent(evaluation, decision.selectedServiceId);
+                const overallScore = isSelected
+                  ? decision.decisionScore.totalScore.toFixed(1)
+                  : "—";
 
-              return (
-                <tr
-                  key={evaluation.serviceId}
-                  className={`border-b border-border last:border-b-0 ${
-                    isSelected ? "bg-surface-accent/40" : ""
-                  }`}
-                >
-                  <td className="py-3.5 pr-4">
-                    <span className="font-medium text-foreground">
-                      {evaluation.serviceName}
-                    </span>
-                    {isSelected && (
-                      <span className="ml-2 text-caption font-medium text-accent">
-                        ✓ Selected
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-3.5 pr-4 text-muted-foreground">
-                    {availabilityLabel(evaluation)}
-                  </td>
-                  <td className="py-3.5 pr-4">{compatibilityLabel(evaluation)}</td>
-                  <td className="py-3.5 pr-4 text-right tabular-nums">
-                    {formatPrice(evaluation.price)}
-                  </td>
-                  <td className="py-3.5 pr-4 text-right tabular-nums">
-                    {formatEta(evaluation.totalEtaMinutes)}
-                  </td>
-                  <td className="py-3.5 pr-4 text-right tabular-nums">
-                    {formatScore(evaluation.serviceQualityScore)}
-                  </td>
-                  <td className="py-3.5 pr-4 text-right tabular-nums font-medium">
-                    {overallScore}
-                  </td>
-                  <td className="py-3.5">
-                    <AdminBadge variant={result.variant}>{result.text}</AdminBadge>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </AdminCard>
+                return (
+                  <tr
+                    key={evaluation.serviceId}
+                    className={`border-b border-border/60 transition-colors last:border-b-0 hover:bg-surface/30 ${
+                      isSelected ? "bg-orange-50/50" : ""
+                    }`}
+                  >
+                    <td className="px-5 py-3.5">
+                      <div className="flex min-w-0 items-center gap-2">
+                        <ServiceLogo serviceName={evaluation.serviceName} />
+                        <span className="font-medium text-foreground">
+                          {evaluation.serviceName}
+                        </span>
+                        {isSelected && (
+                          <span className="text-caption font-medium text-accent">
+                            ✓ Selected
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-5 py-3.5 text-muted-foreground">
+                      {availabilityLabel(evaluation)}
+                    </td>
+                    <td className="px-5 py-3.5">{compatibilityLabel(evaluation)}</td>
+                    <td className="px-5 py-3.5 text-right tabular-nums">
+                      {formatPrice(evaluation.price)}
+                    </td>
+                    <td className="px-5 py-3.5 text-right tabular-nums">
+                      {formatEta(evaluation.totalEtaMinutes)}
+                    </td>
+                    <td className="px-5 py-3.5 text-right tabular-nums">
+                      {formatScore(evaluation.serviceQualityScore)}
+                    </td>
+                    <td className="px-5 py-3.5 text-right tabular-nums font-medium">
+                      {overallScore}
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <EvaluationResultPill
+                        label={result.text}
+                        variant={result.variant}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </OrchestrationDetailCard>
     </section>
   );
 }

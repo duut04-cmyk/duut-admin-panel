@@ -4,7 +4,8 @@ import { useId, type ReactNode } from "react";
 import type { MetricTrend } from "@/data/dashboardMetrics";
 import { buildSparklinePath } from "./sparklineUtils";
 
-export type MetricTheme = "orange" | "green" | "blue" | "purple" | "pink";
+export type MetricTheme =
+  "orange" | "green" | "blue" | "purple" | "pink" | "red" | "slate";
 
 const themeStyles: Record<
   MetricTheme,
@@ -62,6 +63,24 @@ const themeStyles: Record<
     fillEnd: "rgba(236, 72, 153, 0)",
     trendPositive: "text-emerald-600",
     trendNegative: "text-admin-pink",
+  },
+  red: {
+    iconBg: "bg-red-100",
+    iconColor: "text-red-600",
+    stroke: "#ef4444",
+    fillStart: "rgba(239, 68, 68, 0.18)",
+    fillEnd: "rgba(239, 68, 68, 0)",
+    trendPositive: "text-emerald-600",
+    trendNegative: "text-red-600",
+  },
+  slate: {
+    iconBg: "bg-slate-100",
+    iconColor: "text-slate-600",
+    stroke: "#64748b",
+    fillStart: "rgba(100, 116, 139, 0.18)",
+    fillEnd: "rgba(100, 116, 139, 0)",
+    trendPositive: "text-emerald-600",
+    trendNegative: "text-red-600",
   },
 };
 
@@ -274,6 +293,38 @@ export function StopwatchIcon() {
     >
       <circle cx="10" cy="11" r="6" />
       <path d="M10 8v3.5l2 1.5M8 3h4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function FailedIcon() {
+  return (
+    <svg
+      className="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="10" r="7" />
+      <path d="M7 7l6 6M13 7l-6 6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function CancelledIcon() {
+  return (
+    <svg
+      className="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="10" r="7" />
+      <path d="M6.5 10h7" strokeLinecap="round" />
     </svg>
   );
 }

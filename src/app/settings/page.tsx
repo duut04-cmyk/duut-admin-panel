@@ -1,10 +1,5 @@
-import ComingSoonPage from "@/components/ComingSoonPage";
+import SettingsPage from "@/settings";
 
-export default function SettingsPage() {
-  return (
-    <ComingSoonPage
-      title="Settings"
-      subtitle="Configure platform preferences and access."
-    />
-  );
+export default function Page() {
+  return <SettingsPage />;
 }

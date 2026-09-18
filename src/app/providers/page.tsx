@@ -1,10 +1,5 @@
-import ComingSoonPage from "@/components/ComingSoonPage";
+import ProvidersPage from "@/providers";
 
-export default function ProvidersPage() {
-  return (
-    <ComingSoonPage
-      title="Providers"
-      subtitle="Manage delivery service providers and integrations."
-    />
-  );
+export default function Page() {
+  return <ProvidersPage />;
 }

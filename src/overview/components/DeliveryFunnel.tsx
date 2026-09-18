@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { DateRangeKey } from "@/data/orchestrationMetrics";
 import type { DeliveryFunnelMetrics } from "@/data/dashboardMetrics";
 import { formatFunnelPercent, resolveFunnelDisplay } from "@/data/overviewDisplay";
@@ -258,18 +258,9 @@ function VerticalFunnelGraphic({ segments }: { segments: SegmentDef[] }) {
   );
 }
 
-function RateLegend({
-  items,
-  funnelHeight,
-}: {
-  items: RateLegendItem[];
-  funnelHeight: number;
-}) {
+function RateLegend({ items }: { items: RateLegendItem[] }) {
   return (
-    <div
-      className="flex w-full flex-col justify-between gap-4 py-2 @min-[480px]:w-auto @min-[480px]:flex-1 @min-[480px]:border-l @min-[480px]:border-border/30 @min-[480px]:py-3 @min-[480px]:pl-5"
-      style={{ minHeight: funnelHeight }}
-    >
+    <div className="flex w-full flex-col gap-4 py-2 @min-[480px]:min-h-[var(--funnel-height)] @min-[480px]:w-auto @min-[480px]:max-w-[280px] @min-[480px]:shrink-0 @min-[480px]:justify-between @min-[480px]:gap-3 @min-[480px]:border-l @min-[480px]:border-border/30 @min-[480px]:py-3 @min-[480px]:pl-8 @min-[480px]:pr-0">
       {items.map((item) => (
         <div key={item.label} className="flex gap-3">
           <span
@@ -305,13 +296,14 @@ export default function DeliveryFunnel({
   return (
     <article
       className="@container min-w-0 self-start rounded-card border border-border/60 bg-background p-4 shadow-sm sm:p-6"
+      style={{ "--funnel-height": `${funnelHeight}px` } as CSSProperties}
       aria-labelledby="delivery-funnel-heading"
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-        <div className="min-w-0">
+      <div className="flex items-start justify-between gap-3 sm:gap-4">
+        <div className="min-w-0 flex-1">
           <h2
             id="delivery-funnel-heading"
-            className="text-body font-semibold text-foreground md:text-subheading"
+            className="text-subheading font-semibold leading-snug text-foreground"
           >
             Delivery Funnel
           </h2>
@@ -319,7 +311,7 @@ export default function DeliveryFunnel({
             How Doot evaluates and selects the best delivery partner.
           </p>
         </div>
-        <div className="w-full shrink-0 sm:w-auto">
+        <div className="shrink-0">
           <DashboardCardDateRange
             value={dateRange}
             onChange={onDateRangeChange}
@@ -328,11 +320,11 @@ export default function DeliveryFunnel({
         </div>
       </div>
 
-      <div className="mt-6 flex min-w-0 flex-col gap-6 @min-[480px]:flex-row @min-[480px]:items-start">
+      <div className="mt-6 flex min-w-0 flex-col gap-6 @min-[480px]:flex-row @min-[480px]:items-start @min-[480px]:justify-start @min-[480px]:gap-14">
         <div className="mx-auto shrink-0 origin-top scale-[0.88] sm:scale-100 @min-[480px]:mx-0 @min-[480px]:scale-100">
           <VerticalFunnelGraphic segments={segments} />
         </div>
-        <RateLegend items={legendItems} funnelHeight={funnelHeight} />
+        <RateLegend items={legendItems} />
       </div>
     </article>
   );

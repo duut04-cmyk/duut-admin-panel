@@ -1,13 +1,9 @@
 import Link from "next/link";
 import type { OrchestrationRecord } from "@/data/orchestrationTypes";
-import AdminStatus from "@/ui/AdminStatus";
+import ServiceLogo from "@/components/ServiceLogo";
 import DeliveryStatus from "./DeliveryStatus";
-import {
-  bookingStatusLabel,
-  bookingStatusVariant,
-  formatRoute,
-  formatTimestamp,
-} from "./utils";
+import { BookingStatusPill } from "./DeliveryStatusPill";
+import { formatRoute, formatTimestamp } from "./utils";
 
 type DeliveryRowProps = {
   record: OrchestrationRecord;
@@ -24,11 +20,11 @@ export default function DeliveryRow({ record, variant = "table" }: DeliveryRowPr
     return (
       <Link
         href={href}
-        className="block rounded-lg border border-border bg-background p-4 shadow-sm transition-colors hover:border-foreground/20 hover:bg-surface/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="block rounded-card border border-border/60 bg-background p-4 shadow-sm transition-colors hover:border-foreground/20 hover:bg-surface/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         aria-label={`Open delivery ${deliveryId}`}
       >
         <div className="flex items-start justify-between gap-3">
-          <div>
+          <div className="min-w-0">
             <p className="font-semibold text-foreground">{deliveryId}</p>
             <p className="mt-0.5 text-small text-muted-foreground">
               {formatRoute(record)}
@@ -37,18 +33,21 @@ export default function DeliveryRow({ record, variant = "table" }: DeliveryRowPr
           <DeliveryStatus status={deliveryRequest.status} />
         </div>
 
-        <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-small">
-          <div>
+        <dl className="mt-4 flex items-start justify-between gap-4 text-small">
+          <div className="min-w-0">
             <dt className="text-caption text-muted-foreground">Service</dt>
-            <dd className="mt-0.5 font-medium">{decision.selectedServiceName}</dd>
-          </div>
-          <div>
-            <dt className="text-caption text-muted-foreground">Booking</dt>
-            <dd className="mt-0.5">
-              <AdminStatus
-                variant={bookingStatusVariant(booking.status)}
-                label={bookingStatusLabel(booking.status)}
+            <dd className="mt-0.5 flex min-w-0 items-center gap-2 font-medium text-foreground">
+              <ServiceLogo
+                serviceName={decision.selectedServiceName}
+                className="h-7 w-7"
               />
+              <span className="truncate">{decision.selectedServiceName}</span>
+            </dd>
+          </div>
+          <div className="shrink-0 text-right">
+            <dt className="text-caption text-muted-foreground">Booking</dt>
+            <dd className="mt-0.5 flex justify-end">
+              <BookingStatusPill status={booking.status} />
             </dd>
           </div>
         </dl>
@@ -57,30 +56,34 @@ export default function DeliveryRow({ record, variant = "table" }: DeliveryRowPr
   }
 
   return (
-    <tr className="border-b border-border last:border-b-0">
-      <td className="whitespace-nowrap py-3.5 pr-4">
+    <tr className="border-b border-border last:border-b-0 transition-colors hover:bg-surface/30">
+      <td className="whitespace-nowrap px-4 py-3.5 md:px-5">
         <Link
           href={href}
-          className="font-medium text-foreground underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="font-semibold text-foreground hover:text-link focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
         >
           {deliveryId}
         </Link>
       </td>
-      <td className="whitespace-nowrap py-3.5 pr-4 text-small text-muted-foreground">
+      <td className="whitespace-nowrap px-4 py-3.5 text-small text-muted-foreground md:px-5">
         {formatRoute(record)}
       </td>
-      <td className="py-3.5 pr-4 text-small">{pkg.type}</td>
-      <td className="py-3.5 pr-4">
+      <td className="px-4 py-3.5 text-small text-foreground md:px-5">{pkg.type}</td>
+      <td className="px-4 py-3.5 md:px-5">
         <DeliveryStatus status={deliveryRequest.status} />
       </td>
-      <td className="py-3.5 pr-4 text-small">{decision.selectedServiceName}</td>
-      <td className="py-3.5 pr-4">
-        <AdminStatus
-          variant={bookingStatusVariant(booking.status)}
-          label={bookingStatusLabel(booking.status)}
-        />
+      <td className="px-4 py-3.5 md:px-5">
+        <div className="flex min-w-0 items-center gap-2">
+          <ServiceLogo serviceName={decision.selectedServiceName} />
+          <span className="truncate text-small text-foreground">
+            {decision.selectedServiceName}
+          </span>
+        </div>
       </td>
-      <td className="py-3.5 text-small tabular-nums text-muted-foreground">
+      <td className="px-4 py-3.5 md:px-5">
+        <BookingStatusPill status={booking.status} />
+      </td>
+      <td className="px-4 py-3.5 text-small tabular-nums text-muted-foreground md:px-5">
         {formatTimestamp(deliveryRequest.createdAt)}
       </td>
     </tr>

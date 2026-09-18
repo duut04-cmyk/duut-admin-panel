@@ -22,18 +22,18 @@ export default function DashboardPageHeader({
     >
       <p className="text-small text-muted-foreground">{greeting} 👋</p>
 
-      <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
-        <h1 className="min-w-0 text-heading font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
-          Here&apos;s what&apos;s happening with Doot
-        </h1>
-        <div className="w-full shrink-0 sm:w-auto sm:pb-0.5">
+      <h1 className="mt-2 text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
+        Here&apos;s what&apos;s happening with Doot
+      </h1>
+
+      <div className="mt-1.5 flex items-center justify-between gap-3">
+        <p className="min-w-0 flex-1 max-w-2xl text-small leading-snug text-muted-foreground">
+          Real-time performance, delivery trends and platform health at a glance.
+        </p>
+        <div className="shrink-0 self-center md:pb-0.5">
           <DashboardCardDateRange value={dateRange} onChange={onDateRangeChange} />
         </div>
       </div>
-
-      <p className="mt-1.5 max-w-2xl text-small leading-snug text-muted-foreground">
-        Real-time performance, delivery trends and platform health at a glance.
-      </p>
     </header>
   );
 }

@@ -1,7 +1,5 @@
-import ComingSoonPage from "@/components/ComingSoonPage";
+import CustomersPage from "@/customers";
 
-export default function CustomersPage() {
-  return (
-    <ComingSoonPage title="Customers" subtitle="View and manage customer accounts." />
-  );
+export default function Page() {
+  return <CustomersPage />;
 }

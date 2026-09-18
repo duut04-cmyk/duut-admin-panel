@@ -91,7 +91,7 @@ export function OverviewToolbar({
             type="button"
             aria-label="Open navigation menu"
             onClick={onMenuClick}
-            className={`mt-1 inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-control border border-border bg-background text-foreground shadow-sm transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${ADMIN_SHELL_SIDEBAR_DRAWER_CHROME_HIDDEN}`}
+            className={`mt-1 inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-[2px] border border-border bg-background text-foreground transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${ADMIN_SHELL_SIDEBAR_DRAWER_CHROME_HIDDEN}`}
           >
             <svg
               className="h-5 w-5"

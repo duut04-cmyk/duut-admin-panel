@@ -19,7 +19,11 @@ function SearchIcon() {
   );
 }
 
-export default function AdminGlobalSearch() {
+type AdminGlobalSearchProps = {
+  className?: string;
+};
+
+export default function AdminGlobalSearch({ className = "" }: AdminGlobalSearchProps) {
   const router = useRouter();
   const [query, setQuery] = useState("");
 
@@ -36,7 +40,7 @@ export default function AdminGlobalSearch() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative min-w-0 w-full max-w-2xl"
+      className={`relative min-w-0 w-full max-w-2xl ${className}`}
       role="search"
     >
       <div className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center">
@@ -46,7 +50,7 @@ export default function AdminGlobalSearch() {
         type="search"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        placeholder="Search deliveries..."
+        placeholder="Search deliveries"
         className="h-10 w-full min-w-0 rounded-[var(--radius-control)] border border-border bg-background py-2 pl-10 pr-4 text-small text-foreground placeholder:text-muted-foreground transition-colors hover:border-foreground/20 focus:border-foreground/30 focus:outline-none focus:ring-1 focus:ring-foreground/10"
         title="Search by delivery ID, location, or service"
         aria-label="Search deliveries"

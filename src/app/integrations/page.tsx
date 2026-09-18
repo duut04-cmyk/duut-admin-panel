@@ -1,10 +1,5 @@
-import ComingSoonPage from "@/components/ComingSoonPage";
+import IntegrationsPage from "@/integrations";
 
-export default function IntegrationsPage() {
-  return (
-    <ComingSoonPage
-      title="Integrations"
-      subtitle="Connect third-party services and APIs."
-    />
-  );
+export default function Page() {
+  return <IntegrationsPage />;
 }

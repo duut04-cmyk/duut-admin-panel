@@ -7,24 +7,21 @@ import {
   getPlatformMetrics,
 } from "@/data";
 import AdminContainer from "@/components/AdminContainer";
+import { ADMIN_LIST_PAGE_FILTERS_SECTION } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
 import OrchestrationFilters, {
+  DEFAULT_ORCHESTRATION_FILTERS,
   type OrchestrationFilterState,
 } from "./components/OrchestrationFilters";
 import OrchestrationList from "./components/OrchestrationList";
 import OrchestrationListSummary from "./components/OrchestrationListSummary";
+import OrchestrationPageHeader from "./components/OrchestrationPageHeader";
 import { matchesOutcome } from "./components/utils";
 
-const defaultFilters: OrchestrationFilterState = {
-  search: "",
-  deliveryStatus: "all",
-  bookingStatus: "all",
-  dateRange: "30d",
-  outcome: "all",
-};
-
 export default function OrchestrationPage() {
-  const [filters, setFilters] = useState<OrchestrationFilterState>(defaultFilters);
+  const [filters, setFilters] = useState<OrchestrationFilterState>(
+    DEFAULT_ORCHESTRATION_FILTERS,
+  );
 
   const allRecords = useMemo(() => getAllOrchestrations(), []);
 
@@ -59,17 +56,27 @@ export default function OrchestrationPage() {
 
   return (
     <AdminShell
-      title="Orchestration"
-      subtitle="Inspect how Doot evaluates, selects, and books delivery services."
-    >
-      <AdminContainer className="space-y-8 pb-10">
-        <OrchestrationListSummary metrics={metrics} />
-        <OrchestrationFilters
-          filters={filters}
-          onChange={setFilters}
-          resultCount={filteredRecords.length}
+      mainClassName="bg-background"
+      customHeader={
+        <OrchestrationPageHeader
+          dateRange={filters.dateRange}
+          onDateRangeChange={(dateRange) =>
+            setFilters((current) => ({ ...current, dateRange }))
+          }
         />
-        <OrchestrationList records={filteredRecords} />
+      }
+    >
+      <AdminContainer flushTop className="space-y-6 pb-10">
+        <OrchestrationListSummary metrics={metrics} records={filteredRecords} />
+        <div className={ADMIN_LIST_PAGE_FILTERS_SECTION}>
+          <OrchestrationFilters
+            filters={filters}
+            onChange={setFilters}
+            resultCount={filteredRecords.length}
+            periodInHeader
+          />
+          <OrchestrationList records={filteredRecords} />
+        </div>
       </AdminContainer>
     </AdminShell>
   );

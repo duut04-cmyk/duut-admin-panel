@@ -100,13 +100,13 @@ export default function LiveActivityFeed() {
 
   return (
     <article
-      className="flex flex-col rounded-card border border-border/60 bg-background shadow-sm"
+      className="flex h-full flex-col rounded-card border border-border/60 bg-background shadow-sm"
       aria-labelledby="live-activity-heading"
     >
       <div className="flex items-center justify-between px-4 pb-2 pt-4 sm:px-5">
         <h2
           id="live-activity-heading"
-          className="text-body font-semibold text-foreground"
+          className="text-subheading font-semibold leading-snug text-foreground"
         >
           Live Activity
         </h2>
@@ -119,11 +119,11 @@ export default function LiveActivityFeed() {
         </span>
       </div>
 
-      <ul className="space-y-1 px-4 pb-2 pt-1 sm:px-5">
+      <ul className="space-y-1 px-4 pb-2 pt-1 sm:px-5 md:flex md:min-h-0 md:flex-1 md:flex-col md:justify-between md:space-y-0 md:pb-0 xl:block xl:flex-none xl:pb-2">
         {mockLiveActivity.map((event) => (
           <li
             key={event.id}
-            className="flex flex-col gap-1 py-3 sm:flex-row sm:items-start sm:gap-3"
+            className="flex flex-col gap-0.5 py-1.5 sm:flex-row sm:items-start sm:gap-2 md:py-0 xl:gap-3 xl:py-3"
           >
             <div className="flex min-w-0 items-start gap-3">
               <ActivityIcon type={event.type} />
@@ -143,7 +143,7 @@ export default function LiveActivityFeed() {
         ))}
       </ul>
 
-      <div className="border-t border-border/25 px-4 py-3.5 sm:px-5">
+      <div className="shrink-0 border-t border-border/25 px-4 py-2 sm:px-5 md:py-2 xl:py-3.5">
         <Link
           href="/deliveries"
           className="text-small font-medium text-link hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"

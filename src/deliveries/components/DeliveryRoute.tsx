@@ -1,6 +1,6 @@
 import type { DeliveryRequest } from "@/data/orchestrationTypes";
-import AdminCard from "@/ui/AdminCard";
 import AdminSectionHeader from "@/ui/AdminSectionHeader";
+import DeliveryDetailCard from "./DeliveryDetailCard";
 
 type DeliveryRouteProps = {
   deliveryRequest: DeliveryRequest;
@@ -26,7 +26,7 @@ function LocationBlock({
       </h3>
       <p className="mt-2 text-small font-medium text-foreground">{address}</p>
       <p className="mt-0.5 text-small text-muted-foreground">{city}</p>
-      <p className="mt-3 text-small text-muted-foreground">
+      <p className="mt-2 text-small text-muted-foreground">
         {contactName} · {contactPhone}
       </p>
     </div>
@@ -43,7 +43,7 @@ export default function DeliveryRoute({ deliveryRequest }: DeliveryRouteProps) {
         description="Pickup and drop locations for this delivery."
       />
 
-      <AdminCard className="mt-4 space-y-6 p-5 md:p-6">
+      <DeliveryDetailCard className="mt-4 space-y-4 p-4 md:p-5">
         <LocationBlock
           title="Pickup"
           address={pickup.address}
@@ -52,7 +52,10 @@ export default function DeliveryRoute({ deliveryRequest }: DeliveryRouteProps) {
           contactPhone={pickup.contactPhone}
         />
 
-        <div className="flex justify-center text-muted-foreground" aria-hidden="true">
+        <div
+          className="flex justify-center text-muted-foreground/70"
+          aria-hidden="true"
+        >
           <svg
             className="h-5 w-5"
             viewBox="0 0 20 20"
@@ -75,7 +78,7 @@ export default function DeliveryRoute({ deliveryRequest }: DeliveryRouteProps) {
           contactName={drop.contactName}
           contactPhone={drop.contactPhone}
         />
-      </AdminCard>
+      </DeliveryDetailCard>
     </section>
   );
 }

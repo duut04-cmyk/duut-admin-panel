@@ -3,17 +3,16 @@
 import Link from "next/link";
 import { getOrchestrationByDeliveryId } from "@/data";
 import AdminContainer from "@/components/AdminContainer";
+import { ADMIN_DETAIL_RAIL_GRID } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
 import AdminEmptyState from "@/ui/AdminEmptyState";
-import BookingResult from "../components/BookingResult";
-import DecisionDetailHeader from "../components/DecisionDetailHeader";
-import DecisionFactors from "../components/DecisionFactors";
-import DecisionScore from "../components/DecisionScore";
-import DeliveryRequestSummary from "../components/DeliveryRequestSummary";
-import OrchestrationSummary from "../components/OrchestrationSummary";
-import OrchestrationTimeline from "../components/OrchestrationTimeline";
-import OrchestrationTrace from "../components/OrchestrationTrace";
-import SelectionReason from "../components/SelectionReason";
+import DecisionBreakdown from "../components/DecisionBreakdown";
+import DeliveryRequestCompact from "../components/DeliveryRequestCompact";
+import LifecyclePanel from "../components/LifecyclePanel";
+import OrchestrationDetailPageHeader from "../components/OrchestrationDetailPageHeader";
+import OrchestrationHeroMetrics from "../components/OrchestrationHeroMetrics";
+import OutcomeCard from "../components/OutcomeCard";
+import SelectionReasonBanner from "../components/SelectionReasonBanner";
 import ServiceEvaluationTable from "../components/ServiceEvaluationTable";
 
 type OrchestrationDetailProps = {
@@ -25,8 +24,19 @@ export default function OrchestrationDetail({ deliveryId }: OrchestrationDetailP
 
   if (!record) {
     return (
-      <AdminShell title="Orchestration" subtitle="Orchestration not found">
-        <AdminContainer className="pb-10">
+      <AdminShell
+        customHeader={
+          <header className="bg-background px-4 pb-4 pt-4 sm:px-6 lg:px-8 lg:pb-5 lg:pt-5">
+            <h1 className="text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
+              Orchestration
+            </h1>
+            <p className="mt-1 text-small text-muted-foreground">
+              Orchestration not found
+            </p>
+          </header>
+        }
+      >
+        <AdminContainer flushTop className="pb-10">
           <AdminEmptyState
             title="Orchestration not found"
             description={`No orchestration record exists for delivery ID "${deliveryId}".`}
@@ -48,52 +58,46 @@ export default function OrchestrationDetail({ deliveryId }: OrchestrationDetailP
 
   return (
     <AdminShell
-      title={deliveryRequest.deliveryId}
-      subtitle={`${deliveryRequest.pickup.city} → ${deliveryRequest.drop.city}`}
+      mainClassName="bg-background"
+      customHeader={<OrchestrationDetailPageHeader record={record} />}
     >
-      <AdminContainer className="space-y-10 pb-10">
-        <DecisionDetailHeader record={record} />
+      <AdminContainer flushTop className="space-y-6 pb-10 lg:space-y-8">
+        <OrchestrationHeroMetrics record={record} />
+        <SelectionReasonBanner
+          reason={decision.selectionReason}
+          selectedServiceName={decision.selectedServiceName}
+        />
 
-        <div className="grid gap-8 lg:grid-cols-2">
-          <OrchestrationSummary record={record} />
-          <DeliveryRequestSummary deliveryRequest={deliveryRequest} />
+        <div className={`grid min-w-0 gap-6 ${ADMIN_DETAIL_RAIL_GRID} xl:items-start`}>
+          <aside className="min-w-0 space-y-6 xl:order-2 xl:sticky xl:top-6 xl:self-start">
+            <DeliveryRequestCompact deliveryRequest={deliveryRequest} />
+            <OutcomeCard booking={booking} />
+          </aside>
+
+          <div className="min-w-0 space-y-6 xl:order-1">
+            <ServiceEvaluationTable evaluations={evaluations} decision={decision} />
+            <DecisionBreakdown
+              decisionScore={decision.decisionScore}
+              selectedServiceName={decision.selectedServiceName}
+            />
+          </div>
         </div>
 
-        <ServiceEvaluationTable evaluations={evaluations} decision={decision} />
-
-        <div className="grid gap-8 lg:grid-cols-2">
-          <DecisionScore
-            decisionScore={decision.decisionScore}
-            selectedServiceName={decision.selectedServiceName}
-          />
-          <DecisionFactors decisionScore={decision.decisionScore} />
-        </div>
-
-        <div className="grid gap-8 lg:grid-cols-2">
-          <SelectionReason
-            reason={decision.selectionReason}
-            selectedServiceName={decision.selectedServiceName}
-          />
-          <BookingResult booking={booking} />
-        </div>
-
-        <OrchestrationTimeline events={events} />
-
-        <OrchestrationTrace events={events} />
+        <LifecyclePanel events={events} />
 
         <nav
           aria-label="Orchestration actions"
-          className="flex flex-wrap gap-4 border-t border-border pt-6"
+          className="flex flex-wrap gap-4 border-t border-border/60 pt-6"
         >
           <Link
             href="/orchestration"
-            className="text-small font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="text-small font-medium text-accent transition-colors hover:text-accent/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             ← Back to orchestration
           </Link>
           <Link
             href={`/deliveries/${deliveryRequest.deliveryId}`}
-            className="text-small font-medium text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="text-small font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             View delivery →
           </Link>

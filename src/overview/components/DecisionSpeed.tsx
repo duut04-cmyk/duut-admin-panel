@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import type { OrchestrationRecord } from "@/data/orchestrationTypes";
 import {
   decisionSpeedStatTrends,
@@ -20,9 +20,11 @@ const Y_TICK_STEP = 2;
 const X_TICK_INTERVAL_DAYS = 5;
 const DAY_MS = 86_400_000;
 const PLOT_HEIGHT = 200;
-const Y_AXIS_WIDTH = 32;
+const Y_AXIS_WIDTH_DESKTOP = 32;
+const Y_AXIS_WIDTH_MOBILE = 24;
 const PLOT_PAD_Y = 8;
-const PLOT_PAD_X = 16;
+const PLOT_PAD_X_DESKTOP = 12;
+const PLOT_PAD_X_MOBILE = 6;
 
 const axisTextClass =
   "font-sans text-[10px] font-normal leading-none text-foreground sm:text-small";
@@ -98,13 +100,21 @@ function buildSmoothLinePath(coords: { x: number; y: number }[]): string {
   return path;
 }
 
-function DecisionTimeChart({ points }: { points: DecisionSpeedChartPoint[] }) {
+function DecisionTimeChart({
+  points,
+  compact = false,
+}: {
+  points: DecisionSpeedChartPoint[];
+  compact?: boolean;
+}) {
   const gradientId = useId();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const plotWidth = 400;
+  const yAxisWidth = compact ? Y_AXIS_WIDTH_MOBILE : Y_AXIS_WIDTH_DESKTOP;
+  const plotPadX = compact ? PLOT_PAD_X_MOBILE : PLOT_PAD_X_DESKTOP;
+  const plotWidth = compact ? 480 : 448;
   const plotHeight = PLOT_HEIGHT;
   const innerPlotHeight = plotHeight - PLOT_PAD_Y * 2;
-  const innerPlotWidth = plotWidth - PLOT_PAD_X * 2;
+  const innerPlotWidth = plotWidth - plotPadX * 2;
   const plotBottom = PLOT_PAD_Y + innerPlotHeight;
 
   const chartStartMs = parseDateMs(points[0].date);
@@ -124,9 +134,9 @@ function DecisionTimeChart({ points }: { points: DecisionSpeedChartPoint[] }) {
     PLOT_PAD_Y + innerPlotHeight - (ms / 1000 / MAX_Y_SECONDS) * innerPlotHeight;
 
   const xForDateMs = (dateMs: number): number => {
-    if (axisDateRange === 0) return PLOT_PAD_X + innerPlotWidth / 2;
+    if (axisDateRange === 0) return plotPadX + innerPlotWidth / 2;
     const ratio = (dateMs - chartStartMs) / axisDateRange;
-    return PLOT_PAD_X + ratio * innerPlotWidth;
+    return plotPadX + ratio * innerPlotWidth;
   };
 
   const xPercentForTick = (tickMs: number): number =>
@@ -152,7 +162,7 @@ function DecisionTimeChart({ points }: { points: DecisionSpeedChartPoint[] }) {
         <div
           className="flex shrink-0 flex-col justify-between text-right"
           style={{
-            width: Y_AXIS_WIDTH,
+            width: yAxisWidth,
             height: plotHeight,
             paddingTop: PLOT_PAD_Y,
             paddingBottom: PLOT_PAD_Y,
@@ -188,9 +198,9 @@ function DecisionTimeChart({ points }: { points: DecisionSpeedChartPoint[] }) {
               return (
                 <line
                   key={tick}
-                  x1={PLOT_PAD_X}
+                  x1={plotPadX}
                   y1={y}
-                  x2={plotWidth - PLOT_PAD_X}
+                  x2={plotWidth - plotPadX}
                   y2={y}
                   stroke="#e8eaed"
                   strokeWidth="1"
@@ -251,7 +261,7 @@ function DecisionTimeChart({ points }: { points: DecisionSpeedChartPoint[] }) {
 
       <div
         className="relative mt-1.5 h-4 overflow-hidden"
-        style={{ marginLeft: Y_AXIS_WIDTH }}
+        style={{ marginLeft: yAxisWidth }}
       >
         {xTicks.map((tick, index) => {
           const percent = xPercentForTick(tick.ms);
@@ -299,12 +309,21 @@ function StatTrend({ value }: { value: string }) {
 }
 
 export default function DecisionSpeed({ metrics, records }: DecisionSpeedProps) {
+  const [compactChart, setCompactChart] = useState(false);
   const rawPoints = useMemo(() => buildDecisionTimeSeries(records), [records]);
   const displayMetrics = resolveDecisionSpeedMetrics(metrics, records.length);
   const points = useMemo(
     () => resolveDecisionSpeedChart(rawPoints, records.length),
     [rawPoints, records.length],
   );
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const sync = () => setCompactChart(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
 
   return (
     <article
@@ -313,7 +332,7 @@ export default function DecisionSpeed({ metrics, records }: DecisionSpeedProps) 
     >
       <h2
         id="decision-speed-heading"
-        className="text-body font-semibold text-foreground md:text-subheading"
+        className="text-subheading font-semibold leading-snug text-foreground"
       >
         Decision Speed
       </h2>
@@ -346,8 +365,8 @@ export default function DecisionSpeed({ metrics, records }: DecisionSpeedProps) 
       </div>
 
       {points.length > 0 && (
-        <div className="mt-5 w-full">
-          <DecisionTimeChart points={points} />
+        <div className="mt-5 -mx-2 w-[calc(100%+1rem)] md:mx-0 md:w-full">
+          <DecisionTimeChart points={points} compact={compactChart} />
         </div>
       )}
 

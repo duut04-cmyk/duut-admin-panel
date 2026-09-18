@@ -1,7 +1,5 @@
-import ComingSoonPage from "@/components/ComingSoonPage";
+import ReportsPage from "@/reports";
 
-export default function ReportsPage() {
-  return (
-    <ComingSoonPage title="Reports" subtitle="Analytics and operational reports." />
-  );
+export default function Page() {
+  return <ReportsPage />;
 }

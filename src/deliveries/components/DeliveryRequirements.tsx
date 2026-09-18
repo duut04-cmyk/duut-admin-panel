@@ -1,6 +1,6 @@
 import type { DeliveryRequirements as DeliveryRequirementsType } from "@/data/orchestrationTypes";
-import AdminCard from "@/ui/AdminCard";
 import AdminSectionHeader from "@/ui/AdminSectionHeader";
+import DeliveryDetailCard from "./DeliveryDetailCard";
 import { formatTimestamp } from "./utils";
 
 type DeliveryRequirementsProps = {
@@ -17,11 +17,11 @@ export default function DeliveryRequirements({
         description="Delivery timing and special instructions."
       />
 
-      <AdminCard className="mt-4 p-5 md:p-6">
-        <dl className="space-y-4 text-small">
+      <DeliveryDetailCard className="mt-4 p-4 md:p-5">
+        <dl className="space-y-3 text-small">
           <div>
             <dt className="text-caption text-muted-foreground">Delivery timing</dt>
-            <dd className="mt-0.5 font-medium capitalize">
+            <dd className="mt-0.5 font-medium capitalize text-foreground">
               {requirements.deliveryType}
             </dd>
             <dd className="mt-0.5 text-muted-foreground">
@@ -35,7 +35,7 @@ export default function DeliveryRequirements({
                 Special requirements
               </dt>
               <dd className="mt-0.5">
-                <ul className="list-inside list-disc space-y-1">
+                <ul className="list-inside list-disc space-y-1 font-medium text-foreground">
                   {requirements.specialRequirements.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
@@ -53,7 +53,7 @@ export default function DeliveryRequirements({
             </div>
           )}
         </dl>
-      </AdminCard>
+      </DeliveryDetailCard>
     </section>
   );
 }
