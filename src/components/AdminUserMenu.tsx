@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { mockAdminUser } from "@/data/mockAdminUser";
+import { getInitials } from "@/settings/components/formatters";
+import { useAdminSessionContext } from "./AdminSessionProvider";
 
 function ChevronDownIcon() {
   return (
@@ -21,7 +22,10 @@ function ChevronDownIcon() {
 export default function AdminUserMenu() {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { name, initials, email } = mockAdminUser;
+  const { account, logout } = useAdminSessionContext();
+  const name = account.name;
+  const email = account.email;
+  const initials = getInitials(account.name);
 
   useEffect(() => {
     if (!open) return;
@@ -67,7 +71,10 @@ export default function AdminUserMenu() {
             type="button"
             role="menuitem"
             className="flex w-full cursor-pointer px-4 py-2.5 text-left text-small text-foreground transition-colors hover:bg-surface"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              setOpen(false);
+              void logout();
+            }}
           >
             Sign out
           </button>

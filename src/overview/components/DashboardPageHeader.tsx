@@ -1,7 +1,8 @@
 "use client";
 
 import type { DateRangeKey } from "@/data/orchestrationMetrics";
-import { getTimeBasedGreeting } from "@/data/mockAdminUser";
+import { getAdminFirstName, getTimeBasedGreeting } from "@/data/mockAdminUser";
+import { useAdminSessionContext } from "@/components/AdminSessionProvider";
 import { ADMIN_SHELL_CONTENT_PADDING } from "@/components/layout";
 import DashboardCardDateRange from "./DashboardCardDateRange";
 
@@ -14,7 +15,11 @@ export default function DashboardPageHeader({
   dateRange,
   onDateRangeChange,
 }: DashboardPageHeaderProps) {
-  const greeting = getTimeBasedGreeting();
+  const { account } = useAdminSessionContext();
+  const greeting = getTimeBasedGreeting(
+    new Date(),
+    getAdminFirstName({ name: account.name, initials: "", email: account.email }),
+  );
 
   return (
     <header

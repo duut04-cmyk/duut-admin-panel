@@ -46,14 +46,42 @@ export type SettingsPolicies = {
 
 export type SettingsFlags = {
   mockProviderAdapter: boolean;
-  borzoWebhooksEnabled: boolean;
   developmentMode: boolean;
+};
+
+export type RuntimeSettingMeta = {
+  value: number;
+  source: "env" | "database";
+  version: number;
+  restartRequired: false;
+};
+
+export type SettingsRuntime = {
+  booking: {
+    quoteMaxAgeSeconds: RuntimeSettingMeta;
+    priceTolerancePercent: RuntimeSettingMeta;
+  };
+};
+
+export type PatchBookingPoliciesResult = {
+  booking: SettingsRuntime["booking"];
+  audit: {
+    outcome: "updated" | "no_change";
+    changes: Array<{
+      key: string;
+      previousValue: number;
+      newValue: number;
+      previousVersion: number;
+      newVersion: number;
+    }>;
+  };
 };
 
 export type SettingsSnapshot = {
   platform: SettingsPlatform;
   policies: SettingsPolicies;
   flags: SettingsFlags;
+  runtime?: SettingsRuntime;
   checkedAt: string;
 };
 

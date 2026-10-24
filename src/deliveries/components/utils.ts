@@ -1,4 +1,5 @@
-import type { OrchestrationRecord } from "@/data/orchestrationTypes";
+import type { DeliveryListItem } from "@/data/deliveryApiTypes";
+import { formatTimestamp } from "@/orchestration/components/utils";
 
 export type DeliveryMetrics = {
   total: number;
@@ -8,28 +9,13 @@ export type DeliveryMetrics = {
   cancelled: number;
 };
 
-export function getDeliveryMetrics(records: OrchestrationRecord[]): DeliveryMetrics {
-  return {
-    total: records.length,
-    inTransit: records.filter(
-      (record) => record.deliveryRequest.status === "in_transit",
-    ).length,
-    delivered: records.filter((record) => record.deliveryRequest.status === "delivered")
-      .length,
-    failed: records.filter((record) => record.deliveryRequest.status === "failed")
-      .length,
-    cancelled: records.filter((record) => record.deliveryRequest.status === "cancelled")
-      .length,
-  };
-}
+export { formatTimestamp };
 
-export {
-  bookingStatusLabel,
-  bookingStatusVariant,
-  deliveryStatusLabel,
-  deliveryStatusVariant,
-  formatRoute,
-  formatTimestamp,
-  matchesOutcome,
-  type OutcomeFilter,
-} from "@/orchestration/components/utils";
+export function formatListItemRoute(item: DeliveryListItem): string {
+  const pickup = item.pickup.addressText.trim();
+  const drop = item.drop.addressText.trim();
+  if (!pickup && !drop) return "—";
+  const short = (value: string) =>
+    value.length > 36 ? `${value.slice(0, 33)}…` : value;
+  return `${short(pickup)} → ${short(drop)}`;
+}

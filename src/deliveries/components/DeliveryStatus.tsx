@@ -1,8 +1,7 @@
-import type { DeliveryRequestStatus } from "@/data/orchestrationTypes";
 import { DeliveryStatusPill } from "./DeliveryStatusPill";
 
 type DeliveryStatusProps = {
-  status: DeliveryRequestStatus;
+  status: string;
   className?: string;
 };
 

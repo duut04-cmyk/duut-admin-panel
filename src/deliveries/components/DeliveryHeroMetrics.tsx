@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import type { OrchestrationRecord } from "@/data/orchestrationTypes";
-import ServiceLogo from "@/components/ServiceLogo";
-import { BookingStatusPill, DeliveryStatusPill } from "./DeliveryStatusPill";
+import type { DeliveryHistoryDetail } from "@/data/deliveryApiTypes";
+import { deliveryStatusLabel } from "../deliveryStatus";
 import DeliveryDetailCard from "./DeliveryDetailCard";
+import { DeliveryStatusPill, ProviderBookingStatusPill } from "./DeliveryStatusPill";
 import { formatTimestamp } from "./utils";
 
 type MetricCellProps = {
@@ -33,15 +33,15 @@ function MetricCell({
 }
 
 type DeliveryHeroMetricsProps = {
-  record: OrchestrationRecord;
+  history: DeliveryHistoryDetail;
 };
 
-export default function DeliveryHeroMetrics({ record }: DeliveryHeroMetricsProps) {
-  const { deliveryRequest, decision, booking } = record;
-  const { requirements } = deliveryRequest;
-  const deliveryType =
-    requirements.deliveryType.charAt(0).toUpperCase() +
-    requirements.deliveryType.slice(1);
+export default function DeliveryHeroMetrics({ history }: DeliveryHeroMetricsProps) {
+  const { delivery, schedule, booking, orchestration } = history;
+  const providerLabel =
+    booking?.providerCode ??
+    orchestration?.selectedOption?.providerCode ??
+    "Not booked";
 
   return (
     <section aria-labelledby="delivery-hero-metrics-heading">
@@ -50,52 +50,45 @@ export default function DeliveryHeroMetrics({ record }: DeliveryHeroMetricsProps
       </h2>
 
       <DeliveryDetailCard className="overflow-hidden">
-        <div className="grid grid-cols-2 divide-border/60 sm:grid-cols-3 lg:grid-cols-6 lg:divide-x">
+        <div className="grid grid-cols-2 divide-border/60 sm:grid-cols-3 lg:grid-cols-5 lg:divide-x">
           <MetricCell label="Status">
-            <DeliveryStatusPill status={deliveryRequest.status} />
+            <DeliveryStatusPill status={delivery.status} />
           </MetricCell>
           <MetricCell
-            label="Selected service"
+            label="Provider"
             highlight
             className="lg:border-l lg:border-border/60"
           >
-            <span className="flex min-w-0 items-center gap-2">
-              <ServiceLogo
-                serviceName={decision.selectedServiceName}
-                className="h-6 w-6 shrink-0"
-              />
-              <span className="truncate">{decision.selectedServiceName}</span>
-            </span>
+            <span className="truncate text-small font-semibold">{providerLabel}</span>
           </MetricCell>
           <MetricCell
             label="Booking"
-            className="border-t border-border/60 sm:border-t-0 sm:border-l sm:border-border/60 lg:border-l lg:border-border/60"
+            className="border-t border-border/60 sm:border-t-0 sm:border-l sm:border-border/60"
           >
-            <BookingStatusPill status={booking.status} />
+            {booking ? (
+              <ProviderBookingStatusPill status={booking.status} />
+            ) : (
+              <span className="text-small text-muted-foreground">No booking</span>
+            )}
           </MetricCell>
           <MetricCell
-            label="Delivery type"
+            label="Schedule"
             className="border-t border-border/60 sm:border-t-0 lg:border-l lg:border-border/60"
           >
-            {deliveryType}
-          </MetricCell>
-          <MetricCell
-            label="Requested timing"
-            className="col-span-2 border-t border-border/60 sm:col-span-1 sm:border-l sm:border-border/60 lg:border-l lg:border-border/60"
-          >
-            <span className="text-small font-semibold">
-              {formatTimestamp(requirements.requestedTime)}
-            </span>
+            <span className="text-small font-semibold">{schedule.mode}</span>
           </MetricCell>
           <MetricCell
             label="Created"
             className="col-span-2 border-t border-border/60 sm:col-span-1 lg:col-span-1 lg:border-l lg:border-border/60"
           >
             <span className="text-small font-semibold">
-              {formatTimestamp(deliveryRequest.createdAt)}
+              {formatTimestamp(delivery.createdAt)}
             </span>
           </MetricCell>
         </div>
+        <p className="border-t border-border/60 px-4 py-2 text-caption text-muted-foreground">
+          Current status: {deliveryStatusLabel(delivery.status)}
+        </p>
       </DeliveryDetailCard>
     </section>
   );

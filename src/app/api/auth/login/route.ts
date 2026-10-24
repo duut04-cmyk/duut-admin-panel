@@ -1,76 +1,62 @@
 /**
- * Admin login — validates against backend JWT auth when BACKEND_API_URL is set,
- * otherwise falls back to env-var mock validation for UI prototyping.
+ * Admin panel login — backend ADMIN session only (no mock fallback).
  */
 
 import { NextResponse } from "next/server";
 import { accessTokenCookieOptions, ACCESS_TOKEN_COOKIE } from "@/lib/backendAuth";
+import { isSameOriginPost } from "@/lib/auth/csrf";
 import { getBackendApiUrl } from "@/lib/backendClient";
-
-function delay(ms: number) {
-  return new Promise<void>((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
 
 type BackendLoginResponse = {
   success: boolean;
   data?: {
     accessToken: string;
     expiresIn: number;
+    user?: { role?: string };
   };
-  error?: { message?: string };
+  error?: { message?: string; code?: string };
 };
 
-async function loginWithBackend(email: string, password: string) {
-  const baseUrl = getBackendApiUrl();
-  if (!baseUrl) return null;
+type BackendMeResponse = {
+  success: boolean;
+  data?: {
+    user: { role: string };
+  };
+};
 
-  const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/v1/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+async function verifyAdminRole(accessToken: string, baseUrl: string): Promise<boolean> {
+  const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/v1/auth/me`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
     cache: "no-store",
   });
 
-  const data = (await response.json()) as BackendLoginResponse;
-
-  if (!response.ok || !data.success || !data.data?.accessToken) {
-    return {
-      success: false as const,
-      message: data.error?.message ?? "Invalid credentials.",
-    };
+  if (!response.ok) {
+    return false;
   }
 
-  return {
-    success: true as const,
-    accessToken: data.data.accessToken,
-    expiresIn: data.data.expiresIn,
-  };
-}
-
-async function loginWithMock(email: string, password: string) {
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminPassword = process.env.ADMIN_PASSWORD;
-
-  if (!adminEmail || !adminPassword) {
-    return {
-      success: false as const,
-      message: "Admin credentials are not configured.",
-    };
-  }
-
-  await delay(500);
-
-  const success =
-    email.toLowerCase() === adminEmail.toLowerCase() && password === adminPassword;
-
-  return success
-    ? { success: true as const }
-    : { success: false as const, message: "Invalid credentials." };
+  const data = (await response.json()) as BackendMeResponse;
+  return data.success === true && data.data?.user.role === "ADMIN";
 }
 
 export async function POST(request: Request) {
+  if (!isSameOriginPost(request)) {
+    return NextResponse.json(
+      { success: false, error: "Invalid request." },
+      { status: 403 },
+    );
+  }
+
+  const baseUrl = getBackendApiUrl();
+  if (!baseUrl) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Admin sign-in is unavailable. BACKEND_API_URL is not configured.",
+      },
+      { status: 503 },
+    );
+  }
+
   const body = (await request.json()) as {
     email?: string;
     password?: string;
@@ -79,36 +65,50 @@ export async function POST(request: Request) {
   const email = String(body.email ?? "").trim();
   const password = String(body.password ?? "");
 
-  const backendResult = await loginWithBackend(email, password);
-
-  if (backendResult) {
-    if (!backendResult.success) {
-      return NextResponse.json(
-        { success: false, error: backendResult.message },
-        { status: 401 },
-      );
-    }
-
-    const response = NextResponse.json({ success: true });
-    response.cookies.set(
-      ACCESS_TOKEN_COOKIE,
-      backendResult.accessToken,
-      accessTokenCookieOptions(backendResult.expiresIn),
+  if (!email || !password) {
+    return NextResponse.json(
+      { success: false, error: "Email and password are required." },
+      { status: 400 },
     );
-    return response;
   }
 
-  const mockResult = await loginWithMock(email, password);
+  const response = await fetch(
+    `${baseUrl.replace(/\/$/, "")}/api/v1/auth/admin/login`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+      cache: "no-store",
+    },
+  );
 
-  if (!mockResult.success) {
+  const data = (await response.json()) as BackendLoginResponse;
+
+  if (!response.ok || !data.success || !data.data?.accessToken) {
     return NextResponse.json(
-      { success: false, error: mockResult.message },
+      { success: false, error: data.error?.message ?? "Invalid email or password." },
       {
         status:
-          mockResult.message === "Admin credentials are not configured." ? 500 : 401,
+          response.status === 401 || response.status === 403
+            ? 401
+            : response.status || 401,
       },
     );
   }
 
-  return NextResponse.json({ success: true });
+  const isAdmin = await verifyAdminRole(data.data.accessToken, baseUrl);
+  if (!isAdmin) {
+    return NextResponse.json(
+      { success: false, error: "Invalid email or password." },
+      { status: 401 },
+    );
+  }
+
+  const sessionResponse = NextResponse.json({ success: true });
+  sessionResponse.cookies.set(
+    ACCESS_TOKEN_COOKIE,
+    data.data.accessToken,
+    accessTokenCookieOptions(data.data.expiresIn),
+  );
+  return sessionResponse;
 }

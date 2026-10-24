@@ -2,56 +2,48 @@
 
 import { useMemo } from "react";
 import Input from "@/common/components/Input";
-import type { BookingStatus, DeliveryRequestStatus } from "@/data/orchestrationTypes";
+import type {
+  BackendDeliveryStatus,
+  BackendProviderBookingStatus,
+} from "@/data/deliveryApiTypes";
+import type { BackendOrchestrationRequestStatus } from "@/data/orchestrationListApiTypes";
 import type { DateRangeKey } from "@/data/orchestrationMetrics";
+import { DELIVERY_STATUS_FILTER_OPTIONS } from "@/deliveries/deliveryStatus";
 import AdminCustomSelect from "@/ui/AdminCustomSelect";
 import DashboardCardDateRange from "@/overview/components/DashboardCardDateRange";
 import AdminFilterChip from "@/ui/AdminFilterChip";
 import AdminFilterToolbar from "@/ui/AdminFilterToolbar";
-import type { OutcomeFilter } from "./utils";
 
 export type OrchestrationFilterState = {
   search: string;
-  deliveryStatus: DeliveryRequestStatus | "all";
-  bookingStatus: BookingStatus | "all";
+  deliveryStatus: BackendDeliveryStatus | "all";
+  bookingStatus: BackendProviderBookingStatus | "all";
+  orchestrationStatus: BackendOrchestrationRequestStatus | "all";
   dateRange: DateRangeKey;
-  outcome: OutcomeFilter;
 };
 
 export const DEFAULT_ORCHESTRATION_FILTERS: OrchestrationFilterState = {
   search: "",
   deliveryStatus: "all",
   bookingStatus: "all",
+  orchestrationStatus: "all",
   dateRange: "30d",
-  outcome: "all",
 };
-
-const deliveryStatusOptions = [
-  { value: "all", label: "All statuses" },
-  { value: "delivered", label: "Delivered" },
-  { value: "in_transit", label: "In transit" },
-  { value: "booked", label: "Booked" },
-  { value: "failed", label: "Failed" },
-  { value: "cancelled", label: "Cancelled" },
-  { value: "orchestrating", label: "Orchestrating" },
-  { value: "pending_orchestration", label: "Pending" },
-];
 
 const bookingStatusOptions = [
   { value: "all", label: "All bookings" },
-  { value: "confirmed", label: "Confirmed" },
-  { value: "failed", label: "Failed" },
-  { value: "pending", label: "Pending" },
-  { value: "cancelled", label: "Cancelled" },
+  { value: "BOOKED", label: "Confirmed" },
+  { value: "FAILED", label: "Failed" },
+  { value: "PENDING", label: "Pending" },
+  { value: "BOOKING", label: "Booking" },
+  { value: "UNKNOWN", label: "Unknown" },
 ];
 
-const outcomeOptions = [
-  { value: "all", label: "All outcomes" },
-  { value: "booking_confirmed", label: "Booking confirmed" },
-  { value: "booking_failed", label: "Booking failed" },
-  { value: "delivered", label: "Delivered" },
-  { value: "delivery_failed", label: "Delivery failed" },
-  { value: "cancelled", label: "Cancelled" },
+const orchestrationStatusOptions = [
+  { value: "all", label: "All orchestrations" },
+  { value: "COMPLETED", label: "Completed" },
+  { value: "RUNNING", label: "Running" },
+  { value: "FAILED", label: "Failed" },
 ];
 
 const dateRangeLabels: Record<DateRangeKey, string> = {
@@ -65,7 +57,6 @@ type OrchestrationFiltersProps = {
   filters: OrchestrationFilterState;
   onChange: (filters: OrchestrationFilterState) => void;
   resultCount: number;
-  /** When true, date range is shown only on mobile (desktop uses page header). */
   periodInHeader?: boolean;
 };
 
@@ -84,13 +75,13 @@ function countActiveFilters(
   if (filters.search.trim()) count += 1;
   if (filters.deliveryStatus !== "all") count += 1;
   if (filters.bookingStatus !== "all") count += 1;
+  if (filters.orchestrationStatus !== "all") count += 1;
   if (
     includeDateRange &&
     filters.dateRange !== DEFAULT_ORCHESTRATION_FILTERS.dateRange
   ) {
     count += 1;
   }
-  if (filters.outcome !== "all") count += 1;
   return count;
 }
 
@@ -98,7 +89,7 @@ function countSheetActiveFilters(filters: OrchestrationFilterState): number {
   let count = 0;
   if (filters.deliveryStatus !== "all") count += 1;
   if (filters.bookingStatus !== "all") count += 1;
-  if (filters.outcome !== "all") count += 1;
+  if (filters.orchestrationStatus !== "all") count += 1;
   return count;
 }
 
@@ -122,7 +113,7 @@ export default function OrchestrationFilters({
       filters.dateRange !== DEFAULT_ORCHESTRATION_FILTERS.dateRange) ||
     filters.deliveryStatus !== "all" ||
     filters.bookingStatus !== "all" ||
-    filters.outcome !== "all";
+    filters.orchestrationStatus !== "all";
 
   const activeFilterChips = (
     <>
@@ -137,7 +128,11 @@ export default function OrchestrationFilters({
       ) : null}
       {filters.deliveryStatus !== "all" ? (
         <AdminFilterChip
-          label={labelForOption(deliveryStatusOptions, filters.deliveryStatus)}
+          label={
+            DELIVERY_STATUS_FILTER_OPTIONS.find(
+              (option) => option.value === filters.deliveryStatus,
+            )?.label ?? filters.deliveryStatus
+          }
           onRemove={() => update({ deliveryStatus: "all" })}
         />
       ) : null}
@@ -147,10 +142,13 @@ export default function OrchestrationFilters({
           onRemove={() => update({ bookingStatus: "all" })}
         />
       ) : null}
-      {filters.outcome !== "all" ? (
+      {filters.orchestrationStatus !== "all" ? (
         <AdminFilterChip
-          label={labelForOption(outcomeOptions, filters.outcome)}
-          onRemove={() => update({ outcome: "all" })}
+          label={labelForOption(
+            orchestrationStatusOptions,
+            filters.orchestrationStatus,
+          )}
+          onRemove={() => update({ orchestrationStatus: "all" })}
         />
       ) : null}
     </>
@@ -186,10 +184,10 @@ export default function OrchestrationFilters({
         <Input
           id="orchestration-search"
           type="search"
-          placeholder="Search by DOOT ID"
+          placeholder="Search by DOOT reference or delivery UUID"
           value={filters.search}
           onChange={(event) => update({ search: event.target.value })}
-          aria-label="Search by delivery ID"
+          aria-label="Search orchestrations"
           className="border-border/60 shadow-sm"
         />
       }
@@ -199,10 +197,13 @@ export default function OrchestrationFilters({
           <AdminCustomSelect
             label="Delivery status"
             value={filters.deliveryStatus}
-            options={deliveryStatusOptions}
+            options={DELIVERY_STATUS_FILTER_OPTIONS.map((option) => ({
+              value: option.value,
+              label: option.label,
+            }))}
             onChange={(value) =>
               update({
-                deliveryStatus: value as DeliveryRequestStatus | "all",
+                deliveryStatus: value as BackendDeliveryStatus | "all",
               })
             }
           />
@@ -212,15 +213,19 @@ export default function OrchestrationFilters({
             options={bookingStatusOptions}
             onChange={(value) =>
               update({
-                bookingStatus: value as BookingStatus | "all",
+                bookingStatus: value as BackendProviderBookingStatus | "all",
               })
             }
           />
           <AdminCustomSelect
-            label="Outcome"
-            value={filters.outcome}
-            options={outcomeOptions}
-            onChange={(value) => update({ outcome: value as OutcomeFilter })}
+            label="Orchestration status"
+            value={filters.orchestrationStatus}
+            options={orchestrationStatusOptions}
+            onChange={(value) =>
+              update({
+                orchestrationStatus: value as BackendOrchestrationRequestStatus | "all",
+              })
+            }
           />
         </>
       }
