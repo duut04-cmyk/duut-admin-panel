@@ -75,12 +75,13 @@ test.describe("Admin panel read-only list interactions", () => {
     await pickFilterSelectOption(page, "Status", "Active");
     await statusGet;
     await closeFiltersSheet(page);
+    const clearCustomersGet = waitForCustomersGet(page);
     await page
       .getByRole("button", { name: "Clear all" })
       .locator("visible=true")
       .first()
       .click();
-    await waitForCustomersGet(page);
+    await clearCustomersGet;
 
     await page.goto("/deliveries");
     await page.waitForResponse(

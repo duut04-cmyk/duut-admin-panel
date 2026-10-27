@@ -8,7 +8,9 @@ test.describe("Admin panel read-only interactive acceptance", () => {
     const { consoleErrors, failedRequests } = attachDiagnostics(page);
     await page.goto("/overview");
     await assertNoAppError(page);
-    await expect(page.getByText(/what's happening with Doot/i)).toBeVisible({
+    await expect(
+      page.getByRole("heading", { name: /what's happening with Doot/i }),
+    ).toBeVisible({
       timeout: 60_000,
     });
 
