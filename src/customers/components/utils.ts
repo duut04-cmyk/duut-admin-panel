@@ -1,6 +1,7 @@
 import type {
   CustomerDetail,
-  CustomerMetrics,
+  CustomerListSummaryMetrics,
+  CustomerPageMetrics,
   CustomerSummary,
   DeliveryStatus,
   UserStatus,
@@ -8,13 +9,27 @@ import type {
 type AdminStatusVariant =
   "operational" | "active" | "pending" | "success" | "failed" | "cancelled" | "warning";
 
-export function getCustomerMetrics(customers: CustomerSummary[]): CustomerMetrics {
+export function getCustomerPageMetrics(
+  customers: CustomerSummary[],
+): CustomerPageMetrics {
   return {
-    total: customers.length,
     active: customers.filter((customer) => customer.status === "ACTIVE").length,
     verified: customers.filter((customer) => customer.emailVerified).length,
     withDeliveries: customers.filter((customer) => customer.stats.totalDeliveries > 0)
       .length,
+  };
+}
+
+export function buildCustomerListSummaryMetrics(
+  matchingTotal: number | null,
+  pageItems: CustomerSummary[],
+): CustomerListSummaryMetrics {
+  return {
+    matchingTotal,
+    onPage: {
+      rowCount: pageItems.length,
+      ...getCustomerPageMetrics(pageItems),
+    },
   };
 }
 

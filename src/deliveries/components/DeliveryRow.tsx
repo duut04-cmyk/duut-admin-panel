@@ -1,53 +1,43 @@
 import Link from "next/link";
-import type { OrchestrationRecord } from "@/data/orchestrationTypes";
-import ServiceLogo from "@/components/ServiceLogo";
+import type { DeliveryListItem } from "@/data/deliveryApiTypes";
 import DeliveryStatus from "./DeliveryStatus";
-import { BookingStatusPill } from "./DeliveryStatusPill";
-import { formatRoute, formatTimestamp } from "./utils";
+import { formatListItemRoute, formatTimestamp } from "./utils";
 
 type DeliveryRowProps = {
-  record: OrchestrationRecord;
+  item: DeliveryListItem;
   variant?: "table" | "card";
 };
 
-export default function DeliveryRow({ record, variant = "table" }: DeliveryRowProps) {
-  const { deliveryRequest, decision, booking } = record;
-  const deliveryId = deliveryRequest.deliveryId;
-  const href = `/deliveries/${deliveryId}`;
-  const { package: pkg } = deliveryRequest;
+export default function DeliveryRow({ item, variant = "table" }: DeliveryRowProps) {
+  const href = `/deliveries/${item.id}`;
 
   if (variant === "card") {
     return (
       <Link
         href={href}
         className="block rounded-card border border-border/60 bg-background p-4 shadow-sm transition-colors hover:border-foreground/20 hover:bg-surface/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        aria-label={`Open delivery ${deliveryId}`}
+        aria-label={`Open delivery ${item.reference}`}
       >
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="font-semibold text-foreground">{deliveryId}</p>
+            <p className="font-semibold text-foreground">{item.reference}</p>
+            <p className="mt-0.5 text-caption text-muted-foreground">{item.id}</p>
             <p className="mt-0.5 text-small text-muted-foreground">
-              {formatRoute(record)}
+              {formatListItemRoute(item)}
             </p>
           </div>
-          <DeliveryStatus status={deliveryRequest.status} />
+          <DeliveryStatus status={item.status} />
         </div>
 
-        <dl className="mt-4 flex items-start justify-between gap-4 text-small">
-          <div className="min-w-0">
-            <dt className="text-caption text-muted-foreground">Service</dt>
-            <dd className="mt-0.5 flex min-w-0 items-center gap-2 font-medium text-foreground">
-              <ServiceLogo
-                serviceName={decision.selectedServiceName}
-                className="h-7 w-7"
-              />
-              <span className="truncate">{decision.selectedServiceName}</span>
-            </dd>
+        <dl className="mt-4 grid grid-cols-2 gap-3 text-small">
+          <div>
+            <dt className="text-caption text-muted-foreground">Package</dt>
+            <dd className="mt-0.5 font-medium text-foreground">{item.packageType}</dd>
           </div>
-          <div className="shrink-0 text-right">
-            <dt className="text-caption text-muted-foreground">Booking</dt>
-            <dd className="mt-0.5 flex justify-end">
-              <BookingStatusPill status={booking.status} />
+          <div className="text-right">
+            <dt className="text-caption text-muted-foreground">Created</dt>
+            <dd className="mt-0.5 tabular-nums text-muted-foreground">
+              {formatTimestamp(item.createdAt)}
             </dd>
           </div>
         </dl>
@@ -60,31 +50,25 @@ export default function DeliveryRow({ record, variant = "table" }: DeliveryRowPr
       <td className="whitespace-nowrap px-4 py-3.5 md:px-5">
         <Link
           href={href}
-          className="font-semibold text-foreground hover:text-link focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
+          className="block font-semibold text-foreground hover:text-link focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
         >
-          {deliveryId}
+          {item.reference}
         </Link>
+        <p className="mt-0.5 max-w-[12rem] truncate text-caption text-muted-foreground">
+          {item.id}
+        </p>
       </td>
-      <td className="whitespace-nowrap px-4 py-3.5 text-small text-muted-foreground md:px-5">
-        {formatRoute(record)}
+      <td className="max-w-xs px-4 py-3.5 text-small text-muted-foreground md:px-5">
+        {formatListItemRoute(item)}
       </td>
-      <td className="px-4 py-3.5 text-small text-foreground md:px-5">{pkg.type}</td>
-      <td className="px-4 py-3.5 md:px-5">
-        <DeliveryStatus status={deliveryRequest.status} />
-      </td>
-      <td className="px-4 py-3.5 md:px-5">
-        <div className="flex min-w-0 items-center gap-2">
-          <ServiceLogo serviceName={decision.selectedServiceName} />
-          <span className="truncate text-small text-foreground">
-            {decision.selectedServiceName}
-          </span>
-        </div>
+      <td className="px-4 py-3.5 text-small text-foreground md:px-5">
+        {item.packageType}
       </td>
       <td className="px-4 py-3.5 md:px-5">
-        <BookingStatusPill status={booking.status} />
+        <DeliveryStatus status={item.status} />
       </td>
       <td className="px-4 py-3.5 text-small tabular-nums text-muted-foreground md:px-5">
-        {formatTimestamp(deliveryRequest.createdAt)}
+        {formatTimestamp(item.createdAt)}
       </td>
     </tr>
   );

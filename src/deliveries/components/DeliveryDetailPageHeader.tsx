@@ -1,19 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import type { OrchestrationRecord } from "@/data/orchestrationTypes";
+import type { DeliveryHistoryDetail, DeliveryListItem } from "@/data/deliveryApiTypes";
 import { ADMIN_SHELL_CONTENT_PADDING } from "@/components/layout";
+import { formatListRoute } from "../deliveryMappers";
 import { DeliveryStatusPill } from "./DeliveryStatusPill";
-import { formatRoute } from "./utils";
 
 type DeliveryDetailPageHeaderProps = {
-  record: OrchestrationRecord;
+  history: DeliveryHistoryDetail;
 };
 
+function routeLabel(history: DeliveryHistoryDetail): string {
+  const item: DeliveryListItem = {
+    id: history.delivery.id,
+    reference: history.delivery.reference,
+    status: history.delivery.status,
+    pickup: {
+      addressText: history.pickup.addressText,
+      contactName: history.pickup.contactName,
+    },
+    drop: {
+      addressText: history.drop.addressText,
+      contactName: history.drop.contactName,
+    },
+    packageType: history.package.packageType,
+    weightKg: history.package.weightKg,
+    sizeTier: history.package.sizeTier,
+    schedule: history.schedule,
+    createdAt: history.delivery.createdAt,
+    updatedAt: history.delivery.updatedAt,
+  };
+  return formatListRoute(item);
+}
+
 export default function DeliveryDetailPageHeader({
-  record,
+  history,
 }: DeliveryDetailPageHeaderProps) {
-  const { deliveryRequest } = record;
+  const { delivery } = history;
 
   return (
     <header
@@ -39,14 +62,17 @@ export default function DeliveryDetailPageHeader({
       <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <h1 className="text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
-            {deliveryRequest.deliveryId}
+            {delivery.reference}
           </h1>
+          <p className="mt-0.5 font-mono text-caption text-muted-foreground">
+            {delivery.id}
+          </p>
           <p className="mt-1 text-small text-muted-foreground">
-            {formatRoute(record)} · Delivery
+            {routeLabel(history)} · Delivery
           </p>
         </div>
         <DeliveryStatusPill
-          status={deliveryRequest.status}
+          status={delivery.status}
           className="self-start sm:shrink-0"
         />
       </div>

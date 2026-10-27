@@ -29,7 +29,11 @@ export default function AuthFieldInput({
         className={`${authInputClass} ${trailingSlot ? "pr-11" : ""} ${className}`}
         {...props}
       />
-      {trailingSlot}
+      {trailingSlot ? (
+        <div className="absolute inset-y-0 right-0 z-10 flex items-center pr-3">
+          {trailingSlot}
+        </div>
+      ) : null}
     </div>
   );
 }

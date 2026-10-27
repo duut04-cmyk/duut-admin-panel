@@ -1,13 +1,26 @@
-import type { OrchestrationRecord } from "@/data/orchestrationTypes";
+import type { OrchestrationListRowView } from "../orchestrationListMappers";
+import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import OrchestrationRow from "./OrchestrationRow";
 
 type OrchestrationListProps = {
-  records: OrchestrationRecord[];
+  rows: OrchestrationListRowView[];
+  loading?: boolean;
 };
 
-export default function OrchestrationList({ records }: OrchestrationListProps) {
-  if (records.length === 0) {
+export default function OrchestrationList({
+  rows,
+  loading = false,
+}: OrchestrationListProps) {
+  if (loading) {
+    return (
+      <section aria-labelledby="orchestration-list-heading">
+        <ListRowsSkeleton rows={6} />
+      </section>
+    );
+  }
+
+  if (rows.length === 0) {
     return (
       <AdminEmptyState
         title="No orchestration records"
@@ -27,17 +40,13 @@ export default function OrchestrationList({ records }: OrchestrationListProps) {
             Orchestration decisions
           </h2>
           <p className="mt-1 text-small text-muted-foreground">
-            Each row represents one delivery evaluated across multiple services.
+            Each row is one persisted orchestration attempt for a delivery.
           </p>
         </div>
 
         <div className="space-y-3 p-4 md:hidden">
-          {records.map((record) => (
-            <OrchestrationRow
-              key={record.deliveryRequest.deliveryId}
-              record={record}
-              variant="card"
-            />
+          {rows.map((row) => (
+            <OrchestrationRow key={row.orchestrationId} row={row} variant="card" />
           ))}
         </div>
 
@@ -50,7 +59,7 @@ export default function OrchestrationList({ records }: OrchestrationListProps) {
                   scope="col"
                   className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
                 >
-                  Delivery ID
+                  Delivery
                 </th>
                 <th
                   scope="col"
@@ -74,7 +83,7 @@ export default function OrchestrationList({ records }: OrchestrationListProps) {
                   scope="col"
                   className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5"
                 >
-                  Selected service
+                  Selected provider
                 </th>
                 <th
                   scope="col"
@@ -86,7 +95,7 @@ export default function OrchestrationList({ records }: OrchestrationListProps) {
                   scope="col"
                   className="px-4 py-3 text-right text-caption font-semibold text-muted-foreground md:px-5"
                 >
-                  Decision time
+                  Duration
                 </th>
                 <th
                   scope="col"
@@ -103,12 +112,8 @@ export default function OrchestrationList({ records }: OrchestrationListProps) {
               </tr>
             </thead>
             <tbody>
-              {records.map((record) => (
-                <OrchestrationRow
-                  key={record.deliveryRequest.deliveryId}
-                  record={record}
-                  variant="table"
-                />
+              {rows.map((row) => (
+                <OrchestrationRow key={row.orchestrationId} row={row} variant="table" />
               ))}
             </tbody>
           </table>

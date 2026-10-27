@@ -97,7 +97,7 @@ export default function AddProviderModal({
                 code: event.target.value.toUpperCase(),
               }))
             }
-            placeholder="BORZO"
+            placeholder="MOCK"
             required
             autoComplete="off"
           />
@@ -119,7 +119,7 @@ export default function AddProviderModal({
             onChange={(event) =>
               setForm((current) => ({ ...current, name: event.target.value }))
             }
-            placeholder="Borzo"
+            placeholder="Mock Provider"
             required
           />
         </div>

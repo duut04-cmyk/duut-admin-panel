@@ -94,7 +94,7 @@ type OverviewMetricCardProps = {
   trend?: MetricTrend;
   theme: MetricTheme;
   icon: ReactNode;
-  sparklineValues: number[];
+  sparklineValues?: number[];
 };
 
 function TrendArrow({ up }: { up: boolean }) {
@@ -150,7 +150,7 @@ export default function OverviewMetricCard({
   const styles = themeStyles[theme];
   const gradientId = useId();
   const { line, area, lastPoint } = buildSparklinePath(
-    sparklineValues,
+    sparklineValues ?? [],
     SPARKLINE_WIDTH,
     SPARKLINE_HEIGHT,
   );

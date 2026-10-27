@@ -23,7 +23,7 @@ export default function DeliveryPageHeader({
 
       <div className="mt-1.5 flex items-center justify-between gap-3">
         <p className="min-w-0 flex-1 max-w-2xl text-small leading-snug text-muted-foreground">
-          Monitor delivery activity, status, bookings, and outcomes.
+          Monitor delivery activity and status from live delivery records.
         </p>
         <div className="hidden shrink-0 self-center sm:block md:pb-0.5">
           <DashboardCardDateRange

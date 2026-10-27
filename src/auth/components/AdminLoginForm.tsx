@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import { useId, useState, type FormEvent } from "react";
 import Button from "@/common/components/Button";
 import Checkbox from "@/common/components/Checkbox";
-import { mockAdminLogin } from "../mockAdminAuth";
+import { submitAdminLogin } from "../adminLogin";
 import AdminForgotPasswordModal from "./AdminForgotPasswordModal";
 import AdminPasswordInput from "./AdminPasswordInput";
 import AuthFieldInput from "./AuthFieldInput";
-import { ArrowRightIcon, EnvelopeIcon, GoogleIcon, LoadingSpinner } from "./icons";
+import { ArrowRightIcon, EnvelopeIcon, LoadingSpinner } from "./icons";
 
 type FieldErrors = {
   email?: string;
@@ -65,8 +65,8 @@ export default function AdminLoginForm() {
 
     setLoading(true);
     try {
-      const success = await mockAdminLogin(submittedEmail, password);
-      if (success) {
+      const result = await submitAdminLogin(submittedEmail, password);
+      if (result.success) {
         if (rememberMe) {
           localStorage.setItem("doot-admin-remember-email", submittedEmail);
         } else {
@@ -74,7 +74,7 @@ export default function AdminLoginForm() {
         }
         router.push("/overview");
       } else {
-        setFormError("Incorrect email or password.");
+        setFormError(result.error);
       }
     } finally {
       setLoading(false);
@@ -178,26 +178,6 @@ export default function AdminLoginForm() {
           )}
         </Button>
       </form>
-
-      <div className="relative my-6 lg:landscape:max-xl:my-4 xl:my-6">
-        <div className="absolute inset-0 flex items-center" aria-hidden="true">
-          <div className="w-full border-t border-border/80" />
-        </div>
-        <p className="relative flex justify-center">
-          <span className="bg-background px-3 text-caption text-muted-foreground">
-            or continue with
-          </span>
-        </p>
-      </div>
-
-      <Button
-        type="button"
-        variant="secondary"
-        className="h-[52px] w-full gap-3 rounded-lg border-border/70 text-body font-medium shadow-none lg:landscape:max-xl:h-10 xl:h-[52px]"
-      >
-        <GoogleIcon className="h-5 w-5" />
-        Continue with Google
-      </Button>
 
       <p className="mt-6 text-center text-small text-muted-foreground lg:landscape:max-xl:mt-4 lg:landscape:max-xl:text-[12px] xl:mt-6">
         Don&apos;t have an account?{" "}

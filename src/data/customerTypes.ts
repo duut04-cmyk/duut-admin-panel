@@ -69,11 +69,22 @@ export type PaginatedCustomers = {
   totalPages: number;
 };
 
-export type CustomerMetrics = {
-  total: number;
+export type CustomerPageMetrics = {
   active: number;
   verified: number;
   withDeliveries: number;
+};
+
+/** @deprecated Prefer CustomerListSummaryMetrics for list page. */
+export type CustomerMetrics = CustomerPageMetrics & {
+  total: number;
+};
+
+export type CustomerListSummaryMetrics = {
+  /** Total customers matching current filters (from API). */
+  matchingTotal: number | null;
+  /** Counts derived from the current page of results only. */
+  onPage: CustomerPageMetrics & { rowCount: number };
 };
 
 export type UpdateCustomerInput = {

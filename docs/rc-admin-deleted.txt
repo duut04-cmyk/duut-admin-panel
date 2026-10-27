@@ -1,0 +1,17 @@
+src/app/customers/[customerId]/page.tsx
+src/app/customers/page.tsx
+src/app/deliveries/[deliveryId]/page.tsx
+src/app/deliveries/page.tsx
+src/app/design-system/page.tsx
+src/app/integrations/page.tsx
+src/app/orchestration/[deliveryId]/page.tsx
+src/app/orchestration/page.tsx
+src/app/orchestration/requests/[orchestrationRequestId]/page.tsx
+src/app/overview/page.tsx
+src/app/providers/page.tsx
+src/app/reports/page.tsx
+src/app/settings/page.tsx
+src/data/mockAdminUser.ts
+src/data/mockLiveActivity.ts
+src/overview/components/rightRail/LiveActivityFeed.tsx
+src/overview/components/rightRail/OverviewRightRail.tsx

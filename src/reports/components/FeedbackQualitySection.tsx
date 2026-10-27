@@ -102,19 +102,16 @@ export default function FeedbackQualitySection({
                     href={`/deliveries/${item.deliveryId}`}
                     className="font-medium text-accent hover:underline"
                   >
-                    {item.deliveryId}
+                    {item.deliveryReference}
                   </Link>
                   <p className="mt-0.5 text-caption text-muted-foreground">
-                    {item.customerName}
+                    {new Date(item.submittedAt).toLocaleString()}
                   </p>
                 </div>
                 <p className="text-small tabular-nums text-muted-foreground">
                   Driver {item.driverRating}/5 · Delivery {item.deliveryRating}/5
                 </p>
               </div>
-              {item.comment ? (
-                <p className="mt-2 text-small text-muted-foreground">{item.comment}</p>
-              ) : null}
             </li>
           ))}
         </ul>

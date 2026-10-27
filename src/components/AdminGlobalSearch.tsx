@@ -52,8 +52,8 @@ export default function AdminGlobalSearch({ className = "" }: AdminGlobalSearchP
         onChange={(event) => setQuery(event.target.value)}
         placeholder="Search deliveries"
         className="h-10 w-full min-w-0 rounded-[var(--radius-control)] border border-border bg-background py-2 pl-10 pr-4 text-small text-foreground placeholder:text-muted-foreground transition-colors hover:border-foreground/20 focus:border-foreground/30 focus:outline-none focus:ring-1 focus:ring-foreground/10"
-        title="Search by delivery ID, location, or service"
-        aria-label="Search deliveries"
+        title="Search by DOOT reference or delivery UUID"
+        aria-label="Search deliveries by reference or UUID"
       />
     </form>
   );

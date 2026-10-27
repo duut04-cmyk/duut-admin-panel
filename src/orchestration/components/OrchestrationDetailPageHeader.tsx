@@ -1,19 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import type { OrchestrationRecord } from "@/data/orchestrationTypes";
+import type { BackendDeliveryStatus } from "@/data/deliveryApiTypes";
 import { ADMIN_SHELL_CONTENT_PADDING } from "@/components/layout";
 import { DeliveryStatusPill } from "@/deliveries/components/DeliveryStatusPill";
-import { formatRoute } from "./utils";
 
 type OrchestrationDetailPageHeaderProps = {
-  record: OrchestrationRecord;
+  deliveryId: string;
+  reference: string | null;
+  routeSubtitle: string;
+  deliveryStatus: BackendDeliveryStatus | null;
 };
 
 export default function OrchestrationDetailPageHeader({
-  record,
+  deliveryId,
+  reference,
+  routeSubtitle,
+  deliveryStatus,
 }: OrchestrationDetailPageHeaderProps) {
-  const { deliveryRequest } = record;
+  const title = reference?.trim() ? reference : deliveryId;
 
   return (
     <header
@@ -39,14 +44,21 @@ export default function OrchestrationDetailPageHeader({
       <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <h1 className="text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
-            {deliveryRequest.deliveryId}
+            {title}
           </h1>
-          <p className="mt-1 text-small text-muted-foreground">{formatRoute(record)}</p>
+          <p className="mt-1 text-small text-muted-foreground">{routeSubtitle}</p>
+          {reference?.trim() ? (
+            <p className="mt-0.5 font-mono text-caption text-muted-foreground">
+              {deliveryId}
+            </p>
+          ) : null}
         </div>
-        <DeliveryStatusPill
-          status={deliveryRequest.status}
-          className="self-start sm:shrink-0"
-        />
+        {deliveryStatus ? (
+          <DeliveryStatusPill
+            status={deliveryStatus}
+            className="self-start sm:shrink-0"
+          />
+        ) : null}
       </div>
     </header>
   );

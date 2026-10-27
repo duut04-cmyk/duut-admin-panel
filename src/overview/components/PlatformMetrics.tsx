@@ -1,6 +1,7 @@
 import type { OrchestrationRecord } from "@/data/orchestrationTypes";
 import type { DashboardMetrics } from "@/data/dashboardMetrics";
 import { resolveOverviewTrend } from "@/data/overviewDisplay";
+import { flatSparkline } from "@/overview/liveOverviewMappers";
 import { formatDecisionTime, formatPercent } from "@/data/orchestrationMetrics";
 import OverviewMetricCard, {
   DeliveredIcon,
@@ -18,15 +19,30 @@ import {
 
 type PlatformMetricsProps = {
   metrics: DashboardMetrics;
-  records: OrchestrationRecord[];
+  records?: OrchestrationRecord[];
   className?: string;
+  /** When true, use API-backed trends only (no demo KPI overrides). */
+  liveTrends?: boolean;
 };
 
 export default function PlatformMetrics({
   metrics,
-  records,
+  records = [],
   className = "",
+  liveTrends = false,
 }: PlatformMetricsProps) {
+  const trend = (key: keyof DashboardMetrics["trends"]) =>
+    liveTrends ? metrics.trends[key] : resolveOverviewTrend(key, metrics.trends[key]);
+
+  const sparklineOrFlat = (
+    fromRecords: number[],
+    cumulativeValue: number,
+  ): number[] | undefined => {
+    if (records.length > 0) return fromRecords;
+    if (cumulativeValue <= 0) return undefined;
+    return flatSparkline(cumulativeValue);
+  };
+
   return (
     <section aria-labelledby="platform-metrics-heading" className={className}>
       <h2 id="platform-metrics-heading" className="sr-only">
@@ -36,51 +52,57 @@ export default function PlatformMetrics({
         <OverviewMetricCard
           title="Total Deliveries"
           value={metrics.totalDeliveries.toLocaleString()}
-          trend={resolveOverviewTrend(
-            "totalDeliveries",
-            metrics.trends.totalDeliveries,
-          )}
+          trend={trend("totalDeliveries")}
           theme="orange"
           icon={<PackageIcon />}
-          sparklineValues={getCumulativeDeliverySparkline(records)}
+          sparklineValues={sparklineOrFlat(
+            getCumulativeDeliverySparkline(records),
+            metrics.totalDeliveries,
+          )}
         />
         <OverviewMetricCard
           title="Delivered"
           value={metrics.deliveredCount.toLocaleString()}
-          trend={resolveOverviewTrend("delivered", metrics.trends.delivered)}
+          trend={trend("delivered")}
           theme="green"
           icon={<DeliveredIcon />}
-          sparklineValues={getCumulativeDeliveredSparkline(records)}
+          sparklineValues={sparklineOrFlat(
+            getCumulativeDeliveredSparkline(records),
+            metrics.deliveredCount,
+          )}
         />
         <OverviewMetricCard
           title="In Progress"
           value={metrics.inProgressCount.toLocaleString()}
-          trend={resolveOverviewTrend("inProgress", metrics.trends.inProgress)}
+          trend={trend("inProgress")}
           theme="blue"
           icon={<InProgressIcon />}
-          sparklineValues={getCumulativeDeliverySparkline(records)}
+          sparklineValues={sparklineOrFlat(
+            getCumulativeDeliverySparkline(records),
+            metrics.inProgressCount,
+          )}
         />
         <OverviewMetricCard
           title="Booking Success Rate"
           value={formatPercent(metrics.bookingSuccessRate)}
-          trend={resolveOverviewTrend(
-            "bookingSuccessRate",
-            metrics.trends.bookingSuccessRate,
-          )}
+          trend={trend("bookingSuccessRate")}
           theme="purple"
           icon={<TicketIcon />}
-          sparklineValues={getRollingBookingSuccessSparkline(records)}
+          sparklineValues={sparklineOrFlat(
+            getRollingBookingSuccessSparkline(records),
+            metrics.bookingSuccessRate,
+          )}
         />
         <OverviewMetricCard
           title="Avg. Orchestration Time"
           value={formatDecisionTime(metrics.averageDecisionTimeMs)}
-          trend={resolveOverviewTrend(
-            "avgOrchestrationTime",
-            metrics.trends.avgOrchestrationTime,
-          )}
+          trend={trend("avgOrchestrationTime")}
           theme="pink"
           icon={<StopwatchIcon />}
-          sparklineValues={getDecisionTimeSparkline(records)}
+          sparklineValues={sparklineOrFlat(
+            getDecisionTimeSparkline(records),
+            metrics.averageDecisionTimeMs,
+          )}
         />
       </div>
     </section>

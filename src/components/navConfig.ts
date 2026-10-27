@@ -3,7 +3,6 @@ import {
   CustomersNavIcon,
   DeliveriesNavIcon,
   IntegrationsNavIcon,
-  OrchestrationNavIcon,
   OverviewNavIcon,
   ProvidersNavIcon,
   ReportsNavIcon,
@@ -27,11 +26,6 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Overview", href: "/overview", icon: OverviewNavIcon },
       { label: "Deliveries", href: "/deliveries", icon: DeliveriesNavIcon },
-      {
-        label: "Orchestration",
-        href: "/orchestration",
-        icon: OrchestrationNavIcon,
-      },
       { label: "Providers", href: "/providers", icon: ProvidersNavIcon },
       { label: "Customers", href: "/customers", icon: CustomersNavIcon },
       { label: "Reports", href: "/reports", icon: ReportsNavIcon },

@@ -8,6 +8,8 @@ type DeliveryFunnelProps = {
   funnel: DeliveryFunnelMetrics;
   dateRange: DateRangeKey;
   onDateRangeChange: (value: DateRangeKey) => void;
+  /** When true, never substitute demo funnel values. */
+  liveData?: boolean;
 };
 
 type SegmentDef = {
@@ -287,8 +289,9 @@ export default function DeliveryFunnel({
   funnel,
   dateRange,
   onDateRangeChange,
+  liveData = false,
 }: DeliveryFunnelProps) {
-  const displayFunnel = resolveFunnelDisplay(funnel);
+  const displayFunnel = liveData ? funnel : resolveFunnelDisplay(funnel);
   const segments = buildSegments(displayFunnel);
   const legendItems = buildRateLegend(displayFunnel);
   const funnelHeight =

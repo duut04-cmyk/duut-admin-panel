@@ -24,11 +24,6 @@ export default function OperationsSection({ flags }: OperationsSectionProps) {
             hint: "ENABLE_MOCK_PROVIDER_ADAPTER",
           },
           {
-            label: "Borzo webhooks",
-            value: formatBoolean(flags.borzoWebhooksEnabled),
-            hint: "BORZO_WEBHOOKS_ENABLED — see Integrations for signing status",
-          },
-          {
             label: "Development mode",
             value: formatBoolean(flags.developmentMode),
             hint: "NODE_ENV === development",
