@@ -11,6 +11,10 @@ export type SettingsBookingPolicies = {
   priceTolerancePercent: number;
 };
 
+export type SettingsPricingPolicies = {
+  platformServiceFeePercent: number;
+};
+
 export type SettingsAuthPolicies = {
   jwtAccessExpiresIn: string;
   refreshTokenExpiresInDays: number;
@@ -39,6 +43,7 @@ export type SettingsOrchestrationPolicies = {
 
 export type SettingsPolicies = {
   booking: SettingsBookingPolicies;
+  pricing: SettingsPricingPolicies;
   auth: SettingsAuthPolicies;
   deliveryOtp: SettingsDeliveryOtpPolicies;
   orchestration: SettingsOrchestrationPolicies;
@@ -54,6 +59,8 @@ export type RuntimeSettingMeta = {
   source: "env" | "database";
   version: number;
   restartRequired: false;
+  invalidStoredOverride?: true;
+  storageUnavailable?: true;
 };
 
 export type SettingsRuntime = {
@@ -61,10 +68,29 @@ export type SettingsRuntime = {
     quoteMaxAgeSeconds: RuntimeSettingMeta;
     priceTolerancePercent: RuntimeSettingMeta;
   };
+  pricing: {
+    platformServiceFeePercent: RuntimeSettingMeta;
+  };
 };
 
-export type PatchBookingPoliciesResult = {
+export type PatchRuntimePoliciesRequestBody = {
+  booking?: {
+    quoteMaxAgeSeconds?: number;
+    priceTolerancePercent?: number;
+  };
+  pricing?: {
+    platformServiceFeePercent?: number;
+  };
+  expectedVersions: {
+    quoteMaxAgeSeconds: number;
+    priceTolerancePercent: number;
+    platformServiceFeePercent: number;
+  };
+};
+
+export type PatchRuntimePoliciesResult = {
   booking: SettingsRuntime["booking"];
+  pricing: SettingsRuntime["pricing"];
   audit: {
     outcome: "updated" | "no_change";
     changes: Array<{
@@ -76,6 +102,9 @@ export type PatchBookingPoliciesResult = {
     }>;
   };
 };
+
+/** @deprecated Use PatchRuntimePoliciesResult */
+export type PatchBookingPoliciesResult = PatchRuntimePoliciesResult;
 
 export type SettingsSnapshot = {
   platform: SettingsPlatform;

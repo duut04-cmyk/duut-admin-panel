@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { DeliveryHistoryDetail } from "@/data/deliveryApiTypes";
 import { isValidDeliveryId } from "@/lib/bff/deliveries";
 import { useLoadedAsync } from "@/lib/useLoadedAsync";
+import { useExclusiveAsync } from "@/lib/useExclusiveAsync";
 import AdminContainer from "@/components/AdminContainer";
 import { ADMIN_DETAIL_RAIL_GRID } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
-import AdminCallout from "@/ui/AdminCallout";
+import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
+import { DeliveryDetailSkeleton } from "@/components/loading/skeletonSections";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import { fetchDeliveryHistory } from "../api";
 import { mapTimeline } from "../deliveryMappers";
@@ -34,8 +36,8 @@ export default function DeliveryDetail({ deliveryId }: DeliveryDetailProps) {
 
   const invalidId = !isValidDeliveryId(deliveryId);
 
-  useLoadedAsync(
-    async (isStale) => {
+  const loadDelivery = useCallback(
+    async (isStale: () => boolean = () => false) => {
       if (invalidId) {
         setLoading(false);
         setHistory(null);
@@ -70,6 +72,17 @@ export default function DeliveryDetail({ deliveryId }: DeliveryDetailProps) {
     },
     [deliveryId, invalidId],
   );
+
+  useLoadedAsync(
+    async (isStale) => {
+      await loadDelivery(isStale);
+    },
+    [loadDelivery],
+  );
+
+  const { run: retryLoad, busy: retrying } = useExclusiveAsync(async () => {
+    await loadDelivery();
+  });
 
   if (invalidId) {
     return (
@@ -114,7 +127,7 @@ export default function DeliveryDetail({ deliveryId }: DeliveryDetailProps) {
         }
       >
         <AdminContainer flushTop className="pb-10">
-          <p className="text-small text-muted-foreground">Loading delivery…</p>
+          <DeliveryDetailSkeleton />
         </AdminContainer>
       </AdminShell>
     );
@@ -134,9 +147,13 @@ export default function DeliveryDetail({ deliveryId }: DeliveryDetailProps) {
       >
         <AdminContainer flushTop className="pb-10">
           {loadError ? (
-            <AdminCallout variant="warning" title="Unable to load delivery">
-              {loadError}
-            </AdminCallout>
+            <AdminLoadErrorCallout
+              title="Unable to load delivery"
+              onRetry={() => void retryLoad()}
+              retrying={retrying}
+            >
+              <p>{loadError}</p>
+            </AdminLoadErrorCallout>
           ) : (
             <AdminEmptyState
               title="Delivery not found"
@@ -165,9 +182,13 @@ export default function DeliveryDetail({ deliveryId }: DeliveryDetailProps) {
     >
       <AdminContainer flushTop className="space-y-6 pb-10 lg:space-y-8">
         {loadError ? (
-          <AdminCallout variant="warning" title="Unable to refresh delivery">
-            {loadError}
-          </AdminCallout>
+          <AdminLoadErrorCallout
+            title="Unable to refresh delivery"
+            onRetry={() => void retryLoad()}
+            retrying={retrying}
+          >
+            <p>{loadError}</p>
+          </AdminLoadErrorCallout>
         ) : null}
 
         <DeliveryHeroMetrics history={history} />

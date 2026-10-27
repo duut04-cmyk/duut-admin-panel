@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { CustomerAccountabilityRow } from "@/reports/accountability";
+import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import CustomerStatusPill from "@/customers/components/CustomerStatusPill";
 
@@ -9,6 +10,11 @@ type CustomerAccountabilityProps = {
   rows: CustomerAccountabilityRow[];
   atRiskRows: CustomerAccountabilityRow[];
   loading?: boolean;
+  unavailable?: boolean;
+  sampleAtRiskCount?: number | null;
+  sampleAtRiskKnown?: boolean;
+  /** Platform total from list API (unfiltered sample fetch); null if unknown. */
+  platformTotal?: number | null;
 };
 
 function formatDate(iso: string | null): string {
@@ -24,12 +30,24 @@ export default function CustomerAccountability({
   rows,
   atRiskRows,
   loading = false,
+  unavailable = false,
+  sampleAtRiskCount = null,
+  sampleAtRiskKnown = false,
+  platformTotal = null,
 }: CustomerAccountabilityProps) {
   if (loading) {
-    return <p className="text-small text-muted-foreground">Loading customers…</p>;
+    return <ListRowsSkeleton rows={4} />;
   }
 
-  if (rows.length === 0) {
+  if (unavailable) {
+    return (
+      <p className="text-small text-muted-foreground" role="status">
+        Customer accountability could not be loaded. Try refreshing the page.
+      </p>
+    );
+  }
+
+  if (rows.length === 0 && platformTotal === 0) {
     return (
       <AdminEmptyState
         title="No customers found"
@@ -43,14 +61,26 @@ export default function CustomerAccountability({
   const verified = rows.filter((row) => row.emailVerified).length;
   const withDeliveries = rows.filter((row) => row.totalDeliveries > 0).length;
 
+  const sampleSizeLabel =
+    platformTotal != null
+      ? `${rows.length} of up to ${Math.min(100, platformTotal).toLocaleString()} loaded`
+      : `${rows.length} in sample`;
+
   return (
     <div className="space-y-4">
+      <p className="text-caption text-muted-foreground">
+        Summary counts below are from the loaded customer sample ({sampleSizeLabel}
+        {platformTotal != null
+          ? `; ${platformTotal.toLocaleString()} customers platform-wide`
+          : ""}
+        ).
+      </p>
       <div className="grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-4">
         {[
-          { label: "Total", value: rows.length },
-          { label: "Active", value: active },
-          { label: "Verified", value: verified },
-          { label: "With deliveries", value: withDeliveries },
+          { label: "In sample", value: rows.length },
+          { label: "Active (sample)", value: active },
+          { label: "Verified (sample)", value: verified },
+          { label: "With deliveries (sample)", value: withDeliveries },
         ].map((item) => (
           <div
             key={item.label}
@@ -64,7 +94,7 @@ export default function CustomerAccountability({
 
       {suspended > 0 ? (
         <p className="text-small text-muted-foreground">
-          {suspended} suspended account{suspended === 1 ? "" : "s"} require review.
+          {suspended} suspended in this sample require review.
         </p>
       ) : null}
 
@@ -74,13 +104,21 @@ export default function CustomerAccountability({
             At-risk customers
           </h3>
           <p className="mt-1 text-caption text-muted-foreground">
-            Suspended accounts or unverified users with delivery activity.
+            Suspended accounts or unverified users with delivery activity (in the loaded
+            customer sample only).
           </p>
+          {sampleAtRiskKnown ? (
+            <p className="mt-1 text-caption text-muted-foreground">
+              {sampleAtRiskCount === 0
+                ? "No at-risk customers in this sample."
+                : `${sampleAtRiskCount} at-risk in this sample.`}
+            </p>
+          ) : null}
         </div>
 
         {atRiskRows.length === 0 ? (
           <p className="p-4 text-small text-muted-foreground sm:p-5">
-            No at-risk customers detected.
+            No at-risk customers in the loaded sample.
           </p>
         ) : (
           <div className="overflow-x-auto">

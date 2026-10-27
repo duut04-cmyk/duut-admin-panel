@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { DeliveryListItem } from "@/data/deliveryApiTypes";
 import { isValidDeliveryId } from "@/lib/bff/deliveries";
 import { useLoadedAsync } from "@/lib/useLoadedAsync";
+import { useExclusiveAsync } from "@/lib/useExclusiveAsync";
 import AdminContainer from "@/components/AdminContainer";
 import { ADMIN_LIST_PAGE_FILTERS_SECTION } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
-import AdminCallout from "@/ui/AdminCallout";
+import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
+import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
 import { fetchDeliveries } from "./api";
 import { listParamsFromFilters } from "./deliveryMappers";
 import DeliveryFilters, {
@@ -54,8 +56,8 @@ export default function DeliveriesPage() {
     return () => window.clearTimeout(timer);
   }, [filters.search]);
 
-  useLoadedAsync(
-    async (isStale) => {
+  const loadDeliveries = useCallback(
+    async (isStale: () => boolean = () => false) => {
       setLoading(true);
       setLoadError(null);
 
@@ -82,6 +84,17 @@ export default function DeliveriesPage() {
     [debouncedReference, filters.deliveryStatus, filters.dateRange, page],
   );
 
+  useLoadedAsync(
+    async (isStale) => {
+      await loadDeliveries(isStale);
+    },
+    [loadDeliveries],
+  );
+
+  const { run: retryLoad, busy: retrying } = useExclusiveAsync(async () => {
+    await loadDeliveries();
+  });
+
   const handleFiltersChange = (next: DeliveryFilterState) => {
     setPage(1);
     setFilters(next);
@@ -101,9 +114,13 @@ export default function DeliveriesPage() {
     >
       <AdminContainer flushTop className="space-y-6 pb-10">
         {loadError ? (
-          <AdminCallout variant="warning" title="Unable to load deliveries">
-            {loadError}
-          </AdminCallout>
+          <AdminLoadErrorCallout
+            title="Unable to load deliveries"
+            onRetry={() => void retryLoad()}
+            retrying={retrying}
+          >
+            <p>{loadError}</p>
+          </AdminLoadErrorCallout>
         ) : null}
 
         <DeliveryListSummary items={items} totalMatching={total} />
@@ -117,7 +134,7 @@ export default function DeliveriesPage() {
           />
 
           {loading ? (
-            <p className="text-small text-muted-foreground">Loading deliveries…</p>
+            <ListRowsSkeleton rows={8} />
           ) : (
             <>
               <DeliveryList items={items} />

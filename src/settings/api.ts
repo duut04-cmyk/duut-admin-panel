@@ -1,9 +1,15 @@
-import type { AdminAccount, SettingsSnapshot } from "@/data/settingsTypes";
+import type {
+  AdminAccount,
+  PatchRuntimePoliciesRequestBody,
+  PatchRuntimePoliciesResult,
+  SettingsSnapshot,
+} from "@/data/settingsTypes";
 
-type ApiResponse<T> = {
+export type ApiResponse<T> = {
   success: boolean;
   data?: T;
   error?: string;
+  status?: number;
 };
 
 function extractErrorMessage(error: unknown): string {
@@ -20,10 +26,14 @@ async function parseResponse<T>(response: Response): Promise<ApiResponse<T>> {
   };
 
   if (!response.ok || !data.success) {
-    return { success: false, error: extractErrorMessage(data.error) };
+    return {
+      success: false,
+      error: extractErrorMessage(data.error),
+      status: response.status,
+    };
   }
 
-  return { success: true, data: data.data };
+  return { success: true, data: data.data, status: response.status };
 }
 
 export async function fetchSettingsSnapshot(): Promise<ApiResponse<SettingsSnapshot>> {
@@ -35,3 +45,18 @@ export async function fetchAdminAccount(): Promise<ApiResponse<AdminAccount>> {
   const response = await fetch("/api/auth/me", { cache: "no-store" });
   return parseResponse<AdminAccount>(response);
 }
+
+export async function patchRuntimePolicies(
+  body: PatchRuntimePoliciesRequestBody,
+): Promise<ApiResponse<PatchRuntimePoliciesResult>> {
+  const response = await fetch("/api/settings/policies", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    cache: "no-store",
+  });
+  return parseResponse<PatchRuntimePoliciesResult>(response);
+}
+
+/** @deprecated Use patchRuntimePolicies */
+export const patchBookingPolicies = patchRuntimePolicies;

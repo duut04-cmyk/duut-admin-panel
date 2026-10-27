@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useLoadedAsync } from "@/lib/useLoadedAsync";
+import { useExclusiveAsync } from "@/lib/useExclusiveAsync";
 import type { CustomerDetail } from "@/data/customerTypes";
 import AdminContainer from "@/components/AdminContainer";
 import { ADMIN_DETAIL_RAIL_GRID } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
-import AdminCallout from "@/ui/AdminCallout";
+import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
+import { CustomerDetailSkeleton } from "@/components/loading/skeletonSections";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import { fetchCustomer, updateCustomer } from "../api";
 import CustomerAccountCard from "../components/CustomerAccountCard";
@@ -25,14 +27,16 @@ export default function CustomerDetailPage({ customerId }: CustomerDetailPagePro
   const [loadError, setLoadError] = useState<string | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState(false);
 
-  useLoadedAsync(
-    async (isStale) => {
+  const loadCustomer = useCallback(
+    async (isStale: () => boolean = () => false) => {
+      setLoading(true);
+      setLoadError(null);
+
       const result = await fetchCustomer(customerId);
 
       if (isStale()) return;
 
       setLoading(false);
-      setLoadError(null);
 
       if (!result.success || !result.data) {
         setCustomer(null);
@@ -44,6 +48,17 @@ export default function CustomerDetailPage({ customerId }: CustomerDetailPagePro
     },
     [customerId],
   );
+
+  useLoadedAsync(
+    async (isStale) => {
+      await loadCustomer(isStale);
+    },
+    [loadCustomer],
+  );
+
+  const { run: retryLoad, busy: retrying } = useExclusiveAsync(async () => {
+    await loadCustomer();
+  });
 
   const handleStatusChange = async (active: boolean) => {
     if (!customer) return;
@@ -71,7 +86,7 @@ export default function CustomerDetailPage({ customerId }: CustomerDetailPagePro
     return (
       <AdminShell customHeader={<CustomerPageLoadingHeader />}>
         <AdminContainer flushTop className="pb-10">
-          <p className="text-small text-muted-foreground">Loading customer…</p>
+          <CustomerDetailSkeleton />
         </AdminContainer>
       </AdminShell>
     );
@@ -81,18 +96,28 @@ export default function CustomerDetailPage({ customerId }: CustomerDetailPagePro
     return (
       <AdminShell customHeader={<CustomerPageLoadingHeader notFound />}>
         <AdminContainer flushTop className="pb-10">
-          <AdminEmptyState
-            title="Customer not found"
-            description={loadError ?? `No customer exists for ID "${customerId}".`}
-            action={
-              <Link
-                href="/customers"
-                className="text-small font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              >
-                Back to customers
-              </Link>
-            }
-          />
+          {loadError ? (
+            <AdminLoadErrorCallout
+              title="Unable to load customer"
+              onRetry={() => void retryLoad()}
+              retrying={retrying}
+            >
+              <p>{loadError}</p>
+            </AdminLoadErrorCallout>
+          ) : (
+            <AdminEmptyState
+              title="Customer not found"
+              description={`No customer exists for ID "${customerId}".`}
+              action={
+                <Link
+                  href="/customers"
+                  className="text-small font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  Back to customers
+                </Link>
+              }
+            />
+          )}
         </AdminContainer>
       </AdminShell>
     );
@@ -105,9 +130,13 @@ export default function CustomerDetailPage({ customerId }: CustomerDetailPagePro
     >
       <AdminContainer flushTop className="space-y-6 pb-10 lg:space-y-8">
         {loadError ? (
-          <AdminCallout variant="warning" title="Something went wrong">
-            {loadError}
-          </AdminCallout>
+          <AdminLoadErrorCallout
+            title="Something went wrong"
+            onRetry={() => void retryLoad()}
+            retrying={retrying}
+          >
+            <p>{loadError}</p>
+          </AdminLoadErrorCallout>
         ) : null}
 
         <CustomerHeroMetrics customer={customer} />
@@ -121,7 +150,7 @@ export default function CustomerDetailPage({ customerId }: CustomerDetailPagePro
             />
           </aside>
 
-          <div className="min-w-0 space-y-6 xl:order-1">
+          <div className="min-w-0 xl:order-1">
             <CustomerDeliveryHistory deliveries={customer.recentDeliveries} />
           </div>
         </div>

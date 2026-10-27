@@ -1,4 +1,4 @@
-import type { AccountabilitySnapshotMetrics } from "@/reports/accountability";
+import type { LiveSnapshotMetrics } from "@/reports/liveReportMappers";
 import {
   formatAccountabilityPercent,
   formatDecisionTime,
@@ -12,7 +12,7 @@ import OverviewMetricCard, {
 } from "@/overview/components/OverviewMetricCard";
 
 type AccountabilitySnapshotProps = {
-  metrics: AccountabilitySnapshotMetrics;
+  metrics: LiveSnapshotMetrics;
 };
 
 export default function AccountabilitySnapshot({
@@ -54,10 +54,23 @@ export default function AccountabilitySnapshot({
         />
         <OverviewMetricCard
           title="Providers at risk"
-          value={metrics.providersNeedingAttention.toLocaleString()}
+          value={
+            metrics.providersNeedingAttentionKnown
+              ? metrics.providersNeedingAttention.toLocaleString()
+              : "—"
+          }
           theme="slate"
           icon={<InProgressIcon />}
-          sparklineValues={[metrics.providersNeedingAttention]}
+          sparklineValues={
+            metrics.providersNeedingAttentionKnown
+              ? [metrics.providersNeedingAttention]
+              : undefined
+          }
+          supportingText={
+            metrics.providersNeedingAttentionKnown
+              ? "All configured providers"
+              : "Provider list unavailable"
+          }
         />
         <OverviewMetricCard
           title="Open issues"

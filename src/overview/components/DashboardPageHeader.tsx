@@ -1,14 +1,15 @@
 "use client";
 
+import type { ReportingDateRangeKey } from "@/lib/reportingDateRange";
 import type { DateRangeKey } from "@/data/orchestrationMetrics";
-import { getAdminFirstName, getTimeBasedGreeting } from "@/data/mockAdminUser";
+import { getAdminFirstName, getTimeBasedGreeting } from "@/lib/adminDisplayName";
 import { useAdminSessionContext } from "@/components/AdminSessionProvider";
 import { ADMIN_SHELL_CONTENT_PADDING } from "@/components/layout";
 import DashboardCardDateRange from "./DashboardCardDateRange";
 
 export type DashboardPageHeaderProps = {
-  dateRange: DateRangeKey;
-  onDateRangeChange: (value: DateRangeKey) => void;
+  dateRange: ReportingDateRangeKey;
+  onDateRangeChange: (value: ReportingDateRangeKey) => void;
 };
 
 export default function DashboardPageHeader({
@@ -18,7 +19,7 @@ export default function DashboardPageHeader({
   const { account } = useAdminSessionContext();
   const greeting = getTimeBasedGreeting(
     new Date(),
-    getAdminFirstName({ name: account.name, initials: "", email: account.email }),
+    getAdminFirstName({ name: account.name, email: account.email }),
   );
 
   return (
@@ -36,7 +37,14 @@ export default function DashboardPageHeader({
           Real-time performance, delivery trends and platform health at a glance.
         </p>
         <div className="shrink-0 self-center md:pb-0.5">
-          <DashboardCardDateRange value={dateRange} onChange={onDateRangeChange} />
+          <DashboardCardDateRange
+            value={dateRange}
+            onChange={(value: DateRangeKey) => {
+              if (value === "7d" || value === "30d" || value === "month") {
+                onDateRangeChange(value);
+              }
+            }}
+          />
         </div>
       </div>
     </header>

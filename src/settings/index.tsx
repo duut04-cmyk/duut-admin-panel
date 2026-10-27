@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useLoadedAsync } from "@/lib/useLoadedAsync";
+import { useExclusiveAsync } from "@/lib/useExclusiveAsync";
 import type { AdminAccount, SettingsSnapshot } from "@/data/settingsTypes";
 import AdminContainer from "@/components/AdminContainer";
 import AdminShell from "@/components/AdminShell";
+import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
+import { SettingsPageSkeleton } from "@/components/loading/skeletonSections";
 import AdminCallout from "@/ui/AdminCallout";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import { fetchAdminAccount, fetchSettingsSnapshot } from "./api";
@@ -24,13 +27,15 @@ export default function SettingsPage() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [accountError, setAccountError] = useState<string | null>(null);
 
-  useLoadedAsync(async (isStale) => {
+  const loadSnapshot = useCallback(async (isStale: () => boolean = () => false) => {
+    setLoading(true);
+    setLoadError(null);
+
     const result = await fetchSettingsSnapshot();
 
     if (isStale()) return;
 
     setLoading(false);
-    setLoadError(null);
 
     if (!result.success || !result.data) {
       setSnapshot(null);
@@ -41,13 +46,15 @@ export default function SettingsPage() {
     setSnapshot(result.data);
   }, []);
 
-  useLoadedAsync(async (isStale) => {
+  const loadAccount = useCallback(async (isStale: () => boolean = () => false) => {
+    setAccountLoading(true);
+    setAccountError(null);
+
     const result = await fetchAdminAccount();
 
     if (isStale()) return;
 
     setAccountLoading(false);
-    setAccountError(null);
 
     if (!result.success || !result.data) {
       setAccount(null);
@@ -58,24 +65,50 @@ export default function SettingsPage() {
     setAccount(result.data);
   }, []);
 
+  useLoadedAsync(
+    async (isStale) => {
+      await loadSnapshot(isStale);
+    },
+    [loadSnapshot],
+  );
+
+  useLoadedAsync(
+    async (isStale) => {
+      await loadAccount(isStale);
+    },
+    [loadAccount],
+  );
+
+  const { run: retrySnapshot, busy: retryingSnapshot } = useExclusiveAsync(async () => {
+    await loadSnapshot();
+  });
+
+  const { run: retryAccount, busy: retryingAccount } = useExclusiveAsync(async () => {
+    await loadAccount();
+  });
+
   return (
     <AdminShell mainClassName="bg-background" customHeader={<SettingsPageHeader />}>
       <AdminContainer flushTop className="space-y-8 pb-10">
         {loadError ? (
-          <AdminCallout variant="warning" title="Unable to load settings">
-            {loadError}
-          </AdminCallout>
+          <AdminLoadErrorCallout
+            title="Unable to load settings"
+            onRetry={() => void retrySnapshot()}
+            retrying={retryingSnapshot}
+          >
+            <p>{loadError}</p>
+          </AdminLoadErrorCallout>
         ) : null}
 
         <AccountSection
           account={account}
           loading={accountLoading}
           error={accountError}
+          onRetry={() => void retryAccount()}
+          retrying={retryingAccount}
         />
 
-        {loading ? (
-          <p className="text-small text-muted-foreground">Loading platform settings…</p>
-        ) : null}
+        {loading ? <SettingsPageSkeleton /> : null}
 
         {!loading && snapshot ? (
           <>
@@ -86,10 +119,11 @@ export default function SettingsPage() {
               </p>
             </div>
 
-            <AdminCallout variant="neutral" title="Read-only configuration">
-              These values reflect server environment variables and code constants. To
-              change them, update deployment configuration or source code — not this
-              admin panel.
+            <AdminCallout variant="neutral" title="Read-only in Admin v1">
+              This page shows effective platform configuration from the backend
+              snapshot. URLs, auth, OTP, orchestration weights, and integration
+              credentials are deployment-managed. Runtime booking and pricing policy
+              editing is not available in this release.
             </AdminCallout>
 
             <PlatformSection platform={snapshot.platform} />

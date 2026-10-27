@@ -4,7 +4,6 @@
 
 import { NextResponse } from "next/server";
 import { accessTokenCookieOptions, ACCESS_TOKEN_COOKIE } from "@/lib/backendAuth";
-import { isSameOriginPost } from "@/lib/auth/csrf";
 import { getBackendApiUrl } from "@/lib/backendClient";
 
 type BackendLoginResponse = {
@@ -39,13 +38,6 @@ async function verifyAdminRole(accessToken: string, baseUrl: string): Promise<bo
 }
 
 export async function POST(request: Request) {
-  if (!isSameOriginPost(request)) {
-    return NextResponse.json(
-      { success: false, error: "Invalid request." },
-      { status: 403 },
-    );
-  }
-
   const baseUrl = getBackendApiUrl();
   if (!baseUrl) {
     return NextResponse.json(

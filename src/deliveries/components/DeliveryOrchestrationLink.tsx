@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { DeliveryHistoryDetail } from "@/data/deliveryApiTypes";
 import AdminSectionHeader from "@/ui/AdminSectionHeader";
 
@@ -8,7 +7,6 @@ type DeliveryOrchestrationLinkProps = {
 };
 
 export default function DeliveryOrchestrationLink({
-  deliveryId,
   orchestration,
 }: DeliveryOrchestrationLinkProps) {
   const selected = orchestration?.selectedOption;
@@ -16,8 +14,8 @@ export default function DeliveryOrchestrationLink({
   return (
     <section aria-labelledby="delivery-orchestration-link-heading">
       <AdminSectionHeader
-        title="Orchestration"
-        description="Summary from the latest completed orchestration when available."
+        title="Orchestration summary"
+        description="Latest selected provider option from delivery history when available."
       />
 
       <aside className="mt-4 rounded-lg border border-accent/20 bg-orange-50/60 px-4 py-3.5">
@@ -38,15 +36,6 @@ export default function DeliveryOrchestrationLink({
             No selected provider option is recorded for this delivery yet.
           </p>
         )}
-        <Link
-          href={`/orchestration/${deliveryId}`}
-          className="mt-2.5 inline-flex text-small font-semibold text-accent transition-colors hover:text-accent/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          View orchestration page
-        </Link>
-        <p className="mt-2 text-caption text-muted-foreground">
-          The orchestration page may still use demo data until it is wired to the API.
-        </p>
       </aside>
     </section>
   );

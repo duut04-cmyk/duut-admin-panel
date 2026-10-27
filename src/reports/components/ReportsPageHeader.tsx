@@ -1,12 +1,13 @@
 "use client";
 
+import type { ReportingDateRangeKey } from "@/lib/reportingDateRange";
 import type { DateRangeKey } from "@/data/orchestrationMetrics";
 import { ADMIN_SHELL_CONTENT_PADDING } from "@/components/layout";
 import DashboardCardDateRange from "@/overview/components/DashboardCardDateRange";
 
 type ReportsPageHeaderProps = {
-  dateRange: DateRangeKey;
-  onDateRangeChange: (value: DateRangeKey) => void;
+  dateRange: ReportingDateRangeKey;
+  onDateRangeChange: (value: ReportingDateRangeKey) => void;
 };
 
 export default function ReportsPageHeader({
@@ -29,7 +30,11 @@ export default function ReportsPageHeader({
         <div className="shrink-0 self-center md:pb-0.5">
           <DashboardCardDateRange
             value={dateRange}
-            onChange={onDateRangeChange}
+            onChange={(value: DateRangeKey) => {
+              if (value === "7d" || value === "30d" || value === "month") {
+                onDateRangeChange(value);
+              }
+            }}
             iconOnlyMobile={false}
           />
         </div>

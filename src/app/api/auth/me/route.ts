@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { backendFetch, parseBackendJson } from "@/lib/backendClient";
-import { ACCESS_TOKEN_COOKIE, clearAccessTokenCookieOptions } from "@/lib/backendAuth";
+import {
+  applyClearAdminSessionCookie,
+  shouldClearAdminSessionOnBackendResponse,
+} from "@/lib/auth/sessionFromBackend";
 import type { AdminAccount } from "@/data/settingsTypes";
 
 type BackendMeResponse = {
@@ -8,7 +11,7 @@ type BackendMeResponse = {
   data?: {
     user: AdminAccount;
   };
-  error?: { message?: string };
+  error?: { message?: string; code?: string };
 };
 
 export async function GET() {
@@ -24,8 +27,8 @@ export async function GET() {
       },
       { status },
     );
-    if (status === 401) {
-      res.cookies.set(ACCESS_TOKEN_COOKIE, "", clearAccessTokenCookieOptions());
+    if (shouldClearAdminSessionOnBackendResponse(response, data)) {
+      applyClearAdminSessionCookie(res);
     }
     return res;
   }
@@ -35,7 +38,7 @@ export async function GET() {
       { success: false, error: "Admin access required." },
       { status: 403 },
     );
-    res.cookies.set(ACCESS_TOKEN_COOKIE, "", clearAccessTokenCookieOptions());
+    applyClearAdminSessionCookie(res);
     return res;
   }
 

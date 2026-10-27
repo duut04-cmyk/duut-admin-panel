@@ -16,28 +16,45 @@ type PoliciesSectionProps = {
 };
 
 export default function PoliciesSection({ policies }: PoliciesSectionProps) {
-  const { booking, auth, deliveryOtp, orchestration } = policies;
+  const { booking, pricing, auth, deliveryOtp, orchestration } = policies;
 
   return (
     <ReportsSection
       id="settings-policies"
       title="Operational policies"
-      description="Business rules applied across booking, auth, delivery OTP, and orchestration. Values are read-only and require a deployment to change."
+      description="Effective business rules from the backend snapshot. Values shown here are read-only in Admin v1; changes require deployment configuration."
     >
       <div className="grid min-w-0 gap-4 lg:grid-cols-2">
         <div className="space-y-2">
-          <h3 className="text-small font-semibold text-foreground">Booking & quotes</h3>
+          <h3 className="text-small font-semibold text-foreground">
+            Booking (effective)
+          </h3>
           <SettingsKeyValueCard
             items={[
               {
                 label: "Quote max age",
                 value: formatSeconds(booking.quoteMaxAgeSeconds),
-                hint: "BOOKING_QUOTE_MAX_AGE_SECONDS",
+                hint: "BOOKING_QUOTE_MAX_AGE_SECONDS (env or runtime store)",
               },
               {
                 label: "Price tolerance",
                 value: formatPercent(booking.priceTolerancePercent),
-                hint: "BOOKING_PRICE_TOLERANCE_PERCENT",
+                hint: "BOOKING_PRICE_TOLERANCE_PERCENT (env or runtime store)",
+              },
+            ]}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="text-small font-semibold text-foreground">
+            Pricing (effective)
+          </h3>
+          <SettingsKeyValueCard
+            items={[
+              {
+                label: "Platform service fee",
+                value: formatPercent(pricing.platformServiceFeePercent),
+                hint: "PLATFORM_SERVICE_FEE_PERCENT (env or runtime store) · GST 18% fixed",
               },
             ]}
           />

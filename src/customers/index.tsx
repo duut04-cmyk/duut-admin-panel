@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLoadedAsync } from "@/lib/useLoadedAsync";
+import { useExclusiveAsync } from "@/lib/useExclusiveAsync";
 import type { CustomerSummary } from "@/data/customerTypes";
 import AdminContainer from "@/components/AdminContainer";
 import { ADMIN_LIST_PAGE_FILTERS_SECTION } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
-import AdminCallout from "@/ui/AdminCallout";
+import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
+import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
 import { fetchCustomers } from "./api";
 import CustomerFilters, {
   DEFAULT_CUSTOMER_FILTERS,
@@ -15,10 +17,16 @@ import CustomerFilters, {
 import CustomerList from "./components/CustomerList";
 import CustomerListSummary from "./components/CustomerListSummary";
 import CustomerPageHeader from "./components/CustomerPageHeader";
-import { getCustomerMetrics } from "./components/utils";
+import CustomerPagination from "./components/CustomerPagination";
+import { buildCustomerListSummaryMetrics } from "./components/utils";
+
+const PAGE_SIZE = 20;
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<CustomerSummary[]>([]);
+  const [matchingTotal, setMatchingTotal] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [filters, setFilters] = useState<CustomerFilterState>(DEFAULT_CUSTOMER_FILTERS);
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -27,14 +35,19 @@ export default function CustomersPage() {
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setDebouncedSearch(filters.search);
+      setPage(1);
     }, 300);
     return () => window.clearTimeout(timer);
   }, [filters.search]);
 
-  useLoadedAsync(
-    async (isStale) => {
+  const loadCustomers = useCallback(
+    async (isStale: () => boolean = () => false) => {
+      setLoading(true);
+      setLoadError(null);
+
       const result = await fetchCustomers({
-        limit: 100,
+        page,
+        limit: PAGE_SIZE,
         search: debouncedSearch.trim() || undefined,
         status: filters.status === "all" ? undefined : filters.status,
         emailVerified:
@@ -46,42 +59,77 @@ export default function CustomersPage() {
       if (isStale()) return;
 
       setLoading(false);
-      setLoadError(null);
 
-      if (!result.success) {
+      if (!result.success || !result.data) {
+        setCustomers([]);
+        setMatchingTotal(null);
+        setTotalPages(1);
         setLoadError(result.error ?? "Failed to load customers.");
         return;
       }
 
-      setCustomers(result.data?.items ?? []);
+      setCustomers(result.data.items);
+      setMatchingTotal(result.data.total);
+      setTotalPages(Math.max(1, result.data.totalPages));
     },
-    [debouncedSearch, filters.emailVerified, filters.status],
+    [debouncedSearch, filters.emailVerified, filters.status, page],
   );
 
-  const metrics = useMemo(() => getCustomerMetrics(customers), [customers]);
+  useLoadedAsync(
+    async (isStale) => {
+      await loadCustomers(isStale);
+    },
+    [loadCustomers],
+  );
+
+  const { run: retryLoad, busy: retrying } = useExclusiveAsync(async () => {
+    await loadCustomers();
+  });
+
+  const summaryMetrics = useMemo(
+    () => buildCustomerListSummaryMetrics(loadError ? null : matchingTotal, customers),
+    [customers, loadError, matchingTotal],
+  );
+
+  const handleFiltersChange = (next: CustomerFilterState) => {
+    setPage(1);
+    setFilters(next);
+  };
 
   return (
     <AdminShell mainClassName="bg-background" customHeader={<CustomerPageHeader />}>
       <AdminContainer flushTop className="space-y-6 pb-10">
         {loadError ? (
-          <AdminCallout variant="warning" title="Unable to load customers">
-            {loadError}
-          </AdminCallout>
+          <AdminLoadErrorCallout
+            title="Unable to load customers"
+            onRetry={() => void retryLoad()}
+            retrying={retrying}
+          >
+            <p>{loadError}</p>
+          </AdminLoadErrorCallout>
         ) : null}
 
-        <CustomerListSummary metrics={metrics} />
+        <CustomerListSummary metrics={summaryMetrics} />
 
         <div className={ADMIN_LIST_PAGE_FILTERS_SECTION}>
           <CustomerFilters
             filters={filters}
-            onChange={setFilters}
-            resultCount={customers.length}
+            onChange={handleFiltersChange}
+            resultCount={matchingTotal ?? 0}
           />
 
           {loading ? (
-            <p className="text-small text-muted-foreground">Loading customers…</p>
+            <ListRowsSkeleton rows={8} />
           ) : (
-            <CustomerList customers={customers} />
+            <>
+              <CustomerList customers={customers} />
+              <CustomerPagination
+                page={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+                disabled={loading}
+              />
+            </>
           )}
         </div>
       </AdminContainer>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { ProviderAccountabilityRow } from "@/reports/accountability";
+import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import AdminStatus from "@/ui/AdminStatus";
 import ProviderEnvironmentBadge from "@/providers/components/ProviderEnvironmentBadge";
@@ -15,14 +16,24 @@ import {
 type ProviderAccountabilityTableProps = {
   rows: ProviderAccountabilityRow[];
   loading?: boolean;
+  unavailable?: boolean;
 };
 
 export default function ProviderAccountabilityTable({
   rows,
   loading = false,
+  unavailable = false,
 }: ProviderAccountabilityTableProps) {
   if (loading) {
-    return <p className="text-small text-muted-foreground">Loading providers…</p>;
+    return <ListRowsSkeleton rows={4} />;
+  }
+
+  if (unavailable) {
+    return (
+      <p className="text-small text-muted-foreground" role="status">
+        Provider accountability could not be loaded. Try refreshing the page.
+      </p>
+    );
   }
 
   if (rows.length === 0) {

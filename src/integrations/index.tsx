@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useLoadedAsync } from "@/lib/useLoadedAsync";
+import { useExclusiveAsync } from "@/lib/useExclusiveAsync";
 import type { IntegrationsStatus } from "@/data/integrationTypes";
 import AdminContainer from "@/components/AdminContainer";
 import AdminShell from "@/components/AdminShell";
+import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
+import { IntegrationStatusSkeleton } from "@/components/loading/skeletonSections";
 import AdminCallout from "@/ui/AdminCallout";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import { fetchIntegrationsStatus } from "./api";
@@ -17,13 +20,15 @@ export default function IntegrationsPage() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  useLoadedAsync(async (isStale) => {
+  const loadIntegrations = useCallback(async (isStale: () => boolean = () => false) => {
+    setLoading(true);
+    setLoadError(null);
+
     const result = await fetchIntegrationsStatus();
 
     if (isStale()) return;
 
     setLoading(false);
-    setLoadError(null);
 
     if (!result.success || !result.data) {
       setStatus(null);
@@ -34,18 +39,31 @@ export default function IntegrationsPage() {
     setStatus(result.data);
   }, []);
 
+  useLoadedAsync(
+    async (isStale) => {
+      await loadIntegrations(isStale);
+    },
+    [loadIntegrations],
+  );
+
+  const { run: retryLoad, busy: retrying } = useExclusiveAsync(async () => {
+    await loadIntegrations();
+  });
+
   return (
     <AdminShell mainClassName="bg-background" customHeader={<IntegrationsPageHeader />}>
       <AdminContainer flushTop className="space-y-8 pb-10">
         {loadError ? (
-          <AdminCallout variant="warning" title="Unable to load integrations">
-            {loadError}
-          </AdminCallout>
+          <AdminLoadErrorCallout
+            title="Unable to load integrations"
+            onRetry={() => void retryLoad()}
+            retrying={retrying}
+          >
+            <p>{loadError}</p>
+          </AdminLoadErrorCallout>
         ) : null}
 
-        {loading ? (
-          <p className="text-small text-muted-foreground">Loading integrations…</p>
-        ) : null}
+        {loading ? <IntegrationStatusSkeleton /> : null}
 
         {!loading && status ? (
           <>

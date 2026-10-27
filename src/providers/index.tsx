@@ -2,11 +2,13 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { useLoadedAsync } from "@/lib/useLoadedAsync";
+import { useExclusiveAsync } from "@/lib/useExclusiveAsync";
+import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
 import type { CreateProviderInput, ProviderSummary } from "@/data/providerTypes";
 import AdminContainer from "@/components/AdminContainer";
 import { ADMIN_LIST_PAGE_FILTERS_SECTION } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
-import AdminCallout from "@/ui/AdminCallout";
+import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
 import AddProviderModal from "./components/AddProviderModal";
 import ProviderFilters, {
   DEFAULT_PROVIDER_FILTERS,
@@ -16,7 +18,16 @@ import ProviderList from "./components/ProviderList";
 import ProviderListSummary from "./components/ProviderListSummary";
 import ProviderPageHeader from "./components/ProviderPageHeader";
 import { getProviderMetrics } from "./components/utils";
-import { createProvider, fetchProviders, updateProvider } from "./api";
+import {
+  createProvider,
+  fetchProviders,
+  updateProvider,
+  updateProviderStatus,
+} from "./api";
+import {
+  providerSummaryFromDetail,
+  setProviderEnabledFromList,
+} from "./providerListLifecycle";
 
 export default function ProvidersPage() {
   const [providers, setProviders] = useState<ProviderSummary[]>([]);
@@ -29,19 +40,10 @@ export default function ProvidersPage() {
     "enabled" | "orchestrationEnabled" | null
   >(null);
 
-  const reloadProviders = useCallback(async () => {
-    const result = await fetchProviders();
-
-    if (!result.success) {
-      setLoadError(result.error ?? "Failed to load providers.");
-      return;
-    }
-
+  const loadProviders = useCallback(async (isStale: () => boolean = () => false) => {
+    setLoading(true);
     setLoadError(null);
-    setProviders(result.data ?? []);
-  }, []);
 
-  useLoadedAsync(async (isStale) => {
     const result = await fetchProviders();
 
     if (isStale()) return;
@@ -53,9 +55,23 @@ export default function ProvidersPage() {
       return;
     }
 
-    setLoadError(null);
     setProviders(result.data ?? []);
   }, []);
+
+  useLoadedAsync(
+    async (isStale) => {
+      await loadProviders(isStale);
+    },
+    [loadProviders],
+  );
+
+  const { run: retryLoad, busy: retrying } = useExclusiveAsync(async () => {
+    await loadProviders();
+  });
+
+  const reloadProviders = useCallback(async () => {
+    await loadProviders();
+  }, [loadProviders]);
 
   const filteredProviders = useMemo(() => {
     const query = filters.search.trim().toLowerCase();
@@ -110,28 +126,30 @@ export default function ProvidersPage() {
     setTogglingId(provider.id);
     setTogglingField(field);
 
-    const patch =
-      field === "enabled"
-        ? {
-            enabled: value,
-            ...(value ? {} : { orchestrationEnabled: false }),
-          }
-        : { orchestrationEnabled: value };
-
     const previous = providers;
-    setProviders((current) =>
-      current.map((item) => {
-        if (item.id !== provider.id) return item;
 
-        const next = { ...item, ...patch };
-        if (field === "enabled" && !value) {
-          next.status = "INACTIVE";
-        }
-        return next;
-      }),
-    );
+    if (field === "enabled") {
+      const result = await setProviderEnabledFromList(provider, value, {
+        updateProviderStatus,
+        updateProvider,
+      });
 
-    const result = await updateProvider(provider.id, patch);
+      setTogglingId(null);
+      setTogglingField(null);
+
+      if (!result.success) {
+        setLoadError(result.error ?? "Failed to update provider.");
+        return;
+      }
+
+      const summary = providerSummaryFromDetail(result.data);
+      setProviders((current) =>
+        current.map((item) => (item.id === provider.id ? summary : item)),
+      );
+      return;
+    }
+
+    const result = await updateProvider(provider.id, { orchestrationEnabled: value });
 
     setTogglingId(null);
     setTogglingField(null);
@@ -143,8 +161,9 @@ export default function ProvidersPage() {
     }
 
     if (result.data) {
+      const summary = providerSummaryFromDetail(result.data);
       setProviders((current) =>
-        current.map((item) => (item.id === provider.id ? result.data! : item)),
+        current.map((item) => (item.id === provider.id ? summary : item)),
       );
     }
   };
@@ -156,9 +175,13 @@ export default function ProvidersPage() {
     >
       <AdminContainer flushTop className="space-y-6 pb-10">
         {loadError ? (
-          <AdminCallout variant="warning" title="Unable to load providers">
-            {loadError}
-          </AdminCallout>
+          <AdminLoadErrorCallout
+            title="Unable to load providers"
+            onRetry={() => void retryLoad()}
+            retrying={retrying}
+          >
+            <p>{loadError}</p>
+          </AdminLoadErrorCallout>
         ) : null}
 
         <ProviderListSummary metrics={metrics} />
@@ -171,7 +194,7 @@ export default function ProvidersPage() {
           />
 
           {loading ? (
-            <p className="text-small text-muted-foreground">Loading providers…</p>
+            <ListRowsSkeleton rows={8} />
           ) : (
             <ProviderList
               providers={filteredProviders}

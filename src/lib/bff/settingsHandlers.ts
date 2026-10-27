@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
 import { proxyBackendJsonPatch, type ProxyBackendJsonDeps } from "./proxyBackendJson";
 
-type PatchBookingPoliciesBody = {
+type PatchRuntimePoliciesBody = {
   booking?: {
     quoteMaxAgeSeconds?: number;
     priceTolerancePercent?: number;
   };
+  pricing?: {
+    platformServiceFeePercent?: number;
+  };
   expectedVersions: {
     quoteMaxAgeSeconds: number;
     priceTolerancePercent: number;
+    platformServiceFeePercent: number;
   };
 };
 
@@ -24,67 +28,111 @@ function isPositiveInt(value: unknown): value is number {
   return typeof value === "number" && Number.isInteger(value) && value > 0;
 }
 
-function parsePatchBookingPoliciesBody(
+function isPlatformServiceFeePercent(value: unknown): value is number {
+  return (
+    typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= 100
+  );
+}
+
+function parseExpectedVersions(
   raw: unknown,
-): PatchBookingPoliciesBody | string {
+): PatchRuntimePoliciesBody["expectedVersions"] | string {
+  if (!isRecord(raw)) {
+    return "expectedVersions is required.";
+  }
+  if (!isNonNegativeInt(raw.quoteMaxAgeSeconds)) {
+    return "expectedVersions.quoteMaxAgeSeconds must be a non-negative integer.";
+  }
+  if (!isNonNegativeInt(raw.priceTolerancePercent)) {
+    return "expectedVersions.priceTolerancePercent must be a non-negative integer.";
+  }
+  if (!isNonNegativeInt(raw.platformServiceFeePercent)) {
+    return "expectedVersions.platformServiceFeePercent must be a non-negative integer.";
+  }
+  return {
+    quoteMaxAgeSeconds: raw.quoteMaxAgeSeconds,
+    priceTolerancePercent: raw.priceTolerancePercent,
+    platformServiceFeePercent: raw.platformServiceFeePercent,
+  };
+}
+
+function parsePatchRuntimePoliciesBody(
+  raw: unknown,
+): PatchRuntimePoliciesBody | string {
   if (!isRecord(raw)) {
     return "Invalid request body.";
   }
 
-  const expected = raw.expectedVersions;
-  if (!isRecord(expected)) {
-    return "expectedVersions is required.";
-  }
-  if (!isNonNegativeInt(expected.quoteMaxAgeSeconds)) {
-    return "expectedVersions.quoteMaxAgeSeconds must be a non-negative integer.";
-  }
-  if (!isNonNegativeInt(expected.priceTolerancePercent)) {
-    return "expectedVersions.priceTolerancePercent must be a non-negative integer.";
+  const expectedVersions = parseExpectedVersions(raw.expectedVersions);
+  if (typeof expectedVersions === "string") {
+    return expectedVersions;
   }
 
   const bookingRaw = raw.booking;
-  if (bookingRaw === undefined) {
-    return "At least one booking policy field must be provided.";
-  }
-  if (!isRecord(bookingRaw)) {
-    return "booking must be an object.";
-  }
+  const pricingRaw = raw.pricing;
 
-  const booking: PatchBookingPoliciesBody["booking"] = {};
-  if ("quoteMaxAgeSeconds" in bookingRaw) {
-    if (!isPositiveInt(bookingRaw.quoteMaxAgeSeconds)) {
-      return "booking.quoteMaxAgeSeconds must be a positive integer.";
+  const booking: PatchRuntimePoliciesBody["booking"] = {};
+  if (bookingRaw !== undefined) {
+    if (!isRecord(bookingRaw)) {
+      return "booking must be an object.";
     }
-    booking.quoteMaxAgeSeconds = bookingRaw.quoteMaxAgeSeconds;
-  }
-  if ("priceTolerancePercent" in bookingRaw) {
-    const value = bookingRaw.priceTolerancePercent;
-    if (typeof value !== "number" || value < 0 || value > 100) {
-      return "booking.priceTolerancePercent must be between 0 and 100.";
+    if ("quoteMaxAgeSeconds" in bookingRaw) {
+      if (!isPositiveInt(bookingRaw.quoteMaxAgeSeconds)) {
+        return "booking.quoteMaxAgeSeconds must be a positive integer.";
+      }
+      booking.quoteMaxAgeSeconds = bookingRaw.quoteMaxAgeSeconds;
     }
-    booking.priceTolerancePercent = value;
-  }
-
-  if (
-    booking.quoteMaxAgeSeconds === undefined &&
-    booking.priceTolerancePercent === undefined
-  ) {
-    return "At least one booking policy field must be provided.";
-  }
-
-  for (const key of Object.keys(bookingRaw)) {
-    if (key !== "quoteMaxAgeSeconds" && key !== "priceTolerancePercent") {
-      return `Unknown booking policy field: ${key}`;
+    if ("priceTolerancePercent" in bookingRaw) {
+      const value = bookingRaw.priceTolerancePercent;
+      if (typeof value !== "number" || value < 0 || value > 100) {
+        return "booking.priceTolerancePercent must be between 0 and 100.";
+      }
+      booking.priceTolerancePercent = value;
+    }
+    for (const key of Object.keys(bookingRaw)) {
+      if (key !== "quoteMaxAgeSeconds" && key !== "priceTolerancePercent") {
+        return `Unknown booking policy field: ${key}`;
+      }
     }
   }
 
-  return {
-    booking,
-    expectedVersions: {
-      quoteMaxAgeSeconds: expected.quoteMaxAgeSeconds,
-      priceTolerancePercent: expected.priceTolerancePercent,
-    },
-  };
+  const pricing: PatchRuntimePoliciesBody["pricing"] = {};
+  if (pricingRaw !== undefined) {
+    if (!isRecord(pricingRaw)) {
+      return "pricing must be an object.";
+    }
+    if ("platformServiceFeePercent" in pricingRaw) {
+      if (!isPlatformServiceFeePercent(pricingRaw.platformServiceFeePercent)) {
+        return "pricing.platformServiceFeePercent must be a whole number from 0 to 100.";
+      }
+      pricing.platformServiceFeePercent = pricingRaw.platformServiceFeePercent;
+    }
+    for (const key of Object.keys(pricingRaw)) {
+      if (key !== "platformServiceFeePercent") {
+        return `Unknown pricing policy field: ${key}`;
+      }
+    }
+  }
+
+  const hasBookingField =
+    booking.quoteMaxAgeSeconds !== undefined ||
+    booking.priceTolerancePercent !== undefined;
+  const hasPricingField = pricing.platformServiceFeePercent !== undefined;
+
+  if (!hasBookingField && !hasPricingField) {
+    return "At least one allowlisted runtime policy field must be provided.";
+  }
+
+  const body: PatchRuntimePoliciesBody = { expectedVersions };
+
+  if (hasBookingField) {
+    body.booking = booking;
+  }
+  if (hasPricingField) {
+    body.pricing = pricing;
+  }
+
+  return body;
 }
 
 export async function handleSettingsPoliciesPatch(
@@ -101,7 +149,7 @@ export async function handleSettingsPoliciesPatch(
     );
   }
 
-  const parsed = parsePatchBookingPoliciesBody(rawBody);
+  const parsed = parsePatchRuntimePoliciesBody(rawBody);
   if (typeof parsed === "string") {
     return NextResponse.json({ success: false, error: parsed }, { status: 400 });
   }

@@ -10,6 +10,7 @@ type TopServicesWidgetProps = {
   categories: TopServiceCategory[];
   dateRange: DateRangeKey;
   onDateRangeChange: (value: DateRangeKey) => void;
+  liveData?: boolean;
 };
 
 type CategoryTheme = {
@@ -89,8 +90,11 @@ export default function TopServicesWidget({
   categories,
   dateRange,
   onDateRangeChange,
+  liveData = false,
 }: TopServicesWidgetProps) {
-  const displayCategories = resolveTopServicesDisplay(categories);
+  const displayCategories = liveData
+    ? categories
+    : resolveTopServicesDisplay(categories);
 
   return (
     <article

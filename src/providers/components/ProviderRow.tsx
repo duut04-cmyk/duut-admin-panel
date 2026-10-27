@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { ProviderSummary } from "@/data/providerTypes";
 import AdminStatus from "@/ui/AdminStatus";
 import AdminToggle from "@/ui/AdminToggle";
@@ -25,7 +26,12 @@ type ProviderRowProps = {
 function ProviderIdentity({ provider }: { provider: ProviderSummary }) {
   return (
     <div className="min-w-0">
-      <p className="font-semibold text-foreground">{provider.name}</p>
+      <Link
+        href={`/providers/${provider.id}`}
+        className="font-semibold text-foreground transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        {provider.name}
+      </Link>
       <p className="mt-0.5 text-caption text-muted-foreground">{provider.code}</p>
       {provider.displayName ? (
         <p className="mt-0.5 truncate text-caption text-muted-foreground">

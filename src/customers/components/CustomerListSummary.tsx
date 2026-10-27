@@ -1,4 +1,4 @@
-import type { CustomerMetrics } from "@/data/customerTypes";
+import type { CustomerListSummaryMetrics } from "@/data/customerTypes";
 import OverviewMetricCard, {
   DeliveredIcon,
   InProgressIcon,
@@ -6,7 +6,7 @@ import OverviewMetricCard, {
 } from "@/overview/components/OverviewMetricCard";
 
 type CustomerListSummaryProps = {
-  metrics: CustomerMetrics;
+  metrics: CustomerListSummaryMetrics;
   className?: string;
 };
 
@@ -27,6 +27,9 @@ export default function CustomerListSummary({
   metrics,
   className = "",
 }: CustomerListSummaryProps) {
+  const matchingDisplay =
+    metrics.matchingTotal != null ? metrics.matchingTotal.toLocaleString() : "—";
+
   return (
     <section aria-labelledby="customer-summary-heading" className={className}>
       <h2 id="customer-summary-heading" className="sr-only">
@@ -34,32 +37,32 @@ export default function CustomerListSummary({
       </h2>
       <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3 md:grid-cols-4">
         <OverviewMetricCard
-          title="Total Customers"
-          value={metrics.total.toLocaleString()}
+          title="Matching customers"
+          value={matchingDisplay}
           theme="orange"
           icon={<PackageIcon />}
-          sparklineValues={[metrics.total]}
+          supportingText="Total for current filters"
         />
         <OverviewMetricCard
-          title="Active Accounts"
-          value={metrics.active.toLocaleString()}
+          title="Active accounts"
+          value={metrics.onPage.active.toLocaleString()}
           theme="green"
           icon={<DeliveredIcon />}
-          sparklineValues={[metrics.active]}
+          supportingText="On this page"
         />
         <OverviewMetricCard
-          title="Email Verified"
-          value={metrics.verified.toLocaleString()}
+          title="Email verified"
+          value={metrics.onPage.verified.toLocaleString()}
           theme="blue"
           icon={<VerifiedIcon />}
-          sparklineValues={[metrics.verified]}
+          supportingText="On this page"
         />
         <OverviewMetricCard
-          title="With Deliveries"
-          value={metrics.withDeliveries.toLocaleString()}
+          title="With deliveries"
+          value={metrics.onPage.withDeliveries.toLocaleString()}
           theme="slate"
           icon={<InProgressIcon />}
-          sparklineValues={[metrics.withDeliveries]}
+          supportingText="On this page"
         />
       </div>
     </section>

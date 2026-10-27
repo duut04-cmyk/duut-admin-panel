@@ -38,6 +38,9 @@ export default function ServiceOrchestrationTable({
                 Selected
               </th>
               <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
+                Booking attempts
+              </th>
+              <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
                 Booking success
               </th>
               <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
@@ -64,7 +67,12 @@ export default function ServiceOrchestrationTable({
                   {formatPercent(service.selectionRate)}
                 </td>
                 <td className="px-4 py-3 tabular-nums md:px-5">
-                  {formatPercent(service.bookingSuccessRate)}
+                  {service.bookingAttempts}
+                </td>
+                <td className="px-4 py-3 tabular-nums md:px-5">
+                  {service.bookingAttempts === 0
+                    ? "—"
+                    : formatPercent(service.bookingSuccessRate)}
                 </td>
                 <td className="px-4 py-3 tabular-nums text-muted-foreground md:px-5">
                   {service.averagePrice != null ? `₹${service.averagePrice}` : "—"}

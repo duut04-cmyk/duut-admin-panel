@@ -1,23 +1,29 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { evaluateProtectedApiRequest } from "@/lib/auth/apiRequestPolicy";
 import { ACCESS_TOKEN_COOKIE } from "@/lib/auth/constants";
-import { isPublicApiPath, isPublicPagePath } from "@/lib/auth/routes";
+import { isPublicPagePath } from "@/lib/auth/routes";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
   const hasSession = Boolean(token);
 
+  const apiDecision = evaluateProtectedApiRequest({
+    pathname,
+    method: request.method,
+    headers: request.headers,
+    hasSession,
+  });
+
+  if (apiDecision.action === "reject") {
+    return NextResponse.json(
+      { success: false, error: apiDecision.error },
+      { status: apiDecision.status },
+    );
+  }
+
   if (pathname.startsWith("/api/")) {
-    if (isPublicApiPath(pathname)) {
-      return NextResponse.next();
-    }
-    if (!hasSession) {
-      return NextResponse.json(
-        { success: false, error: "Authentication required." },
-        { status: 401 },
-      );
-    }
     return NextResponse.next();
   }
 
