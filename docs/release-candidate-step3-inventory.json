@@ -1,0 +1,2800 @@
+{
+  "generatedAt": "2026-10-27T11:51:37.596Z",
+  "repositories": {
+    "backend": {
+      "branch": "develop",
+      "stagedCount": 0,
+      "modified": [
+        {
+          "path": ".env.example",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["CORS/configuration"]
+        },
+        {
+          "path": ".husky/pre-commit",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "package.json",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "package-lock.json",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "prisma/schema.prisma",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Prisma schema and migrations"]
+        },
+        {
+          "path": "README.md",
+          "gitState": "modified",
+          "fileKind": "documentation",
+          "functionalAreas": ["CORS/configuration"]
+        },
+        {
+          "path": "scripts/reset-database-data.lib.ts",
+          "gitState": "modified",
+          "fileKind": "qa_script",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "src/app.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["CORS/configuration"]
+        },
+        {
+          "path": "src/config/env.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["CORS/configuration"]
+        },
+        {
+          "path": "src/infrastructure/sms/msg91/msg91.provider.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "src/infrastructure/sms/sms.service.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "src/infrastructure/sms/sms.types.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "src/modules/auth/auth.controller.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin BFF and authentication/session/CSRF"]
+        },
+        {
+          "path": "src/modules/auth/auth.routes.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin BFF and authentication/session/CSRF"]
+        },
+        {
+          "path": "src/modules/auth/auth.service.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin BFF and authentication/session/CSRF"]
+        },
+        {
+          "path": "src/modules/booking/booking.provider-outcome.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/booking/booking.repository.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/booking/booking.service.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/booking/booking.types.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/delivery/delivery.controller.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/delivery/delivery.routes.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/delivery/delivery.service.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/dev-delivery-simulate/dev-delivery-simulate.config.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/integration/integration.service.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "src/modules/operations/operational.swagger.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration.controller.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration.mapper.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration.provider-evaluation.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration.repository.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration.routes.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration.schema.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration.scoring.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration.service.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration.types.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/otp/otp.service.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "src/modules/pricing/customer-delivery-pricing.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/bootstrap.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "src/modules/provider/adapters/delivery-provider.mapper.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/modules/provider/adapters/provider-adapter.types.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "src/modules/provider/adapters/provider.adapter-urls.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "src/modules/provider/adapters/provider-http-client.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "src/modules/provider/contracts/booking.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/provider.mapper.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/modules/provider/provider.schema.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/modules/provider/provider.service.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/modules/settings/settings.controller.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/settings/settings.routes.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/settings/settings.service.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/settings/settings.swagger.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/settings/settings.types.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/test-sms/test-sms.routes.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "src/routes/index.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "tests/booking.failure.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/booking.provider-outcome.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/cancellation.http.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/customer-delivery-pricing.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/delivery.foundation.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/helpers/booking-test-helpers.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/helpers/in-memory-booking-repository.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/helpers/in-memory-orchestration-repository.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/helpers/sms-test-helpers.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/msg91.provider.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/operational.http.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/operational-polling.service.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/orchestration.cancellation-policy.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/orchestration.scoring.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/orchestration.service.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/otp.service.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/otp.sms.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/phase7-audit-fixes.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/provider.admin.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "tests/provider.resilience.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/reset-database-data.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/setup.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/test-sms.http.test.ts",
+          "gitState": "modified",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "vitest.config.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Tests and QA scripts"]
+        }
+      ],
+      "deleted": [],
+      "untracked": [
+        {
+          "path": "docs/local-frontend-live-backend.md",
+          "gitState": "untracked",
+          "fileKind": "documentation",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "docs/sms-providers.md",
+          "gitState": "untracked",
+          "fileKind": "documentation",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "prisma/migrations/20261024143000_add_platform_runtime_settings/migration.sql",
+          "gitState": "untracked",
+          "fileKind": "migration",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "prisma/migrations/20261024150000_add_platform_service_fee_runtime_setting/migration.sql",
+          "gitState": "untracked",
+          "fileKind": "migration",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "scripts/check-sms-env.ts",
+          "gitState": "untracked",
+          "fileKind": "qa_script",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "scripts/lib/twilio-trial-template-smoke.lib.ts",
+          "gitState": "untracked",
+          "fileKind": "qa_script",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "scripts/phase5i-readonly-validation.ts",
+          "gitState": "untracked",
+          "fileKind": "qa_script",
+          "functionalAreas": ["Unknown/needs human review"]
+        },
+        {
+          "path": "scripts/shiprocket-sandbox-serviceability-probe.ts",
+          "gitState": "untracked",
+          "fileKind": "qa_script",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "scripts/twilio-pickup-otp-smoke.ts",
+          "gitState": "untracked",
+          "fileKind": "qa_script",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "scripts/twilio-trial-template-smoke.ts",
+          "gitState": "untracked",
+          "fileKind": "qa_script",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "src/config/cors.config.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["CORS/configuration"]
+        },
+        {
+          "path": "src/infrastructure/geocoding/google-geocoding.client.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/infrastructure/geocoding/google-geocoding.errors.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/infrastructure/sms/sms-outcome.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "src/infrastructure/sms/sms-provider.factory.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "src/infrastructure/sms/sms-recipient.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "src/infrastructure/sms/twilio/twilio-error-diagnostics.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "src/infrastructure/sms/twilio/twilio.provider.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "src/modules/admin-reporting/reporting.constants.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/modules/admin-reporting/reporting.controller.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/modules/admin-reporting/reporting.metrics.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/modules/admin-reporting/reporting.repository.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/modules/admin-reporting/reporting.routes.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/modules/admin-reporting/reporting.schema.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/modules/admin-reporting/reporting.service.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/modules/admin-reporting/reporting.types.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/modules/booking/booking.quote-snapshot.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/booking/booking.shiprocket-recovery.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/delivery/delivery-admin-list.routes.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration-admin-list.routes.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration.fallback-policy.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/orchestration/orchestration.winner-selection.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket-auth.service.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket-booking.service.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket.constants.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket-hyperlocal.parser.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket-hyperlocal.query.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket-hyperlocal.serviceability.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket-lifecycle.service.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket-metadata.util.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket-order-show.probe.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket-order.util.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket-provider.adapter.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket-sandbox-probe.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/adapters/shiprocket/shiprocket.types.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/modules/provider/provider-health-error.util.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/modules/runtime-settings/runtime-settings.constants.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/runtime-settings/runtime-settings.repository.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/runtime-settings/runtime-settings.schema.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/runtime-settings/runtime-settings.service.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/runtime-settings/runtime-settings.storage-errors.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/runtime-settings/runtime-settings.types.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/runtime-settings/runtime-settings.validation.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/modules/test-sms/test-sms.config.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/admin-panel-auth.lib.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-csrf.lib.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-customer-list-metrics.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-delivery-bff.handlers.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-delivery-bff.lib.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-delivery-mappers.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-exclusive-async.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-live-report-mappers.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-middleware.csrf.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-orchestration-bff.handlers.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-orchestration-bff.lib.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-orchestration-history-load.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-orchestration-list-mappers.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-orchestration-mappers.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-orchestration-run-mappers.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-provider-capabilities.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-provider-connection-diagnostics.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-provider-credential-validation.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-provider-list-lifecycle.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-providers-bff.handlers.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-provider-service-validation.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-provider-status-validation.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-provider-update-validation.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-provider-vehicle-validation.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-reporting-bff.handlers.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-reports-load.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-session-proxy.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-settings-bff.handlers.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-settings-booking-policies.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/admin-panel-settings-pricing.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/auth.admin-login.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/booking.shiprocket-integration.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/booking.shiprocket-recovery.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/cors.config.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["CORS/configuration"]
+        },
+        {
+          "path": "tests/customer-admin-list.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/delivery.admin-access.http.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/dev-delivery-simulate.config.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/env.shiprocket-config.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/fixtures/google/geocode-postal-code.json",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/fixtures/shiprocket/assign-awb-success.json",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/fixtures/shiprocket/auth-login-success.json",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/fixtures/shiprocket/create-adhoc-success.json",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/fixtures/shiprocket/hyperlocal-serviceability-empty.json",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/fixtures/shiprocket/hyperlocal-serviceability-success.json",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/fixtures/shiprocket/order-show-success.json",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/fixtures/shiprocket/track-shipment-success.json",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/google-geocoding.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/helpers/in-memory-runtime-settings-repository.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "tests/helpers/transactional-storage-failure-runtime-settings-repository.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "tests/orchestration.admin-detail.http.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/orchestration.admin-list.http.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/orchestration.fallback-policy.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/orchestration.fallback-policy.unit.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/orchestration.winner-selection.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/provider-health-error.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "tests/reporting.admin.http.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "tests/reportingDateRange.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/reporting.metrics.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "tests/runtime-settings.persistence.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "tests/runtime-settings.service.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "tests/runtime-settings.storage-errors.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "tests/settings.admin.http.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "tests/shiprocket-auth.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/shiprocket-booking-disabled.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/shiprocket-booking.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/shiprocket-hyperlocal.serviceability.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/shiprocket-order-show.probe.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/shiprocket-sandbox-probe.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "tests/sms-outcome.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/sms-provider-selection.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/sms-recipient.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/sms.service.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/test-sms.config.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/twilio-error-diagnostics.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/twilio.provider.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        },
+        {
+          "path": "tests/twilio-trial-template-smoke.test.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["OTP/SMS/Twilio/MSG91"]
+        }
+      ],
+      "diffStat": {
+        "files": 76,
+        "insertions": 2744,
+        "deletions": 434
+      }
+    },
+    "admin_panel": {
+      "branch": "control-panel",
+      "stagedCount": 0,
+      "modified": [
+        {
+          "path": ".gitignore",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": ".husky/pre-commit",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "package.json",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "package-lock.json",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/app/api/auth/login/route.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin BFF and authentication/session/CSRF"]
+        },
+        {
+          "path": "src/app/api/auth/logout/route.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin BFF and authentication/session/CSRF"]
+        },
+        {
+          "path": "src/app/api/auth/me/route.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin BFF and authentication/session/CSRF"]
+        },
+        {
+          "path": "src/app/api/providers/[id]/route.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/app/customers/[customerId]/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/customers/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/deliveries/[deliveryId]/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/deliveries/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/design-system/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/app/integrations/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/app/orchestration/[deliveryId]/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/orchestration/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/orchestration/requests/[orchestrationRequestId]/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/overview/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/app/providers/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/app/reports/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/app/settings/page.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/components/AdminShell.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/customers/components/CustomerListSummary.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/customers/components/utils.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/customers/detail/index.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/customers/index.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/data/customerTypes.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/data/index.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/data/mockAdminUser.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/data/mockLiveActivity.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/data/providerTypes.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/data/settingsTypes.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/deliveries/detail/index.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/deliveries/index.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/integrations/index.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/lib/auth/csrf.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin BFF and authentication/session/CSRF"]
+        },
+        {
+          "path": "src/lib/bff/proxyBackendJson.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/lib/bff/settingsHandlers.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/middleware.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin BFF and authentication/session/CSRF"]
+        },
+        {
+          "path": "src/orchestration/components/OrchestrationList.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/orchestration/components/OrchestrationRow.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/orchestration/detail/index.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/orchestration/index.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/orchestration/runDetail/index.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/overview/components/DashboardPageHeader.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/DeliveryFunnel.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/OverviewDashboard.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/OverviewMetricCard.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/PlatformMetrics.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/rightRail/LiveActivityFeed.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/rightRail/OverviewRightRail.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/rightRail/TopServicesWidget.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/providers/api.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/components/ProviderRow.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/index.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/reports/accountability.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/reports/components/AccountabilitySnapshot.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/reports/components/CustomerAccountability.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/reports/components/FeedbackQualitySection.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/reports/components/ProviderAccountabilityTable.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/reports/components/ReportsPageHeader.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/reports/components/ServiceOrchestrationTable.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/reports/index.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/settings/api.ts",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/settings/components/AccountSection.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/settings/components/PoliciesSection.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/settings/index.tsx",
+          "gitState": "modified",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        }
+      ],
+      "deleted": [
+        {
+          "path": "src/app/customers/[customerId]/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/customers/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/deliveries/[deliveryId]/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/deliveries/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/design-system/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/app/integrations/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/app/orchestration/[deliveryId]/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/orchestration/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/orchestration/requests/[orchestrationRequestId]/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/overview/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/app/providers/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/app/reports/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/app/settings/page.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/data/mockAdminUser.ts",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/data/mockLiveActivity.ts",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/rightRail/LiveActivityFeed.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/rightRail/OverviewRightRail.tsx",
+          "gitState": "deleted",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        }
+      ],
+      "untracked": [
+        {
+          "path": "docs/admin-api-acceptance-report.md",
+          "gitState": "untracked",
+          "fileKind": "documentation",
+          "functionalAreas": ["Documentation"]
+        },
+        {
+          "path": "docs/admin-api-coverage.md",
+          "gitState": "untracked",
+          "fileKind": "documentation",
+          "functionalAreas": ["Documentation"]
+        },
+        {
+          "path": "e2e/admin-readonly-interactions.spec.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "e2e/admin-readonly.spec.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "e2e/.gitignore",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "e2e/global-setup.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "e2e/helpers.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "playwright.config.ts",
+          "gitState": "untracked",
+          "fileKind": "test",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "scripts/qa-authenticated-acceptance.mjs",
+          "gitState": "untracked",
+          "fileKind": "qa_script",
+          "functionalAreas": ["Tests and QA scripts"]
+        },
+        {
+          "path": "src/app/(admin)/customers/[customerId]/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing", "Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/(admin)/customers/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing", "Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/(admin)/deliveries/[deliveryId]/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing", "Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/(admin)/deliveries/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing", "Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/(admin)/design-system/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/app/(admin)/integrations/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/app/(admin)/layout.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/app/(admin)/orchestration/[deliveryId]/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing", "Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/(admin)/orchestration/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing", "Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/(admin)/orchestration/requests/[orchestrationRequestId]/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing", "Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/(admin)/overview/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/app/(admin)/providers/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": [
+            "Admin Panel UI and routing",
+            "Provider administration and provider health"
+          ]
+        },
+        {
+          "path": "src/app/(admin)/providers/[providerId]/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": [
+            "Admin Panel UI and routing",
+            "Provider administration and provider health"
+          ]
+        },
+        {
+          "path": "src/app/(admin)/reports/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing", "Admin reporting"]
+        },
+        {
+          "path": "src/app/(admin)/settings/page.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": [
+            "Admin Panel UI and routing",
+            "Runtime settings and platform service fee"
+          ]
+        },
+        {
+          "path": "src/app/api/providers/[id]/capabilities/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/app/api/providers/[id]/credentials/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/app/api/providers/[id]/services/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/app/api/providers/[id]/services/[serviceId]/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/app/api/providers/[id]/status/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/app/api/providers/[id]/test-connection/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/app/api/providers/[id]/vehicles/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/app/api/providers/[id]/vehicles/[vehicleId]/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/app/api/reporting/feedback/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/app/api/reporting/orchestration/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting", "Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/api/reporting/recent-activity/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/app/api/reporting/recent-deliveries/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting", "Delivery/orchestration"]
+        },
+        {
+          "path": "src/app/api/reporting/summary/route.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/components/admin-layout/AdminAppLayout.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/components/admin-layout/AdminPageConfigContext.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/components/AdminLoadErrorCallout.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/components/loading/skeletonSections.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/customers/components/CustomerPagination.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/data/reportingTypes.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/lib/adminDisplayName.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/lib/auth/apiRequestPolicy.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin BFF and authentication/session/CSRF"]
+        },
+        {
+          "path": "src/lib/auth/sessionFromBackend.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin BFF and authentication/session/CSRF"]
+        },
+        {
+          "path": "src/lib/bff/providerHandlers.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/lib/bff/providers.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/lib/bff/reportingHandlers.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/lib/reportingDateRange.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/lib/useExclusiveAsync.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/orchestration/historyLoad.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Delivery/orchestration"]
+        },
+        {
+          "path": "src/overview/components/DecisionSpeedReporting.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/LiveDeliveryFunnel.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/LivePlatformMetrics.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/LiveRecentDeliveriesTable.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/LiveTopPackagesWidget.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/OverviewRecentActivityFeed.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/components/RecentDeliveriesReportingTable.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/liveOverviewMappers.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin Panel UI and routing"]
+        },
+        {
+          "path": "src/overview/reportingUi.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/providers/components/detailFormatting.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/components/ProviderCapabilitiesSection.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/components/ProviderConfigurationSection.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/components/ProviderCredentialsSection.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/components/ProviderDetailPageHeader.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/components/ProviderDiagnosticsSection.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/components/ProviderServicesSection.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/components/ProviderStatusSection.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/components/ProviderVehiclesSection.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/detail/index.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/providerCapabilities.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/providerConnectionDiagnostics.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/providerCredentialValidation.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/providerDetailContract.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/providerListLifecycle.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/providerServiceValidation.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/providerStatusValidation.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/providerUpdateValidation.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/providers/providerVehicleValidation.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Provider administration and provider health"]
+        },
+        {
+          "path": "src/reporting/api.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/reports/liveIssueQueue.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/reports/liveReportMappers.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/reports/reportsLoad.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Admin reporting"]
+        },
+        {
+          "path": "src/settings/bookingPoliciesPatch.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/settings/components/BookingRuntimePoliciesSection.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/settings/components/PricingRuntimePoliciesSection.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/settings/components/RuntimePolicyField.tsx",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/settings/pricingPoliciesPatch.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        },
+        {
+          "path": "src/settings/runtimePoliciesShared.ts",
+          "gitState": "untracked",
+          "fileKind": "source",
+          "functionalAreas": ["Runtime settings and platform service fee"]
+        }
+      ],
+      "diffStat": {
+        "files": 67,
+        "insertions": 1865,
+        "deletions": 1462
+      }
+    }
+  },
+  "routeMoves": {
+    "admin_panel": {
+      "deletedUnder": "src/app/{customers,deliveries,...}/page.tsx",
+      "replacement": "src/app/(admin)/**/page.tsx"
+    }
+  },
+  "criticalUntrackedImports": [
+    {
+      "tracked": "backend/src/modules/settings/settings.service.ts",
+      "imports": "runtime-settings/* (untracked)"
+    },
+    {
+      "tracked": "backend/src/routes/index.ts",
+      "imports": "admin-reporting/* (untracked)"
+    },
+    {
+      "tracked": "backend/src/app.ts",
+      "imports": "cors.config.ts (untracked)"
+    },
+    {
+      "tracked": "backend/src/modules/provider/provider.mapper.ts",
+      "imports": "provider-health-error.util.ts (untracked)"
+    },
+    {
+      "tracked": "admin-panel modified UI",
+      "imports": "src/app/(admin)/*, reporting BFF, provider BFF subroutes (untracked)"
+    }
+  ],
+  "proposedGroups": [
+    {
+      "id": 1,
+      "name": "Admin security (BFF CSRF, session, middleware)",
+      "backendPaths": [
+        "tests/admin-panel-csrf.lib.test.ts",
+        "tests/admin-panel-middleware.csrf.test.ts",
+        "tests/admin-panel-session-proxy.test.ts",
+        "tests/auth.admin-login.test.ts",
+        "src/modules/auth/auth.controller.ts",
+        "src/modules/auth/auth.routes.ts",
+        "src/modules/auth/auth.service.ts"
+      ],
+      "adminPaths": [
+        "src/app/api/auth/login/route.ts",
+        "src/app/api/auth/logout/route.ts",
+        "src/app/api/auth/me/route.ts",
+        "src/lib/auth/csrf.ts",
+        "src/lib/bff/proxyBackendJson.ts",
+        "src/middleware.ts",
+        "src/lib/auth/apiRequestPolicy.ts",
+        "src/lib/auth/sessionFromBackend.ts"
+      ],
+      "dependsOn": [],
+      "tests": [
+        "tests/admin-panel-csrf*.test.ts",
+        "tests/admin-panel-session-proxy.test.ts",
+        "tests/admin-panel-middleware.csrf.test.ts",
+        "tests/auth.admin-login.test.ts"
+      ],
+      "risks": ["Must ship CSRF + session cookie clearing together"]
+    },
+    {
+      "id": 2,
+      "name": "Backend platform: runtime settings, migrations, CORS, provider P3",
+      "backendPaths": [
+        "prisma/migrations/20261024143000_add_platform_runtime_settings/migration.sql",
+        "prisma/migrations/20261024150000_add_platform_service_fee_runtime_setting/migration.sql",
+        "src/config/cors.config.ts",
+        "src/modules/provider/provider-health-error.util.ts",
+        "src/modules/runtime-settings/runtime-settings.constants.ts",
+        "src/modules/runtime-settings/runtime-settings.repository.ts",
+        "src/modules/runtime-settings/runtime-settings.schema.ts",
+        "src/modules/runtime-settings/runtime-settings.service.ts",
+        "src/modules/runtime-settings/runtime-settings.storage-errors.ts",
+        "src/modules/runtime-settings/runtime-settings.types.ts",
+        "src/modules/runtime-settings/runtime-settings.validation.ts",
+        "tests/cors.config.test.ts",
+        "tests/helpers/in-memory-runtime-settings-repository.ts",
+        "tests/helpers/transactional-storage-failure-runtime-settings-repository.ts",
+        "tests/provider-health-error.test.ts",
+        "tests/runtime-settings.persistence.test.ts",
+        "tests/runtime-settings.service.test.ts",
+        "tests/runtime-settings.storage-errors.test.ts",
+        ".env.example",
+        "prisma/schema.prisma",
+        "src/app.ts",
+        "src/config/env.ts",
+        "src/infrastructure/sms/msg91/msg91.provider.ts",
+        "src/modules/provider/adapters/delivery-provider.mapper.ts",
+        "src/modules/provider/adapters/provider.adapter-urls.ts",
+        "src/modules/provider/provider.mapper.ts",
+        "src/modules/provider/provider.schema.ts",
+        "src/modules/provider/provider.service.ts",
+        "src/modules/settings/settings.controller.ts",
+        "src/modules/settings/settings.routes.ts",
+        "src/modules/settings/settings.service.ts",
+        "src/modules/settings/settings.swagger.ts",
+        "src/modules/settings/settings.types.ts",
+        "tests/msg91.provider.test.ts",
+        "tests/provider.admin.test.ts",
+        "tests/provider.resilience.test.ts"
+      ],
+      "adminPaths": [],
+      "dependsOn": [
+        "Deploy prisma migrations 20261024143000 then 20261024150000 before relying on PLATFORM_SERVICE_FEE_PERCENT"
+      ],
+      "tests": [
+        "tests/runtime-settings*.test.ts",
+        "tests/settings.admin.http.test.ts",
+        "tests/cors.config.test.ts",
+        "tests/provider.admin.test.ts",
+        "tests/provider-health-error.test.ts"
+      ],
+      "risks": ["HIGH if migrations not applied in target env"]
+    },
+    {
+      "id": 3,
+      "name": "Backend admin APIs (reporting, admin list routes, auth admin login)",
+      "backendPaths": [
+        "src/modules/admin-reporting/reporting.constants.ts",
+        "src/modules/admin-reporting/reporting.controller.ts",
+        "src/modules/admin-reporting/reporting.metrics.ts",
+        "src/modules/admin-reporting/reporting.repository.ts",
+        "src/modules/admin-reporting/reporting.routes.ts",
+        "src/modules/admin-reporting/reporting.schema.ts",
+        "src/modules/admin-reporting/reporting.service.ts",
+        "src/modules/admin-reporting/reporting.types.ts",
+        "src/modules/delivery/delivery-admin-list.routes.ts",
+        "src/modules/orchestration/orchestration-admin-list.routes.ts",
+        "tests/customer-admin-list.test.ts",
+        "tests/delivery.admin-access.http.test.ts",
+        "tests/orchestration.admin-detail.http.test.ts",
+        "tests/orchestration.admin-list.http.test.ts",
+        "tests/reporting.admin.http.test.ts",
+        "src/routes/index.ts",
+        "src/modules/auth/auth.controller.ts",
+        "src/modules/auth/auth.routes.ts",
+        "src/modules/auth/auth.service.ts"
+      ],
+      "adminPaths": [],
+      "dependsOn": [2],
+      "tests": [
+        "tests/reporting.admin.http.test.ts",
+        "tests/orchestration.admin-*.http.test.ts",
+        "tests/delivery.admin-access.http.test.ts",
+        "tests/customer-admin-list.test.ts"
+      ],
+      "risks": ["routes/index.ts imports untracked admin-reporting"]
+    },
+    {
+      "id": 4,
+      "name": "Admin Panel UI + BFF integration",
+      "adminPaths": [
+        "src/app/(admin)/customers/[customerId]/page.tsx",
+        "src/app/(admin)/customers/page.tsx",
+        "src/app/(admin)/deliveries/[deliveryId]/page.tsx",
+        "src/app/(admin)/deliveries/page.tsx",
+        "src/app/(admin)/design-system/page.tsx",
+        "src/app/(admin)/integrations/page.tsx",
+        "src/app/(admin)/layout.tsx",
+        "src/app/(admin)/orchestration/[deliveryId]/page.tsx",
+        "src/app/(admin)/orchestration/page.tsx",
+        "src/app/(admin)/orchestration/requests/[orchestrationRequestId]/page.tsx",
+        "src/app/(admin)/overview/page.tsx",
+        "src/app/(admin)/providers/page.tsx",
+        "src/app/(admin)/providers/[providerId]/page.tsx",
+        "src/app/(admin)/reports/page.tsx",
+        "src/app/(admin)/settings/page.tsx",
+        "src/app/api/providers/[id]/capabilities/route.ts",
+        "src/app/api/providers/[id]/credentials/route.ts",
+        "src/app/api/providers/[id]/services/route.ts",
+        "src/app/api/providers/[id]/services/[serviceId]/route.ts",
+        "src/app/api/providers/[id]/status/route.ts",
+        "src/app/api/providers/[id]/test-connection/route.ts",
+        "src/app/api/providers/[id]/vehicles/route.ts",
+        "src/app/api/providers/[id]/vehicles/[vehicleId]/route.ts",
+        "src/app/api/reporting/feedback/route.ts",
+        "src/app/api/reporting/orchestration/route.ts",
+        "src/app/api/reporting/recent-activity/route.ts",
+        "src/app/api/reporting/recent-deliveries/route.ts",
+        "src/app/api/reporting/summary/route.ts",
+        "src/components/admin-layout/AdminAppLayout.tsx",
+        "src/components/admin-layout/AdminPageConfigContext.tsx",
+        "src/components/AdminLoadErrorCallout.tsx",
+        "src/components/loading/skeletonSections.tsx",
+        "src/customers/components/CustomerPagination.tsx",
+        "src/data/reportingTypes.ts",
+        "src/lib/adminDisplayName.ts",
+        "src/lib/auth/apiRequestPolicy.ts",
+        "src/lib/auth/sessionFromBackend.ts",
+        "src/lib/bff/providerHandlers.ts",
+        "src/lib/bff/providers.ts",
+        "src/lib/bff/reportingHandlers.ts",
+        "src/lib/reportingDateRange.ts",
+        "src/lib/useExclusiveAsync.ts",
+        "src/orchestration/historyLoad.ts",
+        "src/overview/components/DecisionSpeedReporting.tsx",
+        "src/overview/components/LiveDeliveryFunnel.tsx",
+        "src/overview/components/LivePlatformMetrics.tsx",
+        "src/overview/components/LiveRecentDeliveriesTable.tsx",
+        "src/overview/components/LiveTopPackagesWidget.tsx",
+        "src/overview/components/OverviewRecentActivityFeed.tsx",
+        "src/overview/components/RecentDeliveriesReportingTable.tsx",
+        "src/overview/liveOverviewMappers.ts",
+        "src/overview/reportingUi.ts",
+        "src/providers/components/detailFormatting.ts",
+        "src/providers/components/ProviderCapabilitiesSection.tsx",
+        "src/providers/components/ProviderConfigurationSection.tsx",
+        "src/providers/components/ProviderCredentialsSection.tsx",
+        "src/providers/components/ProviderDetailPageHeader.tsx",
+        "src/providers/components/ProviderDiagnosticsSection.tsx",
+        "src/providers/components/ProviderServicesSection.tsx",
+        "src/providers/components/ProviderStatusSection.tsx",
+        "src/providers/components/ProviderVehiclesSection.tsx",
+        "src/providers/detail/index.tsx",
+        "src/providers/providerCapabilities.ts",
+        "src/providers/providerConnectionDiagnostics.ts",
+        "src/providers/providerCredentialValidation.ts",
+        "src/providers/providerDetailContract.ts",
+        "src/providers/providerListLifecycle.ts",
+        "src/providers/providerServiceValidation.ts",
+        "src/providers/providerStatusValidation.ts",
+        "src/providers/providerUpdateValidation.ts",
+        "src/providers/providerVehicleValidation.ts",
+        "src/reporting/api.ts",
+        "src/reports/liveIssueQueue.ts",
+        "src/reports/liveReportMappers.ts",
+        "src/reports/reportsLoad.ts",
+        "src/settings/bookingPoliciesPatch.ts",
+        "src/settings/components/BookingRuntimePoliciesSection.tsx",
+        "src/settings/components/PricingRuntimePoliciesSection.tsx",
+        "src/settings/components/RuntimePolicyField.tsx",
+        "src/settings/pricingPoliciesPatch.ts",
+        "src/settings/runtimePoliciesShared.ts",
+        ".gitignore",
+        ".husky/pre-commit",
+        "package.json",
+        "package-lock.json",
+        "src/app/api/auth/login/route.ts",
+        "src/app/api/auth/logout/route.ts",
+        "src/app/api/auth/me/route.ts",
+        "src/app/api/providers/[id]/route.ts",
+        "src/app/customers/[customerId]/page.tsx",
+        "src/app/customers/page.tsx",
+        "src/app/deliveries/[deliveryId]/page.tsx",
+        "src/app/deliveries/page.tsx",
+        "src/app/design-system/page.tsx",
+        "src/app/integrations/page.tsx",
+        "src/app/orchestration/[deliveryId]/page.tsx",
+        "src/app/orchestration/page.tsx",
+        "src/app/orchestration/requests/[orchestrationRequestId]/page.tsx",
+        "src/app/overview/page.tsx",
+        "src/app/providers/page.tsx",
+        "src/app/reports/page.tsx",
+        "src/app/settings/page.tsx",
+        "src/components/AdminShell.tsx",
+        "src/customers/components/CustomerListSummary.tsx",
+        "src/customers/components/utils.ts",
+        "src/customers/detail/index.tsx",
+        "src/customers/index.tsx",
+        "src/data/customerTypes.ts",
+        "src/data/index.ts",
+        "src/data/mockAdminUser.ts",
+        "src/data/mockLiveActivity.ts",
+        "src/data/providerTypes.ts",
+        "src/data/settingsTypes.ts",
+        "src/deliveries/detail/index.tsx",
+        "src/deliveries/index.tsx",
+        "src/integrations/index.tsx",
+        "src/lib/auth/csrf.ts",
+        "src/lib/bff/proxyBackendJson.ts",
+        "src/lib/bff/settingsHandlers.ts",
+        "src/middleware.ts",
+        "src/orchestration/components/OrchestrationList.tsx",
+        "src/orchestration/components/OrchestrationRow.tsx",
+        "src/orchestration/detail/index.tsx",
+        "src/orchestration/index.tsx",
+        "src/orchestration/runDetail/index.tsx",
+        "src/overview/components/DashboardPageHeader.tsx",
+        "src/overview/components/DeliveryFunnel.tsx",
+        "src/overview/components/OverviewDashboard.tsx",
+        "src/overview/components/OverviewMetricCard.tsx",
+        "src/overview/components/PlatformMetrics.tsx",
+        "src/overview/components/rightRail/LiveActivityFeed.tsx",
+        "src/overview/components/rightRail/OverviewRightRail.tsx",
+        "src/overview/components/rightRail/TopServicesWidget.tsx",
+        "src/providers/api.ts",
+        "src/providers/components/ProviderRow.tsx",
+        "src/providers/index.tsx",
+        "src/reports/accountability.ts",
+        "src/reports/components/AccountabilitySnapshot.tsx",
+        "src/reports/components/CustomerAccountability.tsx",
+        "src/reports/components/FeedbackQualitySection.tsx",
+        "src/reports/components/ProviderAccountabilityTable.tsx",
+        "src/reports/components/ReportsPageHeader.tsx",
+        "src/reports/components/ServiceOrchestrationTable.tsx",
+        "src/reports/index.tsx",
+        "src/settings/api.ts",
+        "src/settings/components/AccountSection.tsx",
+        "src/settings/components/PoliciesSection.tsx",
+        "src/settings/index.tsx"
+      ],
+      "backendPaths": [
+        "tests/admin-panel-auth.lib.test.ts",
+        "tests/admin-panel-csrf.lib.test.ts",
+        "tests/admin-panel-customer-list-metrics.test.ts",
+        "tests/admin-panel-delivery-bff.handlers.test.ts",
+        "tests/admin-panel-delivery-bff.lib.test.ts",
+        "tests/admin-panel-delivery-mappers.test.ts",
+        "tests/admin-panel-exclusive-async.test.ts",
+        "tests/admin-panel-live-report-mappers.test.ts",
+        "tests/admin-panel-middleware.csrf.test.ts",
+        "tests/admin-panel-orchestration-bff.handlers.test.ts",
+        "tests/admin-panel-orchestration-bff.lib.test.ts",
+        "tests/admin-panel-orchestration-history-load.test.ts",
+        "tests/admin-panel-orchestration-list-mappers.test.ts",
+        "tests/admin-panel-orchestration-mappers.test.ts",
+        "tests/admin-panel-orchestration-run-mappers.test.ts",
+        "tests/admin-panel-provider-capabilities.test.ts",
+        "tests/admin-panel-provider-connection-diagnostics.test.ts",
+        "tests/admin-panel-provider-credential-validation.test.ts",
+        "tests/admin-panel-provider-list-lifecycle.test.ts",
+        "tests/admin-panel-providers-bff.handlers.test.ts",
+        "tests/admin-panel-provider-service-validation.test.ts",
+        "tests/admin-panel-provider-status-validation.test.ts",
+        "tests/admin-panel-provider-update-validation.test.ts",
+        "tests/admin-panel-provider-vehicle-validation.test.ts",
+        "tests/admin-panel-reporting-bff.handlers.test.ts",
+        "tests/admin-panel-reports-load.test.ts",
+        "tests/admin-panel-session-proxy.test.ts",
+        "tests/admin-panel-settings-bff.handlers.test.ts",
+        "tests/admin-panel-settings-booking-policies.test.ts",
+        "tests/admin-panel-settings-pricing.test.ts"
+      ],
+      "dependsOn": [1, 2, 3],
+      "tests": [
+        "npm run build (admin-panel)",
+        "npm test -- tests/admin-panel- (backend)"
+      ],
+      "risks": ["Large diff; requires qa:acceptance + qa:e2e after merge"]
+    },
+    {
+      "id": 5,
+      "name": "QA, E2E, documentation",
+      "adminPaths": [
+        "docs/admin-api-acceptance-report.md",
+        "docs/admin-api-coverage.md",
+        "e2e/admin-readonly-interactions.spec.ts",
+        "e2e/admin-readonly.spec.ts",
+        "e2e/.gitignore",
+        "e2e/global-setup.ts",
+        "e2e/helpers.ts",
+        "playwright.config.ts",
+        "scripts/qa-authenticated-acceptance.mjs"
+      ],
+      "dependsOn": [4],
+      "tests": ["npm run qa:acceptance", "npm run qa:e2e"],
+      "risks": ["e2e/.auth and results.json must stay gitignored"]
+    },
+    {
+      "id": 6,
+      "name": "Logistics / SMS / Shiprocket / orchestration core (optional separate PR)",
+      "backendPaths": [
+        "docs/sms-providers.md",
+        "scripts/check-sms-env.ts",
+        "scripts/lib/twilio-trial-template-smoke.lib.ts",
+        "scripts/shiprocket-sandbox-serviceability-probe.ts",
+        "scripts/twilio-pickup-otp-smoke.ts",
+        "scripts/twilio-trial-template-smoke.ts",
+        "src/infrastructure/geocoding/google-geocoding.client.ts",
+        "src/infrastructure/geocoding/google-geocoding.errors.ts",
+        "src/infrastructure/sms/sms-outcome.ts",
+        "src/infrastructure/sms/sms-provider.factory.ts",
+        "src/infrastructure/sms/sms-recipient.ts",
+        "src/infrastructure/sms/twilio/twilio-error-diagnostics.ts",
+        "src/infrastructure/sms/twilio/twilio.provider.ts",
+        "src/modules/booking/booking.shiprocket-recovery.ts",
+        "src/modules/orchestration/orchestration.fallback-policy.ts",
+        "src/modules/orchestration/orchestration.winner-selection.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket-auth.service.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket-booking.service.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket.constants.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket-hyperlocal.parser.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket-hyperlocal.query.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket-hyperlocal.serviceability.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket-lifecycle.service.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket-metadata.util.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket-order-show.probe.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket-order.util.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket-provider.adapter.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket-sandbox-probe.ts",
+        "src/modules/provider/adapters/shiprocket/shiprocket.types.ts",
+        "tests/booking.shiprocket-integration.test.ts",
+        "tests/booking.shiprocket-recovery.test.ts",
+        "tests/env.shiprocket-config.test.ts",
+        "tests/fixtures/shiprocket/assign-awb-success.json",
+        "tests/fixtures/shiprocket/auth-login-success.json",
+        "tests/fixtures/shiprocket/create-adhoc-success.json",
+        "tests/fixtures/shiprocket/hyperlocal-serviceability-empty.json",
+        "tests/fixtures/shiprocket/hyperlocal-serviceability-success.json",
+        "tests/fixtures/shiprocket/order-show-success.json",
+        "tests/fixtures/shiprocket/track-shipment-success.json",
+        "tests/google-geocoding.test.ts",
+        "tests/orchestration.fallback-policy.test.ts",
+        "tests/orchestration.fallback-policy.unit.test.ts",
+        "tests/orchestration.winner-selection.test.ts",
+        "tests/shiprocket-auth.test.ts",
+        "tests/shiprocket-booking-disabled.test.ts",
+        "tests/shiprocket-booking.test.ts",
+        "tests/shiprocket-hyperlocal.serviceability.test.ts",
+        "tests/shiprocket-order-show.probe.test.ts",
+        "tests/shiprocket-sandbox-probe.test.ts",
+        "tests/sms-outcome.test.ts",
+        "tests/sms-provider-selection.test.ts",
+        "tests/sms-recipient.test.ts",
+        "tests/twilio-error-diagnostics.test.ts",
+        "tests/twilio.provider.test.ts",
+        "tests/twilio-trial-template-smoke.test.ts",
+        "src/infrastructure/sms/msg91/msg91.provider.ts",
+        "src/infrastructure/sms/sms.service.ts",
+        "src/infrastructure/sms/sms.types.ts",
+        "src/modules/booking/booking.provider-outcome.ts",
+        "src/modules/booking/booking.repository.ts",
+        "src/modules/booking/booking.service.ts",
+        "src/modules/booking/booking.types.ts",
+        "src/modules/orchestration/orchestration.controller.ts",
+        "src/modules/orchestration/orchestration.mapper.ts",
+        "src/modules/orchestration/orchestration.provider-evaluation.ts",
+        "src/modules/orchestration/orchestration.repository.ts",
+        "src/modules/orchestration/orchestration.routes.ts",
+        "src/modules/orchestration/orchestration.schema.ts",
+        "src/modules/orchestration/orchestration.scoring.ts",
+        "src/modules/orchestration/orchestration.service.ts",
+        "src/modules/orchestration/orchestration.types.ts",
+        "src/modules/otp/otp.service.ts",
+        "src/modules/provider/adapters/bootstrap.ts",
+        "src/modules/provider/adapters/delivery-provider.mapper.ts",
+        "src/modules/provider/adapters/provider-adapter.types.ts",
+        "src/modules/provider/adapters/provider.adapter-urls.ts",
+        "src/modules/provider/adapters/provider-http-client.ts",
+        "src/modules/provider/contracts/booking.ts",
+        "src/modules/test-sms/test-sms.routes.ts",
+        "tests/booking.failure.test.ts",
+        "tests/booking.provider-outcome.test.ts",
+        "tests/helpers/booking-test-helpers.ts",
+        "tests/helpers/in-memory-booking-repository.ts",
+        "tests/helpers/in-memory-orchestration-repository.ts",
+        "tests/helpers/sms-test-helpers.ts",
+        "tests/orchestration.cancellation-policy.test.ts",
+        "tests/orchestration.scoring.test.ts",
+        "tests/orchestration.service.test.ts",
+        "tests/otp.service.test.ts",
+        "tests/otp.sms.test.ts",
+        "tests/test-sms.http.test.ts"
+      ],
+      "dependsOn": [
+        "Shared bootstrap.ts / orchestration.service.ts — do not split if tests fail"
+      ],
+      "tests": ["Full backend npm test (891)"],
+      "risks": ["Out of admin-only narrative; same working tree today"]
+    }
+  ],
+  "secretAndGeneratedWarnings": [
+    "admin-panel/.env* gitignored — never commit",
+    "admin-panel/e2e/.auth/admin.json gitignored — local session artifact",
+    "admin-panel/e2e/results.json gitignored — Playwright output",
+    "admin-panel/.next/ build output",
+    "backend/.env not in inventory — keep gitignored",
+    "*.pem in admin .gitignore"
+  ],
+  "operatorDecisions": [
+    "Single integration PR vs groups 1–5",
+    "Include group 6 in admin release or follow-up",
+    "Production migrate deploy for 20261024150000",
+    "Production CORS env (FRONTEND_URL, ADMIN_FRONTEND_URL)",
+    "Staging-only settings PATCH smoke",
+    "Release notes for 5 BLOCKED items in admin-api-coverage.md"
+  ]
+}

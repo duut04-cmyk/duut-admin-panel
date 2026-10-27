@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { OrchestrationListItem } from "@/data/orchestrationListApiTypes";
 import { isValidDeliveryId } from "@/lib/bff/deliveries";
 import { useLoadedAsync } from "@/lib/useLoadedAsync";
+import { useExclusiveAsync } from "@/lib/useExclusiveAsync";
+import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
 import AdminContainer from "@/components/AdminContainer";
 import { ADMIN_LIST_PAGE_FILTERS_SECTION } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
-import AdminCallout from "@/ui/AdminCallout";
 import { fetchProviders } from "@/providers/api";
 import type { ProviderSummary } from "@/data/providerTypes";
 import { fetchOrchestrations } from "./listApi";
@@ -77,8 +78,8 @@ export default function OrchestrationPage() {
     );
   }, [debouncedSearch, filters, page]);
 
-  useLoadedAsync(
-    async (isStale) => {
+  const loadOrchestrations = useCallback(
+    async (isStale: () => boolean = () => false) => {
       setLoading(true);
       setLoadError(null);
 
@@ -110,6 +111,17 @@ export default function OrchestrationPage() {
     [listParams],
   );
 
+  useLoadedAsync(
+    async (isStale) => {
+      await loadOrchestrations(isStale);
+    },
+    [loadOrchestrations],
+  );
+
+  const { run: retryLoad, busy: retrying } = useExclusiveAsync(async () => {
+    await loadOrchestrations();
+  });
+
   const rows = useMemo(
     () => items.map((item) => mapOrchestrationListRow(item, providerNames)),
     [items, providerNames],
@@ -140,9 +152,13 @@ export default function OrchestrationPage() {
       <AdminContainer flushTop className="space-y-6 pb-10">
         <OrchestrationListSummary metrics={metrics} />
         {loadError ? (
-          <AdminCallout variant="warning" title="Unable to load orchestrations">
-            {loadError}
-          </AdminCallout>
+          <AdminLoadErrorCallout
+            title="Unable to load orchestrations"
+            onRetry={() => void retryLoad()}
+            retrying={retrying}
+          >
+            <p>{loadError}</p>
+          </AdminLoadErrorCallout>
         ) : null}
         <div className={ADMIN_LIST_PAGE_FILTERS_SECTION}>
           <OrchestrationFilters

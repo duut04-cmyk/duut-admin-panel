@@ -1,19 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { AdminOrchestrationPayload } from "@/data/orchestrationApiTypes";
 import type { DeliveryHistoryDetail } from "@/data/deliveryApiTypes";
 import type { ProviderSummary } from "@/data/providerTypes";
 import { isValidDeliveryId } from "@/lib/bff/deliveries";
 import { useLoadedAsync } from "@/lib/useLoadedAsync";
+import { useExclusiveAsync } from "@/lib/useExclusiveAsync";
+import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
 import AdminContainer from "@/components/AdminContainer";
 import { ADMIN_DETAIL_RAIL_GRID } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
+import { OrchestrationDetailSkeleton } from "@/components/loading/skeletonSections";
 import AdminCallout from "@/ui/AdminCallout";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import { fetchDeliveryHistory } from "@/deliveries/api";
 import { formatListRoute, mapTimeline } from "@/deliveries/deliveryMappers";
+import { TableCardSkeleton } from "@/components/loading/skeletonSections";
+import { applyDeliveryHistoryFetch } from "../historyLoad";
 import DeliveryTimeline from "@/deliveries/components/DeliveryTimeline";
 import { fetchProviders } from "@/providers/api";
 import { fetchOrchestration } from "../api";
@@ -76,42 +81,67 @@ export default function OrchestrationDetail({ deliveryId }: OrchestrationDetailP
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
-  const [historyWarning, setHistoryWarning] = useState<string | null>(null);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyError, setHistoryError] = useState<string | null>(null);
 
   const invalidId = !isValidDeliveryId(deliveryId);
 
-  useLoadedAsync(
-    async (isStale) => {
+  const loadDeliveryHistoryOnly = useCallback(
+    async (targetDeliveryId: string, isStale: () => boolean = () => false) => {
+      if (!isValidDeliveryId(targetDeliveryId)) return;
+
+      setHistoryLoading(true);
+      setHistoryError(null);
+
+      const historyResult = await fetchDeliveryHistory(targetDeliveryId);
+      if (isStale()) {
+        setHistoryLoading(false);
+        return;
+      }
+
+      const applied = applyDeliveryHistoryFetch(historyResult);
+      setHistory(applied.history);
+      setHistoryError(applied.historyError);
+      setHistoryLoading(false);
+    },
+    [],
+  );
+
+  const loadOrchestrationDetail = useCallback(
+    async (isStale: () => boolean = () => false) => {
       if (invalidId) {
         setLoading(false);
         setPayload(null);
         setHistory(null);
         setNotFound(false);
         setLoadError(null);
-        setHistoryWarning(null);
+        setHistoryError(null);
+        setHistoryLoading(false);
         return;
       }
 
       setLoading(true);
       setLoadError(null);
       setNotFound(false);
-      setHistoryWarning(null);
+      setHistory(null);
+      setHistoryError(null);
 
-      const [orchResult, historyResult, providersResult] = await Promise.all([
+      const [orchResult, providersResult] = await Promise.all([
         fetchOrchestration(deliveryId),
-        fetchDeliveryHistory(deliveryId),
         fetchProviders(),
       ]);
 
-      if (isStale()) return;
-
-      setLoading(false);
+      if (isStale()) {
+        setLoading(false);
+        return;
+      }
 
       if (providersResult.success && providersResult.data) {
         setProviderNames(buildProviderNameMap(providersResult.data));
       }
 
       if (!orchResult.success || !orchResult.data) {
+        setLoading(false);
         setPayload(null);
         const message = orchResult.error ?? "Failed to load orchestration.";
         if (isOrchestrationNotFoundError(message)) {
@@ -124,25 +154,34 @@ export default function OrchestrationDetail({ deliveryId }: OrchestrationDetailP
       }
 
       if (!hasAdminEvaluations(orchResult.data)) {
+        setLoading(false);
         setLoadError("Orchestration response is missing admin evaluation data.");
         setPayload(null);
         return;
       }
 
       setPayload(orchResult.data);
+      setLoading(false);
 
-      if (historyResult.success && historyResult.data) {
-        setHistory(historyResult.data);
-      } else {
-        setHistory(null);
-        setHistoryWarning(
-          historyResult.error ??
-            "Delivery history could not be loaded. Sidebar and timeline are unavailable.",
-        );
-      }
+      await loadDeliveryHistoryOnly(deliveryId, isStale);
     },
-    [deliveryId, invalidId],
+    [deliveryId, invalidId, loadDeliveryHistoryOnly],
   );
+
+  useLoadedAsync(
+    async (isStale) => {
+      await loadOrchestrationDetail(isStale);
+    },
+    [loadOrchestrationDetail],
+  );
+
+  const { run: retryLoad, busy: retrying } = useExclusiveAsync(async () => {
+    await loadOrchestrationDetail();
+  });
+
+  const { run: retryHistory, busy: retryingHistory } = useExclusiveAsync(async () => {
+    await loadDeliveryHistoryOnly(deliveryId);
+  });
 
   const nameByCode = providerNames;
 
@@ -212,7 +251,7 @@ export default function OrchestrationDetail({ deliveryId }: OrchestrationDetailP
         }
       >
         <AdminContainer flushTop className="pb-10">
-          <p className="text-small text-muted-foreground">Loading orchestration…</p>
+          <OrchestrationDetailSkeleton />
         </AdminContainer>
       </AdminShell>
     );
@@ -265,9 +304,13 @@ export default function OrchestrationDetail({ deliveryId }: OrchestrationDetailP
         }
       >
         <AdminContainer flushTop className="pb-10">
-          <AdminCallout variant="warning" title="Failed to load orchestration">
-            {loadError ?? "An unexpected error occurred."}
-          </AdminCallout>
+          <AdminLoadErrorCallout
+            title="Failed to load orchestration"
+            onRetry={() => void retryLoad()}
+            retrying={retrying}
+          >
+            <p>{loadError ?? "An unexpected error occurred."}</p>
+          </AdminLoadErrorCallout>
         </AdminContainer>
       </AdminShell>
     );
@@ -289,10 +332,14 @@ export default function OrchestrationDetail({ deliveryId }: OrchestrationDetailP
       }
     >
       <AdminContainer flushTop className="space-y-6 pb-10 lg:space-y-8">
-        {historyWarning ? (
-          <AdminCallout variant="warning" title="Partial data">
-            {historyWarning}
-          </AdminCallout>
+        {historyError && !historyLoading ? (
+          <AdminLoadErrorCallout
+            title="Failed to load delivery history"
+            onRetry={() => void retryHistory()}
+            retrying={retryingHistory}
+          >
+            <p>{historyError}</p>
+          </AdminLoadErrorCallout>
         ) : null}
 
         {decision.failureReason ? (
@@ -313,7 +360,9 @@ export default function OrchestrationDetail({ deliveryId }: OrchestrationDetailP
 
         <div className={`grid min-w-0 gap-6 ${ADMIN_DETAIL_RAIL_GRID} xl:items-start`}>
           <aside className="min-w-0 space-y-6 xl:order-2 xl:sticky xl:top-6 xl:self-start">
-            {deliveryCompact ? (
+            {historyLoading ? (
+              <TableCardSkeleton titleWidth="w-40" rows={4} />
+            ) : deliveryCompact ? (
               <DeliveryRequestCompact delivery={deliveryCompact} />
             ) : (
               <section aria-labelledby="delivery-request-compact-heading">
@@ -341,7 +390,9 @@ export default function OrchestrationDetail({ deliveryId }: OrchestrationDetailP
           </div>
         </div>
 
-        {timelineEvents.length > 0 ? (
+        {historyLoading ? (
+          <TableCardSkeleton titleWidth="w-36" rows={3} />
+        ) : timelineEvents.length > 0 ? (
           <DeliveryTimeline events={timelineEvents} />
         ) : (
           <section>

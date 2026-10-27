@@ -1,4 +1,5 @@
 import type { OrchestrationListRowView } from "../orchestrationListMappers";
+import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import OrchestrationRow from "./OrchestrationRow";
 
@@ -14,7 +15,7 @@ export default function OrchestrationList({
   if (loading) {
     return (
       <section aria-labelledby="orchestration-list-heading">
-        <p className="text-small text-muted-foreground">Loading orchestrations…</p>
+        <ListRowsSkeleton rows={6} />
       </section>
     );
   }

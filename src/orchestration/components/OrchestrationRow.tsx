@@ -11,9 +11,16 @@ type OrchestrationRowProps = {
   variant?: "table" | "card";
 };
 
-function PrimaryLabel({ row }: { row: OrchestrationListRowView }) {
+function PrimaryLabel({
+  row,
+  asText = false,
+}: {
+  row: OrchestrationListRowView;
+  /** When the row/card is already wrapped in a Link, render plain text to avoid nested anchors. */
+  asText?: boolean;
+}) {
   const label = row.deliveryReference.trim() || row.deliveryId;
-  if (row.runHref) {
+  if (row.runHref && !asText) {
     return (
       <Link
         href={row.runHref}
@@ -35,7 +42,7 @@ export default function OrchestrationRow({
       <>
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <PrimaryLabel row={row} />
+            <PrimaryLabel row={row} asText />
             <p className="mt-0.5 text-small text-muted-foreground">{row.routeLabel}</p>
           </div>
           <DeliveryStatusPill status={row.deliveryStatus} />
