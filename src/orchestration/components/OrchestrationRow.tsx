@@ -1,134 +1,154 @@
 import Link from "next/link";
-import type { OrchestrationRecord } from "@/data/orchestrationTypes";
-import { formatDecisionTime } from "@/data/orchestrationMetrics";
-import AdminBadge from "@/ui/AdminBadge";
-import AdminStatus from "@/ui/AdminStatus";
+import ServiceLogo from "@/components/ServiceLogo";
 import {
-  bookingStatusLabel,
-  bookingStatusVariant,
-  deliveryStatusLabel,
-  deliveryStatusVariant,
-  formatRoute,
-} from "./utils";
+  DeliveryStatusPill,
+  ProviderBookingStatusPill,
+} from "@/deliveries/components/DeliveryStatusPill";
+import type { OrchestrationListRowView } from "../orchestrationListMappers";
 
 type OrchestrationRowProps = {
-  record: OrchestrationRecord;
+  row: OrchestrationListRowView;
   variant?: "table" | "card";
 };
 
-export default function OrchestrationRow({
-  record,
-  variant = "table",
-}: OrchestrationRowProps) {
-  const { deliveryRequest, decision, booking } = record;
-  const deliveryId = deliveryRequest.deliveryId;
-  const href = `/orchestration/${deliveryId}`;
-  const score = decision.decisionScore.totalScore;
-
-  if (variant === "card") {
+function PrimaryLabel({
+  row,
+  asText = false,
+}: {
+  row: OrchestrationListRowView;
+  /** When the row/card is already wrapped in a Link, render plain text to avoid nested anchors. */
+  asText?: boolean;
+}) {
+  const label = row.deliveryReference.trim() || row.deliveryId;
+  if (row.runHref && !asText) {
     return (
       <Link
-        href={href}
-        className="block rounded-lg border border-border bg-background p-4 shadow-sm transition-colors hover:border-foreground/20 hover:bg-surface/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        href={row.runHref}
+        className="font-semibold text-foreground hover:text-link focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
       >
+        {label}
+      </Link>
+    );
+  }
+  return <span className="font-semibold text-foreground">{label}</span>;
+}
+
+export default function OrchestrationRow({
+  row,
+  variant = "table",
+}: OrchestrationRowProps) {
+  if (variant === "card") {
+    const cardInner = (
+      <>
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="font-semibold text-foreground">{deliveryId}</p>
-            <p className="mt-0.5 text-small text-muted-foreground">
-              {formatRoute(record)}
-            </p>
+          <div className="min-w-0">
+            <PrimaryLabel row={row} asText />
+            <p className="mt-0.5 text-small text-muted-foreground">{row.routeLabel}</p>
           </div>
-          <AdminStatus
-            variant={deliveryStatusVariant(deliveryRequest.status)}
-            label={deliveryStatusLabel(deliveryRequest.status)}
-          />
+          <DeliveryStatusPill status={row.deliveryStatus} />
         </div>
 
-        <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-small">
+        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-small">
           <div>
             <dt className="text-caption text-muted-foreground">Evaluated</dt>
-            <dd className="mt-0.5 tabular-nums font-medium">
-              {decision.servicesEvaluated}
-            </dd>
+            <dd className="mt-0.5 tabular-nums font-medium">{row.evaluationCount}</dd>
           </div>
-          <div>
+          <div className="text-right">
             <dt className="text-caption text-muted-foreground">Available</dt>
             <dd className="mt-0.5 tabular-nums font-medium">
-              {decision.availableOptions}
+              {row.availableOptionCount}
             </dd>
           </div>
           <div>
             <dt className="text-caption text-muted-foreground">Selected</dt>
-            <dd className="mt-0.5 font-medium">{decision.selectedServiceName}</dd>
+            <dd className="mt-0.5 flex min-w-0 items-center gap-2 font-medium text-foreground">
+              <ServiceLogo
+                serviceName={row.selectedProviderLabel}
+                className="h-7 w-7"
+              />
+              <span className="truncate">{row.selectedProviderLabel}</span>
+            </dd>
           </div>
-          <div>
+          <div className="text-right">
             <dt className="text-caption text-muted-foreground">Score</dt>
-            <dd className="mt-0.5 tabular-nums font-medium">{score.toFixed(1)}</dd>
-          </div>
-          <div>
-            <dt className="text-caption text-muted-foreground">Decision time</dt>
-            <dd className="mt-0.5 tabular-nums">
-              {formatDecisionTime(decision.durationMs)}
+            <dd className="mt-0.5 tabular-nums font-medium">
+              {row.selectedScoreDisplay}
             </dd>
           </div>
           <div>
+            <dt className="text-caption text-muted-foreground">Duration</dt>
+            <dd className="mt-0.5 tabular-nums">{row.durationDisplay}</dd>
+          </div>
+          <div className="text-right">
             <dt className="text-caption text-muted-foreground">Booking</dt>
-            <dd className="mt-0.5">
-              <AdminBadge
-                variant={
-                  booking.status === "confirmed"
-                    ? "success"
-                    : booking.status === "failed"
-                      ? "danger"
-                      : "neutral"
-                }
-              >
-                {bookingStatusLabel(booking.status)}
-              </AdminBadge>
+            <dd className="mt-0.5 flex justify-end">
+              {row.bookingStatus ? (
+                <ProviderBookingStatusPill status={row.bookingStatus} />
+              ) : (
+                <span className="text-muted-foreground">—</span>
+              )}
             </dd>
           </div>
         </dl>
-      </Link>
+      </>
+    );
+
+    if (row.runHref) {
+      return (
+        <Link
+          href={row.runHref}
+          className="block rounded-card border border-border/60 bg-background p-4 shadow-sm transition-colors hover:border-foreground/20 hover:bg-surface/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          aria-label={`Open orchestration run for ${row.deliveryReference || row.deliveryId}`}
+        >
+          {cardInner}
+        </Link>
+      );
+    }
+
+    return (
+      <article className="block rounded-card border border-border/60 bg-background p-4 shadow-sm">
+        {cardInner}
+      </article>
     );
   }
 
   return (
-    <tr className="group border-b border-border last:border-b-0">
-      <td className="whitespace-nowrap py-3.5 pr-4">
-        <Link
-          href={href}
-          className="font-medium text-foreground underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          {deliveryId}
-        </Link>
+    <tr className="border-b border-border last:border-b-0 transition-colors hover:bg-surface/30">
+      <td className="whitespace-nowrap px-4 py-3.5 md:px-5">
+        <PrimaryLabel row={row} />
       </td>
-      <td className="whitespace-nowrap py-3.5 pr-4 text-small text-muted-foreground">
-        {formatRoute(record)}
+      <td className="whitespace-nowrap px-4 py-3.5 text-small text-muted-foreground md:px-5">
+        {row.routeLabel}
       </td>
-      <td className="py-3.5 pr-4 text-right tabular-nums text-small">
-        {decision.servicesEvaluated}
+      <td className="px-4 py-3.5 text-right tabular-nums text-small md:px-5">
+        {row.evaluationCount}
       </td>
-      <td className="py-3.5 pr-4 text-right tabular-nums text-small">
-        {decision.availableOptions}
+      <td className="px-4 py-3.5 text-right tabular-nums text-small md:px-5">
+        {row.availableOptionCount}
       </td>
-      <td className="py-3.5 pr-4 text-small">{decision.selectedServiceName}</td>
-      <td className="py-3.5 pr-4 text-right tabular-nums text-small font-medium">
-        {score.toFixed(1)}
+      <td className="px-4 py-3.5 md:px-5">
+        <div className="flex min-w-0 items-center gap-2">
+          <ServiceLogo serviceName={row.selectedProviderLabel} />
+          <span className="truncate text-small text-foreground">
+            {row.selectedProviderLabel}
+          </span>
+        </div>
       </td>
-      <td className="py-3.5 pr-4 text-right tabular-nums text-small text-muted-foreground">
-        {formatDecisionTime(decision.durationMs)}
+      <td className="px-4 py-3.5 text-right tabular-nums text-small font-medium md:px-5">
+        {row.selectedScoreDisplay}
       </td>
-      <td className="py-3.5 pr-4">
-        <AdminStatus
-          variant={bookingStatusVariant(booking.status)}
-          label={bookingStatusLabel(booking.status)}
-        />
+      <td className="px-4 py-3.5 text-right tabular-nums text-small text-muted-foreground md:px-5">
+        {row.durationDisplay}
       </td>
-      <td className="py-3.5">
-        <AdminStatus
-          variant={deliveryStatusVariant(deliveryRequest.status)}
-          label={deliveryStatusLabel(deliveryRequest.status)}
-        />
+      <td className="px-4 py-3.5 md:px-5">
+        {row.bookingStatus ? (
+          <ProviderBookingStatusPill status={row.bookingStatus} />
+        ) : (
+          <span className="text-small text-muted-foreground">—</span>
+        )}
+      </td>
+      <td className="px-4 py-3.5 md:px-5">
+        <DeliveryStatusPill status={row.deliveryStatus} />
       </td>
     </tr>
   );

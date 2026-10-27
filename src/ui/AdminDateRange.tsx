@@ -19,6 +19,7 @@ type AdminDateRangeProps = {
   onChange: (value: string) => void;
   options?: AdminDateRangeOption[];
   label?: string;
+  hideLabel?: boolean;
   className?: string;
 };
 
@@ -27,11 +28,12 @@ export default function AdminDateRange({
   onChange,
   options = defaultOptions,
   label = "Date range",
+  hideLabel = false,
   className = "",
 }: AdminDateRangeProps) {
   return (
     <AdminCustomSelect
-      label={label}
+      label={hideLabel ? undefined : label}
       value={value}
       onChange={onChange}
       options={options}

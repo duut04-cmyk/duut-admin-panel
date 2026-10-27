@@ -280,47 +280,46 @@ function RecentDeliveryCard({ record }: { record: OrchestrationRecord }) {
   const dropoff = formatLocationLabel(deliveryRequest.drop);
 
   return (
-    <article className="rounded-card border border-border/60 bg-background p-4 shadow-sm">
+    <article className="min-w-0 rounded-card border border-border/60 bg-background p-3.5 shadow-sm">
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <Link
             href={`/deliveries/${deliveryRequest.deliveryId}`}
-            className="font-semibold text-foreground hover:text-link focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
+            className="block truncate font-semibold text-foreground hover:text-link focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
           >
             {deliveryRequest.deliveryId}
           </Link>
-          <p className="mt-1 text-small text-muted-foreground">
+          <p className="mt-0.5 truncate text-small text-muted-foreground">
             {pickup.label} → {dropoff.label}
           </p>
         </div>
         <StatusPill status={displayStatus} />
       </div>
 
-      <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-small">
-        <div>
-          <dt className="text-caption text-muted-foreground">Service</dt>
-          <dd className="mt-0.5 flex items-center gap-2 font-medium text-foreground">
+      <div className="mt-3 flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="text-caption text-muted-foreground">Service</p>
+          <div className="mt-0.5 flex min-w-0 items-center gap-2 text-small font-medium text-foreground">
             <ServiceLogo serviceName={decision.selectedServiceName} />
-            {decision.selectedServiceName}
-          </dd>
+            <span className="truncate">{decision.selectedServiceName}</span>
+          </div>
         </div>
-        <div>
-          <dt className="text-caption text-muted-foreground">ETA / Delivered</dt>
-          <dd className="mt-0.5 text-muted-foreground">{getEtaOrDelivered(record)}</dd>
-        </div>
-        <div>
-          <dt className="text-caption text-muted-foreground">Amount</dt>
-          <dd className="mt-0.5 font-semibold text-foreground">
-            {formatCurrency(getRecordAmount(record))}
-          </dd>
-        </div>
-        <div className="flex items-end justify-end">
+
+        <div className="flex shrink-0 items-start gap-1">
+          <div className="pt-0.5 text-right">
+            <p className="text-small font-semibold tabular-nums text-foreground">
+              {formatCurrency(getRecordAmount(record))}
+            </p>
+            <p className="mt-0.5 text-caption text-muted-foreground">
+              {getEtaOrDelivered(record)}
+            </p>
+          </div>
           <RowActionsMenu
             deliveryId={deliveryRequest.deliveryId}
             status={displayStatus}
           />
         </div>
-      </dl>
+      </div>
     </article>
   );
 }
@@ -328,11 +327,11 @@ function RecentDeliveryCard({ record }: { record: OrchestrationRecord }) {
 export default function RecentDeliveriesTable({ records }: RecentDeliveriesTableProps) {
   return (
     <section aria-labelledby="recent-deliveries-table-heading">
-      <article className="overflow-hidden rounded-card border border-border/60 bg-background shadow-sm">
-        <div className="flex items-center justify-between gap-4 border-b border-border px-5 py-4 md:px-6">
+      <article className="min-w-0 overflow-hidden rounded-card border border-border/60 bg-background shadow-sm">
+        <div className="flex flex-col gap-2 border-b border-border px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5 lg:px-6">
           <h2
             id="recent-deliveries-table-heading"
-            className="text-body font-semibold text-foreground md:text-subheading"
+            className="min-w-0 text-subheading font-semibold leading-snug text-foreground"
           >
             Recent Deliveries
           </h2>
@@ -350,7 +349,7 @@ export default function RecentDeliveriesTable({ records }: RecentDeliveriesTable
           </p>
         ) : (
           <>
-            <div className="space-y-3 p-4 md:hidden">
+            <div className="space-y-3 p-4 lg:hidden">
               {records.map((record) => (
                 <RecentDeliveryCard
                   key={record.deliveryRequest.deliveryId}
@@ -359,8 +358,8 @@ export default function RecentDeliveriesTable({ records }: RecentDeliveriesTable
               ))}
             </div>
 
-            <div className="hidden overflow-x-auto md:block">
-              <table className="w-full table-fixed text-left text-small">
+            <div className="hidden overflow-x-auto lg:block">
+              <table className="w-full min-w-[960px] table-fixed text-left text-small">
                 <thead>
                   <tr className="border-b border-border">
                     {TABLE_COLUMNS.map((column) => (

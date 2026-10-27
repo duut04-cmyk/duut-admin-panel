@@ -1,37 +1,71 @@
-import AdminMetricCard from "@/ui/AdminMetricCard";
+import type { DeliveryListItem } from "@/data/deliveryApiTypes";
+import OverviewMetricCard, {
+  CancelledIcon,
+  DeliveredIcon,
+  FailedIcon,
+  InProgressIcon,
+  PackageIcon,
+} from "@/overview/components/OverviewMetricCard";
+import { getDeliveryMetricsFromList, sparklineFromCount } from "../deliveryMappers";
 import type { DeliveryMetrics } from "./utils";
 
 type DeliveryListSummaryProps = {
-  metrics: DeliveryMetrics;
+  items: DeliveryListItem[];
+  totalMatching: number;
+  className?: string;
 };
 
-export default function DeliveryListSummary({ metrics }: DeliveryListSummaryProps) {
+export default function DeliveryListSummary({
+  items,
+  totalMatching,
+  className = "",
+}: DeliveryListSummaryProps) {
+  const metrics: DeliveryMetrics = getDeliveryMetricsFromList(items, totalMatching);
+
   return (
-    <section aria-labelledby="delivery-summary-heading">
+    <section aria-labelledby="delivery-summary-heading" className={className}>
       <h2 id="delivery-summary-heading" className="sr-only">
         Delivery summary
       </h2>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
-        <AdminMetricCard
-          label="Total deliveries"
-          value={metrics.total}
-          className="p-4 md:p-5"
+      <p className="mb-3 text-caption text-muted-foreground">
+        Status counts below reflect the current page; total matches your filters across
+        all pages.
+      </p>
+      <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 md:[&>*:last-child]:col-span-1 xl:grid-cols-5 [&>*:last-child]:col-span-2">
+        <OverviewMetricCard
+          title="Total matching"
+          value={metrics.total.toLocaleString()}
+          theme="orange"
+          icon={<PackageIcon />}
+          sparklineValues={sparklineFromCount(metrics.total)}
         />
-        <AdminMetricCard
-          label="In transit"
-          value={metrics.inTransit}
-          className="p-4 md:p-5"
+        <OverviewMetricCard
+          title="In transit (page)"
+          value={metrics.inTransit.toLocaleString()}
+          theme="blue"
+          icon={<InProgressIcon />}
+          sparklineValues={sparklineFromCount(metrics.inTransit)}
         />
-        <AdminMetricCard
-          label="Delivered"
-          value={metrics.delivered}
-          className="p-4 md:p-5"
+        <OverviewMetricCard
+          title="Delivered (page)"
+          value={metrics.delivered.toLocaleString()}
+          theme="green"
+          icon={<DeliveredIcon />}
+          sparklineValues={sparklineFromCount(metrics.delivered)}
         />
-        <AdminMetricCard label="Failed" value={metrics.failed} className="p-4 md:p-5" />
-        <AdminMetricCard
-          label="Cancelled"
-          value={metrics.cancelled}
-          className="col-span-2 p-4 sm:col-span-1 md:p-5"
+        <OverviewMetricCard
+          title="Failed (page)"
+          value={metrics.failed.toLocaleString()}
+          theme="red"
+          icon={<FailedIcon />}
+          sparklineValues={sparklineFromCount(metrics.failed)}
+        />
+        <OverviewMetricCard
+          title="Cancelled (page)"
+          value={metrics.cancelled.toLocaleString()}
+          theme="slate"
+          icon={<CancelledIcon />}
+          sparklineValues={sparklineFromCount(metrics.cancelled)}
         />
       </div>
     </section>

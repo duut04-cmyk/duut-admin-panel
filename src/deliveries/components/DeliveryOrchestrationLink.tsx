@@ -1,45 +1,42 @@
-import Link from "next/link";
-import type { OrchestrationRecord } from "@/data/orchestrationTypes";
-import { formatDecisionTime } from "@/data/orchestrationMetrics";
-import AdminCallout from "@/ui/AdminCallout";
+import type { DeliveryHistoryDetail } from "@/data/deliveryApiTypes";
 import AdminSectionHeader from "@/ui/AdminSectionHeader";
-import { bookingStatusLabel } from "./utils";
 
 type DeliveryOrchestrationLinkProps = {
-  record: OrchestrationRecord;
+  deliveryId: string;
+  orchestration: DeliveryHistoryDetail["orchestration"];
 };
 
 export default function DeliveryOrchestrationLink({
-  record,
+  orchestration,
 }: DeliveryOrchestrationLinkProps) {
-  const { deliveryRequest, decision, booking } = record;
-  const deliveryId = deliveryRequest.deliveryId;
-  const score = decision.decisionScore.totalScore;
+  const selected = orchestration?.selectedOption;
 
   return (
     <section aria-labelledby="delivery-orchestration-link-heading">
       <AdminSectionHeader
-        title="Orchestration decision"
-        description="How Doot evaluated and selected a service for this delivery."
+        title="Orchestration summary"
+        description="Latest selected provider option from delivery history when available."
       />
 
-      <AdminCallout variant="accent" className="mt-4">
-        <div className="space-y-3">
-          <p className="text-small text-foreground">
-            {decision.servicesEvaluated} services evaluated ·{" "}
-            {decision.availableOptions} available · {decision.selectedServiceName}{" "}
-            selected · {score.toFixed(1)}/100 · Booking{" "}
-            {bookingStatusLabel(booking.status).toLowerCase()} · Decision in{" "}
-            {formatDecisionTime(decision.durationMs)}
+      <aside className="mt-4 rounded-lg border border-accent/20 bg-orange-50/60 px-4 py-3.5">
+        {selected ? (
+          <p className="text-small leading-snug text-foreground">
+            <span className="font-semibold">{selected.providerCode}</span>
+            {selected.serviceCode ? (
+              <span className="text-muted-foreground"> · {selected.serviceCode}</span>
+            ) : null}
+            {selected.selectionReason ? (
+              <span className="mt-1 block text-muted-foreground">
+                {selected.selectionReason}
+              </span>
+            ) : null}
           </p>
-          <Link
-            href={`/orchestration/${deliveryId}`}
-            className="inline-flex text-small font-semibold text-accent underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-          >
-            View orchestration decision →
-          </Link>
-        </div>
-      </AdminCallout>
+        ) : (
+          <p className="text-small text-muted-foreground">
+            No selected provider option is recorded for this delivery yet.
+          </p>
+        )}
+      </aside>
     </section>
   );
 }

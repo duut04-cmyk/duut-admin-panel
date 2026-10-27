@@ -10,6 +10,7 @@ type TopServicesWidgetProps = {
   categories: TopServiceCategory[];
   dateRange: DateRangeKey;
   onDateRangeChange: (value: DateRangeKey) => void;
+  liveData?: boolean;
 };
 
 type CategoryTheme = {
@@ -89,29 +90,34 @@ export default function TopServicesWidget({
   categories,
   dateRange,
   onDateRangeChange,
+  liveData = false,
 }: TopServicesWidgetProps) {
-  const displayCategories = resolveTopServicesDisplay(categories);
+  const displayCategories = liveData
+    ? categories
+    : resolveTopServicesDisplay(categories);
 
   return (
     <article
-      className="rounded-card border border-border/60 bg-background shadow-sm"
+      className="flex h-full flex-col rounded-card border border-border/60 bg-background shadow-sm"
       aria-labelledby="top-services-heading"
     >
-      <div className="flex items-center justify-between gap-3 px-5 pb-2 pt-4">
+      <div className="flex items-center justify-between gap-3 px-4 pb-2 pt-4 sm:px-5">
         <h2
           id="top-services-heading"
-          className="text-body font-semibold text-foreground"
+          className="min-w-0 flex-1 text-subheading font-semibold leading-snug text-foreground"
         >
           Top Services
         </h2>
-        <DashboardCardDateRange
-          value={dateRange}
-          onChange={onDateRangeChange}
-          compact
-        />
+        <div className="flex shrink-0 items-center self-center">
+          <DashboardCardDateRange
+            value={dateRange}
+            onChange={onDateRangeChange}
+            compact
+          />
+        </div>
       </div>
 
-      <ul className="space-y-5 px-5 pb-4 pt-1">
+      <ul className="flex-1 space-y-5 px-4 pb-4 pt-1 sm:px-5 md:space-y-8 xl:space-y-5">
         {displayCategories.map((item) => {
           const theme = categoryThemes[item.category];
 

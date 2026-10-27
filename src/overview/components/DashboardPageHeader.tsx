@@ -1,20 +1,26 @@
 "use client";
 
+import type { ReportingDateRangeKey } from "@/lib/reportingDateRange";
 import type { DateRangeKey } from "@/data/orchestrationMetrics";
-import { getTimeBasedGreeting } from "@/data/mockAdminUser";
+import { getAdminFirstName, getTimeBasedGreeting } from "@/lib/adminDisplayName";
+import { useAdminSessionContext } from "@/components/AdminSessionProvider";
 import { ADMIN_SHELL_CONTENT_PADDING } from "@/components/layout";
 import DashboardCardDateRange from "./DashboardCardDateRange";
 
 export type DashboardPageHeaderProps = {
-  dateRange: DateRangeKey;
-  onDateRangeChange: (value: DateRangeKey) => void;
+  dateRange: ReportingDateRangeKey;
+  onDateRangeChange: (value: ReportingDateRangeKey) => void;
 };
 
 export default function DashboardPageHeader({
   dateRange,
   onDateRangeChange,
 }: DashboardPageHeaderProps) {
-  const greeting = getTimeBasedGreeting();
+  const { account } = useAdminSessionContext();
+  const greeting = getTimeBasedGreeting(
+    new Date(),
+    getAdminFirstName({ name: account.name, email: account.email }),
+  );
 
   return (
     <header
@@ -22,18 +28,25 @@ export default function DashboardPageHeader({
     >
       <p className="text-small text-muted-foreground">{greeting} 👋</p>
 
-      <div className="mt-2 flex items-end justify-between gap-4">
-        <h1 className="text-heading-md font-bold leading-tight tracking-tight text-foreground">
-          Here&apos;s what&apos;s happening with Doot
-        </h1>
-        <div className="shrink-0 pb-0.5">
-          <DashboardCardDateRange value={dateRange} onChange={onDateRangeChange} />
+      <h1 className="mt-2 text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
+        Here&apos;s what&apos;s happening with Doot
+      </h1>
+
+      <div className="mt-1.5 flex items-center justify-between gap-3">
+        <p className="min-w-0 flex-1 max-w-2xl text-small leading-snug text-muted-foreground">
+          Real-time performance, delivery trends and platform health at a glance.
+        </p>
+        <div className="shrink-0 self-center md:pb-0.5">
+          <DashboardCardDateRange
+            value={dateRange}
+            onChange={(value: DateRangeKey) => {
+              if (value === "7d" || value === "30d" || value === "month") {
+                onDateRangeChange(value);
+              }
+            }}
+          />
         </div>
       </div>
-
-      <p className="mt-1.5 max-w-2xl text-small leading-snug text-muted-foreground">
-        Real-time performance, delivery trends and platform health at a glance.
-      </p>
     </header>
   );
 }

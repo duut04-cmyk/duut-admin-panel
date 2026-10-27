@@ -14,7 +14,7 @@ export default function AdminHeader({ title, subtitle, actions }: AdminHeaderPro
     >
       <div className="flex w-full items-start justify-between gap-4">
         <div className="min-w-0">
-          <h1 className="text-subheading font-bold tracking-tight text-foreground">
+          <h1 className="text-[1.75rem] leading-8 font-bold tracking-tight text-foreground xl:text-[1.875rem] xl:leading-9">
             {title}
           </h1>
           {subtitle && (

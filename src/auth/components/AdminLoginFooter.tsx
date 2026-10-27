@@ -1,6 +1,6 @@
 export default function AdminLoginFooter() {
   return (
-    <footer className="hidden lg:block">
+    <footer className="hidden lg:landscape:max-xl:block xl:block">
       <svg
         className="h-3.5 w-[72px] text-accent"
         viewBox="0 0 72 14"

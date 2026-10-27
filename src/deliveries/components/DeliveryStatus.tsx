@@ -1,9 +1,7 @@
-import type { DeliveryRequestStatus } from "@/data/orchestrationTypes";
-import AdminStatus from "@/ui/AdminStatus";
-import { deliveryStatusLabel, deliveryStatusVariant } from "./utils";
+import { DeliveryStatusPill } from "./DeliveryStatusPill";
 
 type DeliveryStatusProps = {
-  status: DeliveryRequestStatus;
+  status: string;
   className?: string;
 };
 
@@ -11,11 +9,5 @@ export default function DeliveryStatus({
   status,
   className = "",
 }: DeliveryStatusProps) {
-  return (
-    <AdminStatus
-      variant={deliveryStatusVariant(status)}
-      label={deliveryStatusLabel(status)}
-      className={className}
-    />
-  );
+  return <DeliveryStatusPill status={status} className={className} />;
 }

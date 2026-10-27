@@ -81,7 +81,7 @@ export default function AdminCustomSelect({
           id={listboxId}
           role="listbox"
           aria-label={label ?? "Options"}
-          className="absolute top-full z-30 mt-1.5 w-full overflow-hidden rounded-md border border-border bg-background py-1 shadow-sm"
+          className="absolute top-full z-30 mt-1.5 min-w-full w-max overflow-hidden rounded-md border border-border bg-background py-1 shadow-sm"
         >
           {options.map((option) => {
             const active = option.value === value;
@@ -95,7 +95,7 @@ export default function AdminCustomSelect({
                     onChange(option.value);
                     setOpen(false);
                   }}
-                  className={`flex w-full cursor-pointer px-3 py-2 text-left text-small transition-colors hover:bg-surface focus:outline-none focus-visible:bg-surface ${
+                  className={`flex w-full cursor-pointer whitespace-nowrap px-3 py-2 text-left text-small transition-colors hover:bg-surface focus:outline-none focus-visible:bg-surface ${
                     active
                       ? "bg-surface-accent font-medium text-foreground"
                       : "text-foreground"

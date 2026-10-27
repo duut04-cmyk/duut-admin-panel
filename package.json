@@ -8,6 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "npm --prefix ../backend test -- tests/admin-panel-",
+    "qa:acceptance": "node scripts/qa-authenticated-acceptance.mjs",
+    "qa:e2e": "playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky"
@@ -27,6 +31,7 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

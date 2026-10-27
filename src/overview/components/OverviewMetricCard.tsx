@@ -4,7 +4,8 @@ import { useId, type ReactNode } from "react";
 import type { MetricTrend } from "@/data/dashboardMetrics";
 import { buildSparklinePath } from "./sparklineUtils";
 
-export type MetricTheme = "orange" | "green" | "blue" | "purple" | "pink";
+export type MetricTheme =
+  "orange" | "green" | "blue" | "purple" | "pink" | "red" | "slate";
 
 const themeStyles: Record<
   MetricTheme,
@@ -63,6 +64,24 @@ const themeStyles: Record<
     trendPositive: "text-emerald-600",
     trendNegative: "text-admin-pink",
   },
+  red: {
+    iconBg: "bg-red-100",
+    iconColor: "text-red-600",
+    stroke: "#ef4444",
+    fillStart: "rgba(239, 68, 68, 0.18)",
+    fillEnd: "rgba(239, 68, 68, 0)",
+    trendPositive: "text-emerald-600",
+    trendNegative: "text-red-600",
+  },
+  slate: {
+    iconBg: "bg-slate-100",
+    iconColor: "text-slate-600",
+    stroke: "#64748b",
+    fillStart: "rgba(100, 116, 139, 0.18)",
+    fillEnd: "rgba(100, 116, 139, 0)",
+    trendPositive: "text-emerald-600",
+    trendNegative: "text-red-600",
+  },
 };
 
 const SPARKLINE_WIDTH = 300;
@@ -75,7 +94,7 @@ type OverviewMetricCardProps = {
   trend?: MetricTrend;
   theme: MetricTheme;
   icon: ReactNode;
-  sparklineValues: number[];
+  sparklineValues?: number[];
 };
 
 function TrendArrow({ up }: { up: boolean }) {
@@ -131,14 +150,14 @@ export default function OverviewMetricCard({
   const styles = themeStyles[theme];
   const gradientId = useId();
   const { line, area, lastPoint } = buildSparklinePath(
-    sparklineValues,
+    sparklineValues ?? [],
     SPARKLINE_WIDTH,
     SPARKLINE_HEIGHT,
   );
 
   return (
     <article className="flex flex-col rounded-card border border-border/60 bg-background shadow-sm">
-      <div className="flex flex-col px-4 pb-3 pt-4">
+      <div className="flex flex-col px-3 pb-3 pt-3 sm:px-4 sm:pt-4">
         <div className="flex items-center gap-2.5">
           <span
             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${styles.iconBg} ${styles.iconColor}`}
@@ -146,10 +165,12 @@ export default function OverviewMetricCard({
           >
             {icon}
           </span>
-          <p className="text-small font-medium text-muted-foreground">{title}</p>
+          <p className="min-w-0 text-small font-medium leading-snug text-muted-foreground line-clamp-2 sm:line-clamp-1">
+            {title}
+          </p>
         </div>
 
-        <p className="mt-3 text-[1.75rem] font-bold leading-none tracking-tight text-foreground">
+        <p className="mt-2 text-xl font-bold leading-none tracking-tight text-foreground sm:mt-3 sm:text-[1.75rem]">
           {value}
         </p>
 
@@ -272,6 +293,38 @@ export function StopwatchIcon() {
     >
       <circle cx="10" cy="11" r="6" />
       <path d="M10 8v3.5l2 1.5M8 3h4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function FailedIcon() {
+  return (
+    <svg
+      className="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="10" r="7" />
+      <path d="M7 7l6 6M13 7l-6 6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function CancelledIcon() {
+  return (
+    <svg
+      className="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="10" r="7" />
+      <path d="M6.5 10h7" strokeLinecap="round" />
     </svg>
   );
 }

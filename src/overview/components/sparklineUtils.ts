@@ -117,6 +117,19 @@ export function getCumulativeDeliveredSparkline(
   });
 }
 
+export function getCumulativeStatusSparkline(
+  records: OrchestrationRecord[],
+  status: OrchestrationRecord["deliveryRequest"]["status"],
+): number[] {
+  let count = 0;
+  return sortRecords(records).map((record) => {
+    if (record.deliveryRequest.status === status) {
+      count += 1;
+    }
+    return count;
+  });
+}
+
 export function getRollingBookingSuccessSparkline(
   records: OrchestrationRecord[],
   windowSize = 3,
@@ -137,4 +150,24 @@ export function getRollingBookingSuccessSparkline(
 export function getDecisionTimeSparkline(records: OrchestrationRecord[]): number[] {
   const times = sortRecords(records).map((record) => record.decision.durationMs);
   return times.length > 0 ? times : [0];
+}
+
+export function getCumulativeServicesEvaluatedSparkline(
+  records: OrchestrationRecord[],
+): number[] {
+  let total = 0;
+  return sortRecords(records).map((record) => {
+    total += record.decision.servicesEvaluated;
+    return total;
+  });
+}
+
+export function getCumulativeAvailableOptionsSparkline(
+  records: OrchestrationRecord[],
+): number[] {
+  let total = 0;
+  return sortRecords(records).map((record) => {
+    total += record.decision.availableOptions;
+    return total;
+  });
 }
