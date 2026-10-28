@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import type { ProviderDetail, UpdateProviderInput } from "@/data/providerTypes";
 import Button from "@/common/components/Button";
@@ -32,7 +34,11 @@ import {
 type ProviderConfigurationSectionProps = {
   provider: ProviderDetail;
   onProviderUpdated: (provider: ProviderDetail) => void;
+  mode?: "view" | "edit";
 };
+
+const secondaryLinkClassName =
+  "inline-flex h-11 shrink-0 cursor-pointer items-center justify-center rounded-control border border-border bg-background px-5 text-small font-medium text-foreground transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/30";
 
 const environmentOptions = [
   { value: "SANDBOX", label: "Sandbox" },
@@ -89,8 +95,10 @@ function ConfirmFlagsModal({
 export default function ProviderConfigurationSection({
   provider,
   onProviderUpdated,
+  mode = "view",
 }: ProviderConfigurationSectionProps) {
-  const [editing, setEditing] = useState(false);
+  const router = useRouter();
+  const isEditPage = mode === "edit";
   const [draft, setDraft] = useState<ProviderConfigurationDraft>(() =>
     draftFromProvider(provider),
   );
@@ -101,20 +109,14 @@ export default function ProviderConfigurationSection({
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pendingPatch, setPendingPatch] = useState<UpdateProviderInput | null>(null);
 
-  const startEditing = () => {
-    setDraft(draftFromProvider(provider));
-    setFieldErrors({});
-    setFormError(null);
-    setSaveStatus("idle");
-    setEditing(true);
-  };
-
   const handleCancel = () => {
     setDraft(draftFromProvider(provider));
     setFieldErrors({});
     setFormError(null);
     setSaveStatus("idle");
-    setEditing(false);
+    if (isEditPage) {
+      router.push(`/providers/${provider.id}`);
+    }
   };
 
   const submitPatch = async (patch: NonNullable<typeof pendingPatch>) => {
@@ -137,7 +139,10 @@ export default function ProviderConfigurationSection({
 
     onProviderUpdated(result.data);
     setDraft(draftFromProvider(result.data));
-    setEditing(false);
+    if (isEditPage) {
+      router.push(`/providers/${provider.id}`);
+      return;
+    }
     setSaveStatus("success");
   };
 
@@ -247,15 +252,18 @@ export default function ProviderConfigurationSection({
             status are managed in the Lifecycle status section.
           </p>
         </div>
-        {!editing ? (
-          <Button type="button" variant="secondary" onClick={startEditing}>
-            Edit
-          </Button>
+        {!isEditPage ? (
+          <Link
+            href={`/providers/${provider.id}/edit`}
+            className={secondaryLinkClassName}
+          >
+            Edit details
+          </Link>
         ) : null}
       </div>
 
       <div className="p-4 sm:p-5 lg:p-6">
-        {saveStatus === "success" ? (
+        {saveStatus === "success" && !isEditPage ? (
           <AdminCallout variant="success" title="Saved" className="mb-4">
             Provider configuration was updated.
           </AdminCallout>
@@ -267,7 +275,7 @@ export default function ProviderConfigurationSection({
           </AdminCallout>
         ) : null}
 
-        {!editing ? (
+        {!isEditPage ? (
           viewGrid
         ) : (
           <form onSubmit={handleSave} className="space-y-5">

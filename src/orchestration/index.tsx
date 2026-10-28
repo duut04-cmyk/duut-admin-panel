@@ -26,6 +26,7 @@ import OrchestrationList from "./components/OrchestrationList";
 import OrchestrationListSummary from "./components/OrchestrationListSummary";
 import OrchestrationPageHeader from "./components/OrchestrationPageHeader";
 import OrchestrationPagination from "./components/OrchestrationPagination";
+import { MetricCardsSkeleton } from "@/components/loading/skeletonSections";
 
 const PAGE_SIZE = 20;
 
@@ -150,7 +151,11 @@ export default function OrchestrationPage() {
       }
     >
       <AdminContainer flushTop className="space-y-6 pb-10">
-        <OrchestrationListSummary metrics={metrics} />
+        {loading ? (
+          <MetricCardsSkeleton count={5} />
+        ) : (
+          <OrchestrationListSummary metrics={metrics} />
+        )}
         {loadError ? (
           <AdminLoadErrorCallout
             title="Unable to load orchestrations"

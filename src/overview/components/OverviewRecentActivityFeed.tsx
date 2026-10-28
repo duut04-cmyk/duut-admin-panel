@@ -22,7 +22,7 @@ export default function OverviewRecentActivityFeed({
   hours,
 }: OverviewRecentActivityFeedProps) {
   return (
-    <article className="flex min-w-0 flex-col rounded-card border border-border/60 bg-background p-4 shadow-sm sm:p-5">
+    <article className="flex h-full min-w-0 flex-col rounded-card border border-border/60 bg-background p-3 shadow-sm sm:p-4">
       <h2 className="text-subheading font-semibold leading-snug text-foreground">
         Live Activity
       </h2>

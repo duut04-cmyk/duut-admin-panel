@@ -10,7 +10,10 @@ import AdminContainer from "@/components/AdminContainer";
 import { ADMIN_LIST_PAGE_FILTERS_SECTION } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
 import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
-import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
+import {
+  ListRowsSkeleton,
+  MetricCardsSkeleton,
+} from "@/components/loading/skeletonSections";
 import { fetchDeliveries } from "./api";
 import { listParamsFromFilters } from "./deliveryMappers";
 import DeliveryFilters, {
@@ -81,7 +84,7 @@ export default function DeliveriesPage() {
       setTotal(result.data.total);
       setTotalPages(Math.max(1, result.data.totalPages));
     },
-    [debouncedReference, filters.deliveryStatus, filters.dateRange, page],
+    [debouncedReference, filters, page],
   );
 
   useLoadedAsync(
@@ -123,7 +126,11 @@ export default function DeliveriesPage() {
           </AdminLoadErrorCallout>
         ) : null}
 
-        <DeliveryListSummary items={items} totalMatching={total} />
+        {loading ? (
+          <MetricCardsSkeleton count={5} />
+        ) : (
+          <DeliveryListSummary items={items} totalMatching={total} />
+        )}
 
         <div className={ADMIN_LIST_PAGE_FILTERS_SECTION}>
           <DeliveryFilters

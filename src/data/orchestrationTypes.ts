@@ -150,36 +150,3 @@ export const SCORE_FACTOR_WEIGHTS: Record<ScoreFactorKey, number> = {
   eta: 15,
   serviceQuality: 10,
 };
-
-export const MOCK_DELIVERY_SERVICES: DeliveryService[] = [
-  {
-    id: "swiftgo",
-    name: "SwiftGo",
-    category: "urban_express",
-    serviceLevel: "standard",
-  },
-  {
-    id: "movex",
-    name: "MoveX",
-    category: "same_day",
-    serviceLevel: "express",
-  },
-  {
-    id: "flashdrop",
-    name: "FlashDrop",
-    category: "hyperlocal",
-    serviceLevel: "express",
-  },
-  {
-    id: "cityfleet",
-    name: "CityFleet",
-    category: "scheduled",
-    serviceLevel: "standard",
-  },
-  {
-    id: "quickroute",
-    name: "QuickRoute",
-    category: "regional",
-    serviceLevel: "standard",
-  },
-];

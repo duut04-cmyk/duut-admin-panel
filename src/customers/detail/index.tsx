@@ -1,173 +1,52 @@
 "use client";
 
-import Link from "next/link";
-import { useCallback, useState } from "react";
-import { useLoadedAsync } from "@/lib/useLoadedAsync";
-import { useExclusiveAsync } from "@/lib/useExclusiveAsync";
-import type { CustomerDetail } from "@/data/customerTypes";
-import AdminContainer from "@/components/AdminContainer";
 import { ADMIN_DETAIL_RAIL_GRID } from "@/components/layout";
-import AdminShell from "@/components/AdminShell";
-import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
-import { CustomerDetailSkeleton } from "@/components/loading/skeletonSections";
-import AdminEmptyState from "@/ui/AdminEmptyState";
-import { fetchCustomer, updateCustomer } from "../api";
 import CustomerAccountCard from "../components/CustomerAccountCard";
 import CustomerDeliveryHistory from "../components/CustomerDeliveryHistory";
 import CustomerDetailPageHeader from "../components/CustomerDetailPageHeader";
 import CustomerHeroMetrics from "../components/CustomerHeroMetrics";
+import CustomerDetailRouteShell from "./CustomerDetailRouteShell";
+import { useCustomerDetail } from "./useCustomerDetail";
 
 type CustomerDetailPageProps = {
   customerId: string;
 };
 
 export default function CustomerDetailPage({ customerId }: CustomerDetailPageProps) {
-  const [customer, setCustomer] = useState<CustomerDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState<string | null>(null);
-  const [updatingStatus, setUpdatingStatus] = useState(false);
-
-  const loadCustomer = useCallback(
-    async (isStale: () => boolean = () => false) => {
-      setLoading(true);
-      setLoadError(null);
-
-      const result = await fetchCustomer(customerId);
-
-      if (isStale()) return;
-
-      setLoading(false);
-
-      if (!result.success || !result.data) {
-        setCustomer(null);
-        setLoadError(result.error ?? "Customer not found.");
-        return;
-      }
-
-      setCustomer(result.data);
-    },
-    [customerId],
-  );
-
-  useLoadedAsync(
-    async (isStale) => {
-      await loadCustomer(isStale);
-    },
-    [loadCustomer],
-  );
-
-  const { run: retryLoad, busy: retrying } = useExclusiveAsync(async () => {
-    await loadCustomer();
-  });
-
-  const handleStatusChange = async (active: boolean) => {
-    if (!customer) return;
-
-    setUpdatingStatus(true);
-    const previous = customer;
-    const nextStatus = active ? "ACTIVE" : "SUSPENDED";
-
-    setCustomer({ ...customer, status: nextStatus });
-
-    const result = await updateCustomer(customer.id, { status: nextStatus });
-
-    setUpdatingStatus(false);
-
-    if (!result.success || !result.data) {
-      setCustomer(previous);
-      setLoadError(result.error ?? "Failed to update customer status.");
-      return;
-    }
-
-    setCustomer(result.data);
-  };
-
-  if (loading) {
-    return (
-      <AdminShell customHeader={<CustomerPageLoadingHeader />}>
-        <AdminContainer flushTop className="pb-10">
-          <CustomerDetailSkeleton />
-        </AdminContainer>
-      </AdminShell>
-    );
-  }
-
-  if (!customer) {
-    return (
-      <AdminShell customHeader={<CustomerPageLoadingHeader notFound />}>
-        <AdminContainer flushTop className="pb-10">
-          {loadError ? (
-            <AdminLoadErrorCallout
-              title="Unable to load customer"
-              onRetry={() => void retryLoad()}
-              retrying={retrying}
-            >
-              <p>{loadError}</p>
-            </AdminLoadErrorCallout>
-          ) : (
-            <AdminEmptyState
-              title="Customer not found"
-              description={`No customer exists for ID "${customerId}".`}
-              action={
-                <Link
-                  href="/customers"
-                  className="text-small font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                >
-                  Back to customers
-                </Link>
-              }
-            />
-          )}
-        </AdminContainer>
-      </AdminShell>
-    );
-  }
+  const { customer, loading, loadError, retryLoad, retrying } =
+    useCustomerDetail(customerId);
 
   return (
-    <AdminShell
+    <CustomerDetailRouteShell
+      customerId={customerId}
+      loading={loading}
+      customer={customer}
+      loadError={loadError}
+      retryLoad={() => void retryLoad()}
+      retrying={retrying}
       mainClassName="bg-background"
-      customHeader={<CustomerDetailPageHeader customer={customer} />}
+      containerClassName="space-y-6 pb-10 lg:space-y-8"
+      customHeader={
+        customer ? <CustomerDetailPageHeader customer={customer} /> : undefined
+      }
     >
-      <AdminContainer flushTop className="space-y-6 pb-10 lg:space-y-8">
-        {loadError ? (
-          <AdminLoadErrorCallout
-            title="Something went wrong"
-            onRetry={() => void retryLoad()}
-            retrying={retrying}
+      {(loaded) => (
+        <>
+          <CustomerHeroMetrics customer={loaded} />
+
+          <div
+            className={`grid min-w-0 gap-6 ${ADMIN_DETAIL_RAIL_GRID} xl:items-start`}
           >
-            <p>{loadError}</p>
-          </AdminLoadErrorCallout>
-        ) : null}
+            <aside className="min-w-0 space-y-6 xl:order-2 xl:sticky xl:top-6 xl:self-start">
+              <CustomerAccountCard mode="view" customer={loaded} />
+            </aside>
 
-        <CustomerHeroMetrics customer={customer} />
-
-        <div className={`grid min-w-0 gap-6 ${ADMIN_DETAIL_RAIL_GRID} xl:items-start`}>
-          <aside className="min-w-0 space-y-6 xl:order-2 xl:sticky xl:top-6 xl:self-start">
-            <CustomerAccountCard
-              customer={customer}
-              updatingStatus={updatingStatus}
-              onStatusChange={(active) => void handleStatusChange(active)}
-            />
-          </aside>
-
-          <div className="min-w-0 xl:order-1">
-            <CustomerDeliveryHistory deliveries={customer.recentDeliveries} />
+            <div className="min-w-0 xl:order-1">
+              <CustomerDeliveryHistory deliveries={loaded.recentDeliveries} />
+            </div>
           </div>
-        </div>
-      </AdminContainer>
-    </AdminShell>
-  );
-}
-
-function CustomerPageLoadingHeader({ notFound = false }: { notFound?: boolean }) {
-  return (
-    <header className="bg-background px-4 pb-4 pt-4 sm:px-6 lg:px-8 lg:pb-5 lg:pt-5">
-      <h1 className="text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
-        Customers
-      </h1>
-      <p className="mt-1 text-small text-muted-foreground">
-        {notFound ? "Customer not found" : "Loading customer…"}
-      </p>
-    </header>
+        </>
+      )}
+    </CustomerDetailRouteShell>
   );
 }

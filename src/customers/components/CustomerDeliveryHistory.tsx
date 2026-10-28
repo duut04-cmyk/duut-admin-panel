@@ -5,7 +5,8 @@ import type { CustomerDeliverySummary } from "@/data/customerTypes";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import CustomerDeliveryStatusPill from "./CustomerDeliveryStatusPill";
 import CustomerDetailCard from "./CustomerDetailCard";
-import { formatCustomerDate, formatRoute } from "./utils";
+import CustomerDeliveryRoute from "./CustomerDeliveryRoute";
+import { formatCustomerDate } from "./utils";
 
 type CustomerDeliveryHistoryProps = {
   deliveries: CustomerDeliverySummary[];
@@ -38,9 +39,12 @@ export default function CustomerDeliveryHistory({
                     <p className="font-semibold text-foreground">
                       {delivery.reference}
                     </p>
-                    <p className="mt-0.5 text-small text-muted-foreground">
-                      {formatRoute(delivery.pickup, delivery.drop)}
-                    </p>
+                    <div className="mt-2">
+                      <CustomerDeliveryRoute
+                        pickup={delivery.pickup}
+                        drop={delivery.drop}
+                      />
+                    </div>
                   </div>
                   <CustomerDeliveryStatusPill status={delivery.status} />
                 </div>
@@ -52,7 +56,7 @@ export default function CustomerDeliveryHistory({
           </div>
 
           <div className="hidden overflow-x-auto md:block">
-            <table className="w-full min-w-[720px] text-left text-small">
+            <table className="w-full min-w-[960px] text-left text-small">
               <caption className="sr-only">Customer delivery history</caption>
               <thead>
                 <tr className="border-b border-border">
@@ -84,8 +88,11 @@ export default function CustomerDeliveryHistory({
                         {delivery.reference}
                       </Link>
                     </td>
-                    <td className="px-2 py-3 text-muted-foreground">
-                      {formatRoute(delivery.pickup, delivery.drop)}
+                    <td className="max-w-lg px-2 py-3 align-top">
+                      <CustomerDeliveryRoute
+                        pickup={delivery.pickup}
+                        drop={delivery.drop}
+                      />
                     </td>
                     <td className="px-2 py-3">
                       <CustomerDeliveryStatusPill status={delivery.status} />

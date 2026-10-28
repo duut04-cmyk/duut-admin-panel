@@ -1,19 +1,8 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
-import type { OrchestrationRecord } from "@/data/orchestrationTypes";
-import {
-  decisionSpeedStatTrends,
-  resolveDecisionSpeedChart,
-  resolveDecisionSpeedMetrics,
-  type DecisionSpeedChartPoint,
-} from "@/data/overviewDisplay";
-import { formatDecisionTime, type PlatformMetrics } from "@/data/orchestrationMetrics";
-
-type DecisionSpeedProps = {
-  metrics: PlatformMetrics;
-  records: OrchestrationRecord[];
-};
+import { useId, useState } from "react";
+import type { DecisionSpeedChartPoint } from "@/data/overviewDisplay";
+import { formatDecisionChartDate, formatDecisionTime } from "@/overview/reportingUi";
 
 const MAX_Y_SECONDS = 8;
 const Y_TICK_STEP = 2;
@@ -29,11 +18,6 @@ const PLOT_PAD_X_MOBILE = 6;
 const axisTextClass =
   "font-sans text-[10px] font-normal leading-none text-foreground sm:text-small";
 
-function formatChartDate(isoDate: string): string {
-  const date = new Date(`${isoDate}T00:00:00`);
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
-
 function parseDateMs(isoDate: string): number {
   return new Date(`${isoDate}T00:00:00`).getTime();
 }
@@ -46,38 +30,13 @@ function msToLocalIsoDate(ms: number): string {
   return `${year}-${month}-${day}`;
 }
 
-/** Aggregate decision times by day for a smoother chart line. */
-function buildDecisionTimeSeries(
-  records: OrchestrationRecord[],
-): DecisionSpeedChartPoint[] {
-  const byDay = new Map<string, number[]>();
-
-  for (const record of records) {
-    const date = record.deliveryRequest.createdAt.slice(0, 10);
-    const existing = byDay.get(date) ?? [];
-    existing.push(record.decision.durationMs);
-    byDay.set(date, existing);
-  }
-
-  return [...byDay.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([date, durations]) => {
-      const avgMs = durations.reduce((sum, ms) => sum + ms, 0) / durations.length;
-      return {
-        date,
-        label: formatChartDate(date),
-        ms: avgMs,
-      };
-    });
-}
-
 function buildXAxisTicks(
   chartStartMs: number,
   chartEndMs: number,
 ): { ms: number; label: string }[] {
   const ticks: { ms: number; label: string }[] = [];
   for (let ms = chartStartMs; ms <= chartEndMs; ms += X_TICK_INTERVAL_DAYS * DAY_MS) {
-    ticks.push({ ms, label: formatChartDate(msToLocalIsoDate(ms)) });
+    ticks.push({ ms, label: formatDecisionChartDate(msToLocalIsoDate(ms)) });
   }
   return ticks;
 }
@@ -100,7 +59,7 @@ function buildSmoothLinePath(coords: { x: number; y: number }[]): string {
   return path;
 }
 
-function DecisionTimeChart({
+export default function DecisionTimeChart({
   points,
   compact = false,
 }: {
@@ -287,96 +246,5 @@ function DecisionTimeChart({
         })}
       </div>
     </div>
-  );
-}
-
-function StatTrend({ value }: { value: string }) {
-  return (
-    <p className="mt-1 flex items-center justify-center gap-0.5 text-caption font-medium text-emerald-600">
-      <svg
-        className="h-3 w-3 shrink-0"
-        viewBox="0 0 12 12"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        aria-hidden="true"
-      >
-        <path d="M6 3v6M6 9L3 6M6 9l3-3" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-      <span>{value}</span>
-    </p>
-  );
-}
-
-export default function DecisionSpeed({ metrics, records }: DecisionSpeedProps) {
-  const [compactChart, setCompactChart] = useState(false);
-  const rawPoints = useMemo(() => buildDecisionTimeSeries(records), [records]);
-  const displayMetrics = resolveDecisionSpeedMetrics(metrics, records.length);
-  const points = useMemo(
-    () => resolveDecisionSpeedChart(rawPoints, records.length),
-    [rawPoints, records.length],
-  );
-
-  useEffect(() => {
-    const media = window.matchMedia("(max-width: 767px)");
-    const sync = () => setCompactChart(media.matches);
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
-
-  return (
-    <article
-      className="min-w-0 rounded-card border border-border/60 bg-background p-4 font-sans shadow-sm sm:p-5"
-      aria-labelledby="decision-speed-heading"
-    >
-      <h2
-        id="decision-speed-heading"
-        className="text-subheading font-semibold leading-snug text-foreground"
-      >
-        Decision Speed
-      </h2>
-      <p className="mt-1 text-small text-muted-foreground">
-        Time taken to evaluate services and make a decision.
-      </p>
-
-      <div className="mt-5 grid grid-cols-3 divide-x divide-border overflow-hidden rounded-lg border border-border">
-        <div className="px-2 py-3 text-center sm:px-3">
-          <p className="text-small font-medium text-muted-foreground">Average</p>
-          <p className="mt-1 text-xl font-bold leading-none tracking-tight text-foreground sm:text-2xl">
-            {formatDecisionTime(displayMetrics.averageDecisionTimeMs)}
-          </p>
-          <StatTrend value={decisionSpeedStatTrends.average.value} />
-        </div>
-        <div className="px-2 py-3 text-center sm:px-3">
-          <p className="text-small font-medium text-muted-foreground">Fastest</p>
-          <p className="mt-1 text-xl font-bold leading-none tracking-tight text-foreground sm:text-2xl">
-            {formatDecisionTime(displayMetrics.fastestDecisionTimeMs)}
-          </p>
-          <StatTrend value={decisionSpeedStatTrends.fastest.value} />
-        </div>
-        <div className="px-2 py-3 text-center sm:px-3">
-          <p className="text-small font-medium text-muted-foreground">Slowest</p>
-          <p className="mt-1 text-xl font-bold leading-none tracking-tight text-foreground sm:text-2xl">
-            {formatDecisionTime(displayMetrics.slowestDecisionTimeMs)}
-          </p>
-          <StatTrend value={decisionSpeedStatTrends.slowest.value} />
-        </div>
-      </div>
-
-      {points.length > 0 && (
-        <div className="mt-5 -mx-2 w-[calc(100%+1rem)] md:mx-0 md:w-full">
-          <DecisionTimeChart points={points} compact={compactChart} />
-        </div>
-      )}
-
-      <div className="mt-2 flex items-center justify-center gap-2 text-small text-foreground">
-        <span
-          className="inline-block h-[3px] w-5 rounded-full bg-orange-500"
-          aria-hidden="true"
-        />
-        Decision time
-      </div>
-    </article>
   );
 }

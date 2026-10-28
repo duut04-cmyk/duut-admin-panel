@@ -91,6 +91,7 @@ export default function CustomerFilters({
   const sheetContent = (
     <div className="space-y-4">
       <AdminCustomSelect
+        variant="panel"
         label="Status"
         value={filters.status}
         options={statusOptions}
@@ -102,6 +103,7 @@ export default function CustomerFilters({
         }
       />
       <AdminCustomSelect
+        variant="panel"
         label="Email verified"
         value={filters.emailVerified}
         options={verifiedOptions}

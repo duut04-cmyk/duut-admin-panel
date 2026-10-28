@@ -8,7 +8,10 @@ import AdminContainer from "@/components/AdminContainer";
 import { ADMIN_LIST_PAGE_FILTERS_SECTION } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
 import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
-import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
+import {
+  ListRowsSkeleton,
+  MetricCardsSkeleton,
+} from "@/components/loading/skeletonSections";
 import { fetchCustomers } from "./api";
 import CustomerFilters, {
   DEFAULT_CUSTOMER_FILTERS,
@@ -109,7 +112,11 @@ export default function CustomersPage() {
           </AdminLoadErrorCallout>
         ) : null}
 
-        <CustomerListSummary metrics={summaryMetrics} />
+        {loading ? (
+          <MetricCardsSkeleton count={4} />
+        ) : (
+          <CustomerListSummary metrics={summaryMetrics} />
+        )}
 
         <div className={ADMIN_LIST_PAGE_FILTERS_SECTION}>
           <CustomerFilters
