@@ -108,6 +108,7 @@ export default function ProviderFilters({
   const sheetContent = (
     <div className="space-y-4">
       <AdminCustomSelect
+        variant="panel"
         label="Environment"
         value={filters.environment}
         options={environmentOptions}
@@ -119,6 +120,7 @@ export default function ProviderFilters({
         }
       />
       <AdminCustomSelect
+        variant="panel"
         label="Status"
         value={filters.status}
         options={statusOptions}
@@ -130,6 +132,7 @@ export default function ProviderFilters({
         }
       />
       <AdminCustomSelect
+        variant="panel"
         label="Enabled"
         value={filters.enabled}
         options={enabledOptions}

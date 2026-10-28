@@ -5,8 +5,56 @@ import type {
   PackageCategory,
 } from "@/data/dashboardMetrics";
 import type { MetricTrend } from "@/data/dashboardMetrics";
+import type { DecisionSpeedChartPoint } from "@/data/overviewDisplay";
 import type { RecentDeliveryItem, ReportingSummary } from "@/data/reportingTypes";
-import { trendFromChangePercent } from "@/overview/reportingUi";
+import {
+  formatDecisionChartDate,
+  trendFromChangePercent,
+} from "@/overview/reportingUi";
+
+function reportingWindowEndDate(toExclusive: string): string {
+  const end = new Date(toExclusive);
+  end.setUTCDate(end.getUTCDate() - 1);
+  return end.toISOString().slice(0, 10);
+}
+
+/** Period trend line from summary (prior vs current average duration). */
+export function mapSummaryToDecisionSpeedChartPoints(
+  summary: ReportingSummary,
+): DecisionSpeedChartPoint[] {
+  const { window, orchestrationRuns, trends } = summary;
+  if (orchestrationRuns.durationSampleSize === 0) return [];
+  const averageMs = orchestrationRuns.averageDurationMs;
+  if (averageMs == null) return [];
+
+  const trend = trends.averageOrchestrationDurationMs;
+  const fromDate = window.from.slice(0, 10);
+  const toDate = reportingWindowEndDate(window.toExclusive);
+  const previousMs = trend.previous > 0 ? trend.previous : averageMs;
+
+  if (fromDate >= toDate) {
+    return [
+      {
+        date: fromDate,
+        label: formatDecisionChartDate(fromDate),
+        ms: averageMs,
+      },
+    ];
+  }
+
+  return [
+    {
+      date: fromDate,
+      label: formatDecisionChartDate(fromDate),
+      ms: previousMs,
+    },
+    {
+      date: toDate,
+      label: formatDecisionChartDate(toDate),
+      ms: averageMs,
+    },
+  ];
+}
 
 function packageTypeToCategory(packageType: string | null): PackageCategory {
   const type = (packageType ?? "").toLowerCase();

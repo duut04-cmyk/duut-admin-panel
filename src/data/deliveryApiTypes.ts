@@ -145,7 +145,19 @@ export type DeliveryHistoryDetail = {
     reasonMessage: string | null;
     requestedAt: string;
     cancelledAt: string | null;
+    refund: {
+      id: string;
+      amount: number;
+      currency: string;
+      status: string;
+      gatewayRefundId: string | null;
+      gatewayRefundReference: string | null;
+      requestedAt: string;
+      processedAt: string | null;
+      policy: "FULL_REMAINING_PREPAID";
+    } | null;
   } | null;
+  payment: DeliveryHistoryPayment | null;
   tracking: {
     latest: {
       normalizedStatus: string | null;
@@ -162,6 +174,60 @@ export type DeliveryHistoryDetail = {
   feedback: {
     comment: string | null;
   } | null;
+};
+
+export type DeliveryHistoryPricingBreakdown = {
+  providerQuoteAmount: number;
+  platformFeePercent: number;
+  platformFeeAmount: number;
+  subtotal: number;
+  gstPercent: number;
+  gstAmount: number;
+  customerPayableAmount: number;
+  currency: string;
+};
+
+export type DeliveryHistoryPayment = {
+  id: string;
+  status: string;
+  amount: number;
+  currency: string;
+  gateway: string;
+  gatewayOrderId: string | null;
+  gatewayPaymentSessionId: string | null;
+  gatewayPaymentId: string | null;
+  paidAt: string | null;
+  failedAt: string | null;
+  expiredAt: string | null;
+  refundedAmount: number;
+  pricingBreakdown: DeliveryHistoryPricingBreakdown;
+  attempts: Array<{
+    id: string;
+    attemptNumber: number;
+    status: string;
+    amount: number;
+    currency: string;
+    gatewayPaymentId: string | null;
+    gatewayOrderId: string | null;
+    paymentMethod: string | null;
+    failureCode: string | null;
+    failureMessage: string | null;
+    startedAt: string | null;
+    completedAt: string | null;
+  }>;
+  refunds: Array<{
+    id: string;
+    amount: number;
+    currency: string;
+    status: string;
+    reasonCode: string | null;
+    reason: string | null;
+    gatewayRefundId: string | null;
+    gatewayRefundReference: string | null;
+    idempotencyKey: string;
+    requestedAt: string;
+    processedAt: string | null;
+  }>;
 };
 
 export type DeliveryTimelineEntry = {

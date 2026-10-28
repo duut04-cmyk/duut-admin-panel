@@ -193,8 +193,9 @@ export default function OrchestrationFilters({
       }
       period={periodControl}
       sheetContent={
-        <>
+        <div className="space-y-4">
           <AdminCustomSelect
+            variant="panel"
             label="Delivery status"
             value={filters.deliveryStatus}
             options={DELIVERY_STATUS_FILTER_OPTIONS.map((option) => ({
@@ -208,6 +209,7 @@ export default function OrchestrationFilters({
             }
           />
           <AdminCustomSelect
+            variant="panel"
             label="Booking status"
             value={filters.bookingStatus}
             options={bookingStatusOptions}
@@ -218,6 +220,7 @@ export default function OrchestrationFilters({
             }
           />
           <AdminCustomSelect
+            variant="panel"
             label="Orchestration status"
             value={filters.orchestrationStatus}
             options={orchestrationStatusOptions}
@@ -227,7 +230,7 @@ export default function OrchestrationFilters({
               })
             }
           />
-        </>
+        </div>
       }
     />
   );

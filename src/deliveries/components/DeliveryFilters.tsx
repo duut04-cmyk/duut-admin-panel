@@ -129,6 +129,7 @@ export default function DeliveryFilters({
       period={periodControl}
       sheetContent={
         <AdminCustomSelect
+          variant="panel"
           label="Delivery status"
           value={filters.deliveryStatus}
           options={DELIVERY_STATUS_FILTER_OPTIONS.map((option) => ({

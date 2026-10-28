@@ -51,3 +51,22 @@ export default function CustomerDetailPageHeader({
     </header>
   );
 }
+
+export function CustomerDetailLoadingHeader({
+  notFound = false,
+}: {
+  notFound?: boolean;
+}) {
+  return (
+    <header
+      className={`bg-background pb-4 pt-4 lg:pb-5 lg:pt-5 ${ADMIN_SHELL_CONTENT_PADDING}`}
+    >
+      <p className="text-small text-muted-foreground">
+        {notFound ? "Customer not found" : "Loading customer…"}
+      </p>
+      <h1 className="mt-2 text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
+        Customers
+      </h1>
+    </header>
+  );
+}

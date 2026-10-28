@@ -35,7 +35,7 @@ export default function CustomerRow({ customer, variant = "table" }: CustomerRow
     return (
       <Link
         href={href}
-        className="block rounded-card border border-border/60 bg-background p-4 shadow-sm transition-colors hover:border-foreground/20 hover:bg-surface/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="block cursor-pointer rounded-card border border-border/60 bg-background p-4 shadow-sm transition-colors hover:border-foreground/20 hover:bg-surface/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         aria-label={`Open customer ${customer.name}`}
       >
         <div className="flex items-start justify-between gap-3">
@@ -77,11 +77,12 @@ export default function CustomerRow({ customer, variant = "table" }: CustomerRow
   }
 
   return (
-    <tr className="border-b border-border/60 transition-colors last:border-b-0 hover:bg-surface/30">
+    <tr className="relative cursor-pointer border-b border-border/60 transition-colors last:border-b-0 hover:bg-surface/30">
       <td className="px-4 py-4 align-top md:px-5">
         <Link
           href={href}
-          className="block min-w-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="block min-w-0 after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          aria-label={`Open customer ${customer.name}`}
         >
           <p className="font-semibold text-foreground">{customer.name}</p>
           <p className="mt-0.5 text-caption text-muted-foreground">{customer.email}</p>

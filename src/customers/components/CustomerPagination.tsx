@@ -30,7 +30,7 @@ export default function CustomerPagination({
           type="button"
           disabled={disabled || page <= 1}
           onClick={() => onPageChange(page - 1)}
-          className="rounded-[var(--radius-control)] border border-border px-3 py-1.5 text-small font-medium text-foreground transition-colors hover:bg-surface/50 disabled:cursor-not-allowed disabled:opacity-50"
+          className="cursor-pointer rounded-[var(--radius-control)] border border-border px-3 py-1.5 text-small font-medium text-foreground transition-colors hover:bg-surface/50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Previous
         </button>
@@ -38,7 +38,7 @@ export default function CustomerPagination({
           type="button"
           disabled={disabled || page >= totalPages}
           onClick={() => onPageChange(page + 1)}
-          className="rounded-[var(--radius-control)] border border-border px-3 py-1.5 text-small font-medium text-foreground transition-colors hover:bg-surface/50 disabled:cursor-not-allowed disabled:opacity-50"
+          className="cursor-pointer rounded-[var(--radius-control)] border border-border px-3 py-1.5 text-small font-medium text-foreground transition-colors hover:bg-surface/50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Next
         </button>

@@ -1,5 +1,7 @@
 {
   "generatedAt": "2026-10-27T11:51:37.596Z",
+  "inventoryStaleAfter": "2026-10-28",
+  "inventoryStaleNote": "Overview cleanup removed Live* duplicate components and mockOrchestration; live overview uses OverviewDashboard, DecisionTimeChart, and reporting mappers only.",
   "repositories": {
     "backend": {
       "branch": "develop",
@@ -2091,25 +2093,7 @@
           "functionalAreas": ["Admin Panel UI and routing"]
         },
         {
-          "path": "src/overview/components/LiveDeliveryFunnel.tsx",
-          "gitState": "untracked",
-          "fileKind": "source",
-          "functionalAreas": ["Admin Panel UI and routing"]
-        },
-        {
-          "path": "src/overview/components/LivePlatformMetrics.tsx",
-          "gitState": "untracked",
-          "fileKind": "source",
-          "functionalAreas": ["Admin Panel UI and routing"]
-        },
-        {
-          "path": "src/overview/components/LiveRecentDeliveriesTable.tsx",
-          "gitState": "untracked",
-          "fileKind": "source",
-          "functionalAreas": ["Admin Panel UI and routing"]
-        },
-        {
-          "path": "src/overview/components/LiveTopPackagesWidget.tsx",
+          "path": "src/overview/components/DecisionTimeChart.tsx",
           "gitState": "untracked",
           "fileKind": "source",
           "functionalAreas": ["Admin Panel UI and routing"]
@@ -2516,10 +2500,7 @@
         "src/lib/useExclusiveAsync.ts",
         "src/orchestration/historyLoad.ts",
         "src/overview/components/DecisionSpeedReporting.tsx",
-        "src/overview/components/LiveDeliveryFunnel.tsx",
-        "src/overview/components/LivePlatformMetrics.tsx",
-        "src/overview/components/LiveRecentDeliveriesTable.tsx",
-        "src/overview/components/LiveTopPackagesWidget.tsx",
+        "src/overview/components/DecisionTimeChart.tsx",
         "src/overview/components/OverviewRecentActivityFeed.tsx",
         "src/overview/components/RecentDeliveriesReportingTable.tsx",
         "src/overview/liveOverviewMappers.ts",

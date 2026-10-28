@@ -51,10 +51,7 @@ src/lib/reportingDateRange.ts
 src/lib/useExclusiveAsync.ts
 src/orchestration/historyLoad.ts
 src/overview/components/DecisionSpeedReporting.tsx
-src/overview/components/LiveDeliveryFunnel.tsx
-src/overview/components/LivePlatformMetrics.tsx
-src/overview/components/LiveRecentDeliveriesTable.tsx
-src/overview/components/LiveTopPackagesWidget.tsx
+src/overview/components/DecisionTimeChart.tsx
 src/overview/components/OverviewRecentActivityFeed.tsx
 src/overview/components/RecentDeliveriesReportingTable.tsx
 src/overview/liveOverviewMappers.ts

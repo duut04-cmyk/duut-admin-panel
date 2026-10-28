@@ -194,39 +194,41 @@ export default function OverviewDashboard() {
               description="Adjust the date range to view delivery activity."
             />
           ) : (
-            <div className={`grid min-w-0 gap-6 ${ADMIN_DASHBOARD_RAIL_GRID}`}>
-              <div className="min-w-0 space-y-6">
-                <PlatformMetrics metrics={metrics} liveTrends />
-
-                <div className="grid min-w-0 gap-6 xl:grid-cols-2 xl:items-start">
-                  <DeliveryFunnel
-                    funnel={funnel}
-                    dateRange={dateRangeKey}
-                    onDateRangeChange={handleDateRangeChange}
-                    liveData
-                  />
-                  <DecisionSpeedReporting summary={summary} />
-                </div>
-
-                <RecentDeliveriesReportingTable rows={recentRows} />
-              </div>
-
-              <aside className="grid min-w-0 grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-1 xl:flex xl:flex-col xl:gap-6 xl:sticky xl:top-20 xl:self-start">
-                <div className="flex min-w-0 flex-col">
+            <div className="min-w-0 space-y-4">
+              <PlatformMetrics
+                metrics={metrics}
+                trailing={
                   <OverviewRecentActivityFeed
                     items={recentActivity}
                     hours={activityHours}
                   />
+                }
+              />
+
+              <div
+                className={`grid min-w-0 items-start gap-4 ${ADMIN_DASHBOARD_RAIL_GRID}`}
+              >
+                <div className="min-w-0 space-y-4">
+                  <div className="grid min-w-0 items-stretch gap-4 xl:grid-cols-2">
+                    <DeliveryFunnel
+                      funnel={funnel}
+                      dateRange={dateRangeKey}
+                      onDateRangeChange={handleDateRangeChange}
+                    />
+                    <DecisionSpeedReporting summary={summary} />
+                  </div>
+
+                  <RecentDeliveriesReportingTable rows={recentRows} />
                 </div>
-                <div className="flex min-w-0 flex-col">
+
+                <div className="min-w-0 xl:sticky xl:top-20 xl:self-start">
                   <TopServicesWidget
                     categories={topServices}
                     dateRange={dateRangeKey}
                     onDateRangeChange={handleDateRangeChange}
-                    liveData
                   />
                 </div>
-              </aside>
+              </div>
             </div>
           )
         ) : null}
