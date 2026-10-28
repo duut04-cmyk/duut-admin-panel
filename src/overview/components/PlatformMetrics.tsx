@@ -1,6 +1,7 @@
+import type { ReactNode } from "react";
 import type { OrchestrationRecord } from "@/data/orchestrationTypes";
 import type { DashboardMetrics } from "@/data/dashboardMetrics";
-import { resolveOverviewTrend } from "@/data/overviewDisplay";
+import { formatTrendDisplay } from "@/data/overviewDisplay";
 import { flatSparkline } from "@/overview/liveOverviewMappers";
 import { formatDecisionTime, formatPercent } from "@/data/orchestrationMetrics";
 import OverviewMetricCard, {
@@ -21,18 +22,18 @@ type PlatformMetricsProps = {
   metrics: DashboardMetrics;
   records?: OrchestrationRecord[];
   className?: string;
-  /** When true, use API-backed trends only (no demo KPI overrides). */
-  liveTrends?: boolean;
+  /** Renders in the same grid row as KPI cards (e.g. Live Activity). */
+  trailing?: ReactNode;
 };
 
 export default function PlatformMetrics({
   metrics,
   records = [],
   className = "",
-  liveTrends = false,
+  trailing,
 }: PlatformMetricsProps) {
   const trend = (key: keyof DashboardMetrics["trends"]) =>
-    liveTrends ? metrics.trends[key] : resolveOverviewTrend(key, metrics.trends[key]);
+    formatTrendDisplay(metrics.trends[key]);
 
   const sparklineOrFlat = (
     fromRecords: number[],
@@ -43,12 +44,16 @@ export default function PlatformMetrics({
     return flatSparkline(cumulativeValue);
   };
 
+  const gridClassName = trailing
+    ? "grid min-w-0 items-stretch gap-2 sm:gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-[repeat(5,minmax(0,1fr))_minmax(260px,340px)]"
+    : "grid min-w-0 grid-cols-2 gap-2 sm:gap-3 [&>*:last-child]:col-span-2 md:grid-cols-3 md:[&>*:last-child]:col-span-1 xl:grid-cols-5 xl:[&>*:last-child]:col-span-1";
+
   return (
     <section aria-labelledby="platform-metrics-heading" className={className}>
       <h2 id="platform-metrics-heading" className="sr-only">
         Platform metrics
       </h2>
-      <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 md:[&>*:last-child]:col-span-1 xl:grid-cols-5 [&>*:last-child]:col-span-2">
+      <div className={gridClassName}>
         <OverviewMetricCard
           title="Total Deliveries"
           value={metrics.totalDeliveries.toLocaleString()}
@@ -104,6 +109,11 @@ export default function PlatformMetrics({
             metrics.averageDecisionTimeMs,
           )}
         />
+        {trailing ? (
+          <div className="col-span-2 flex min-h-0 min-w-0 md:col-span-3 xl:col-span-1">
+            {trailing}
+          </div>
+        ) : null}
       </div>
     </section>
   );

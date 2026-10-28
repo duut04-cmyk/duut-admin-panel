@@ -1,10 +1,20 @@
 import { ADMIN_DASHBOARD_RAIL_GRID, ADMIN_DETAIL_RAIL_GRID } from "@/components/layout";
 import AdminSkeleton from "@/ui/AdminSkeleton";
 
-export function MetricCardsSkeleton({ count = 5 }: { count?: number }) {
+export function MetricCardsSkeleton({
+  count = 5,
+  withTrailing = false,
+}: {
+  count?: number;
+  withTrailing?: boolean;
+}) {
   return (
     <div
-      className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 md:[&>*:last-child]:col-span-1 xl:grid-cols-5 [&>*:last-child]:col-span-2"
+      className={
+        withTrailing
+          ? "grid min-w-0 items-stretch gap-2 sm:gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-[repeat(5,minmax(0,1fr))_minmax(260px,340px)]"
+          : "grid min-w-0 grid-cols-2 gap-2 sm:gap-3 [&>*:last-child]:col-span-2 md:grid-cols-3 md:[&>*:last-child]:col-span-1 xl:grid-cols-5 xl:[&>*:last-child]:col-span-1"
+      }
       aria-hidden="true"
     >
       {Array.from({ length: count }, (_, index) => (
@@ -17,6 +27,11 @@ export function MetricCardsSkeleton({ count = 5 }: { count?: number }) {
           <AdminSkeleton variant="text" className="mt-3 h-3 w-16" />
         </div>
       ))}
+      {withTrailing ? (
+        <div className="col-span-2 flex min-h-0 min-w-0 md:col-span-3 xl:col-span-1">
+          <ActivityFeedSkeleton />
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -43,7 +58,7 @@ export function SnapshotMetricsSkeleton() {
 export function FunnelCardSkeleton() {
   return (
     <article
-      className="rounded-card border border-border/60 bg-background p-4 shadow-sm sm:p-5"
+      className="flex h-full flex-col rounded-card border border-border/60 bg-background p-4 shadow-sm sm:p-5"
       aria-hidden="true"
     >
       <AdminSkeleton variant="title" />
@@ -62,19 +77,16 @@ export function FunnelCardSkeleton() {
 export function DecisionSpeedCardSkeleton() {
   return (
     <article
-      className="rounded-card border border-border/60 bg-background p-4 shadow-sm sm:p-5"
+      className="flex h-full flex-col rounded-card border border-border/60 bg-background p-4 shadow-sm sm:p-5"
       aria-hidden="true"
     >
       <AdminSkeleton variant="title" />
       <AdminSkeleton variant="text" className="mt-2 h-3 w-56" />
-      <div className="mt-6 grid grid-cols-3 gap-3">
-        {Array.from({ length: 3 }, (_, index) => (
-          <div key={index} className="rounded-lg border border-border/60 p-3">
-            <AdminSkeleton variant="text" className="mx-auto h-3 w-16" />
-            <AdminSkeleton variant="metric" className="mx-auto mt-2" />
-          </div>
-        ))}
+      <div className="mt-5 rounded-lg border border-border/60 px-4 py-6">
+        <AdminSkeleton variant="text" className="mx-auto h-3 w-24" />
+        <AdminSkeleton variant="metric" className="mx-auto mt-2" />
       </div>
+      <AdminSkeleton variant="row" className="mt-5 h-[200px] w-full rounded-md" />
     </article>
   );
 }
@@ -107,7 +119,7 @@ export function TableCardSkeleton({
 export function ActivityFeedSkeleton({ rows = 4 }: { rows?: number }) {
   return (
     <article
-      className="flex min-w-0 flex-col rounded-card border border-border/60 bg-background p-4 shadow-sm sm:p-5"
+      className="flex h-full min-w-0 flex-col rounded-card border border-border/60 bg-background p-4 shadow-sm sm:p-5"
       aria-hidden="true"
     >
       <AdminSkeleton variant="title" className="w-36" />
@@ -148,19 +160,18 @@ export function TopServicesSkeleton({ rows = 4 }: { rows?: number }) {
 
 export function OverviewPageSkeleton() {
   return (
-    <div className={`grid min-w-0 gap-6 ${ADMIN_DASHBOARD_RAIL_GRID}`} aria-busy="true">
-      <div className="min-w-0 space-y-6">
-        <MetricCardsSkeleton />
-        <div className="grid min-w-0 gap-6 xl:grid-cols-2 xl:items-start">
-          <FunnelCardSkeleton />
-          <DecisionSpeedCardSkeleton />
+    <div className="min-w-0 space-y-4" aria-busy="true">
+      <MetricCardsSkeleton withTrailing />
+      <div className={`grid min-w-0 items-start gap-4 ${ADMIN_DASHBOARD_RAIL_GRID}`}>
+        <div className="min-w-0 space-y-4">
+          <div className="grid min-w-0 items-stretch gap-4 xl:grid-cols-2">
+            <FunnelCardSkeleton />
+            <DecisionSpeedCardSkeleton />
+          </div>
+          <TableCardSkeleton rows={6} />
         </div>
-        <TableCardSkeleton rows={6} />
-      </div>
-      <aside className="grid min-w-0 grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-1 xl:flex xl:flex-col xl:gap-6">
-        <ActivityFeedSkeleton />
         <TopServicesSkeleton />
-      </aside>
+      </div>
     </div>
   );
 }
