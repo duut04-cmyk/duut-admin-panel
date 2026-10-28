@@ -46,14 +46,6 @@ export default function ProviderDetailPageHeader({
           <h1 className="text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
             {provider.name}
           </h1>
-          <p className="mt-1 font-mono text-small text-muted-foreground">
-            {provider.code}
-          </p>
-          {provider.displayName ? (
-            <p className="mt-1 text-small text-muted-foreground">
-              {provider.displayName}
-            </p>
-          ) : null}
         </div>
         <div className="flex flex-wrap items-center gap-2 self-start">
           <ProviderEnvironmentBadge environment={provider.environment} />

@@ -15,7 +15,7 @@ export default function DeliveryBooking({ booking }: DeliveryBookingProps) {
     <section aria-labelledby="delivery-booking-heading">
       <AdminSectionHeader
         title="Booking"
-        description="Provider booking record when available."
+        description="Provider-side booking record. Quote is the provider amount only (excludes platform fee and GST)."
       />
 
       <DeliveryDetailCard

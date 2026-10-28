@@ -12,24 +12,30 @@ export function MetricCardsSkeleton({
     <div
       className={
         withTrailing
-          ? "grid min-w-0 items-stretch gap-2 sm:gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-[repeat(5,minmax(0,1fr))_minmax(260px,340px)]"
-          : "grid min-w-0 grid-cols-2 gap-2 sm:gap-3 [&>*:last-child]:col-span-2 md:grid-cols-3 md:[&>*:last-child]:col-span-1 xl:grid-cols-5 xl:[&>*:last-child]:col-span-1"
+          ? "grid min-w-0 items-start gap-2 sm:gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-[repeat(5,minmax(0,1fr))_340px]"
+          : "grid min-w-0 items-start grid-cols-2 gap-2 sm:gap-3 [&>*:last-child]:col-span-2 md:grid-cols-3 md:[&>*:last-child]:col-span-1 xl:grid-cols-5 xl:[&>*:last-child]:col-span-1"
       }
       aria-hidden="true"
     >
       {Array.from({ length: count }, (_, index) => (
-        <div
+        <article
           key={index}
-          className="rounded-card border border-border/60 bg-background p-4 shadow-sm"
+          className="flex flex-col rounded-card border border-border/60 bg-background shadow-sm"
         >
-          <AdminSkeleton variant="text" className="h-3 w-24 max-w-[70%]" />
-          <AdminSkeleton variant="metric" className="mt-3" />
-          <AdminSkeleton variant="text" className="mt-3 h-3 w-16" />
-        </div>
+          <div className="flex flex-col px-3 pb-3 pt-3 sm:px-4 sm:pt-4">
+            <div className="flex items-center gap-2.5">
+              <AdminSkeleton className="h-9 w-9 shrink-0 rounded-full" />
+              <AdminSkeleton variant="text" className="h-3 w-24 max-w-[70%]" />
+            </div>
+            <AdminSkeleton variant="metric" className="mt-2 sm:mt-3" />
+            <AdminSkeleton variant="text" className="mt-2 h-3 w-20" />
+            <AdminSkeleton variant="text" className="mt-3 h-9 w-full rounded" />
+          </div>
+        </article>
       ))}
       {withTrailing ? (
-        <div className="col-span-2 flex min-h-0 min-w-0 md:col-span-3 xl:col-span-1">
-          <ActivityFeedSkeleton />
+        <div className="col-span-2 flex min-h-0 min-w-0 md:col-span-3 xl:col-span-1 [&>*]:min-w-0 [&>*]:w-full">
+          <ActivityFeedSkeleton rows={0} />
         </div>
       ) : null}
     </div>
@@ -119,15 +125,19 @@ export function TableCardSkeleton({
 export function ActivityFeedSkeleton({ rows = 4 }: { rows?: number }) {
   return (
     <article
-      className="flex h-full min-w-0 flex-col rounded-card border border-border/60 bg-background p-4 shadow-sm sm:p-5"
+      className="flex min-w-0 flex-col rounded-card border border-border/60 bg-background p-3 shadow-sm sm:p-4"
       aria-hidden="true"
     >
       <AdminSkeleton variant="title" className="w-36" />
-      <AdminSkeleton variant="text" className="mt-2 h-3 w-48" />
+      <AdminSkeleton variant="text" className="mt-1 h-3 w-48" />
       <div className="mt-4 space-y-3">
-        {Array.from({ length: rows }, (_, index) => (
-          <AdminSkeleton key={index} variant="row" className="h-12" />
-        ))}
+        {rows <= 0 ? (
+          <AdminSkeleton variant="text" className="h-3 w-40" />
+        ) : (
+          Array.from({ length: rows }, (_, index) => (
+            <AdminSkeleton key={index} variant="row" className="h-12" />
+          ))
+        )}
       </div>
     </article>
   );

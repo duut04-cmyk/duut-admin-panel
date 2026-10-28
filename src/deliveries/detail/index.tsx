@@ -23,6 +23,7 @@ import DeliveryRequirements from "../components/DeliveryRequirements";
 import DeliveryRoute from "../components/DeliveryRoute";
 import DeliveryTimeline from "../components/DeliveryTimeline";
 import DeliveryDetailExtras from "../components/DeliveryDetailExtras";
+import DeliveryPayment from "../components/DeliveryPayment";
 
 type DeliveryDetailProps = {
   deliveryId: string;
@@ -199,6 +200,7 @@ export default function DeliveryDetail({ deliveryId }: DeliveryDetailProps) {
               schedule={history.schedule}
               specialInstructions={history.delivery.specialInstructions}
             />
+            {history.payment ? <DeliveryPayment payment={history.payment} /> : null}
             {history.booking ? <DeliveryBooking booking={history.booking} /> : null}
             <DeliveryDetailExtras history={history} />
           </aside>

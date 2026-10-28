@@ -13,7 +13,36 @@ type AdminCustomSelectProps = {
   onChange: (value: string) => void;
   options: CustomSelectOption[];
   className?: string;
+  /**
+   * `dropdown` — floating menu (default). Avoid inside scroll containers with overflow.
+   * `panel` — in-flow option list for filter sheets and modals.
+   */
+  variant?: "dropdown" | "panel";
 };
+
+function OptionButton({
+  option,
+  active,
+  onPick,
+}: {
+  option: CustomSelectOption;
+  active: boolean;
+  onPick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="option"
+      aria-selected={active}
+      onClick={onPick}
+      className={`flex w-full cursor-pointer px-3 py-2.5 text-left text-small transition-colors hover:bg-surface focus:outline-none focus-visible:bg-surface ${
+        active ? "bg-surface-accent font-medium text-foreground" : "text-foreground"
+      }`}
+    >
+      {option.label}
+    </button>
+  );
+}
 
 export default function AdminCustomSelect({
   label,
@@ -21,6 +50,7 @@ export default function AdminCustomSelect({
   onChange,
   options,
   className = "",
+  variant = "dropdown",
 }: AdminCustomSelectProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,7 +58,7 @@ export default function AdminCustomSelect({
   const selected = options.find((option) => option.value === value);
 
   useEffect(() => {
-    if (!open) return;
+    if (variant !== "dropdown" || !open) return;
 
     const handlePointerDown = (event: MouseEvent) => {
       if (!containerRef.current?.contains(event.target as Node)) {
@@ -46,7 +76,35 @@ export default function AdminCustomSelect({
       document.removeEventListener("mousedown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [open]);
+  }, [open, variant]);
+
+  if (variant === "panel") {
+    return (
+      <div className={`min-w-0 ${className}`}>
+        {label ? (
+          <span className="mb-1.5 block text-caption font-medium text-muted-foreground">
+            {label}
+          </span>
+        ) : null}
+        <ul
+          id={listboxId}
+          role="listbox"
+          aria-label={label ?? "Options"}
+          className="w-full overflow-hidden rounded-md border border-border bg-background py-1"
+        >
+          {options.map((option) => (
+            <li key={option.value} role="presentation">
+              <OptionButton
+                option={option}
+                active={option.value === value}
+                onPick={() => onChange(option.value)}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} className={`relative min-w-0 ${className}`}>
@@ -76,38 +134,27 @@ export default function AdminCustomSelect({
         </svg>
       </button>
 
-      {open && (
+      {open ? (
         <ul
           id={listboxId}
           role="listbox"
           aria-label={label ?? "Options"}
-          className="absolute top-full z-30 mt-1.5 min-w-full w-max overflow-hidden rounded-md border border-border bg-background py-1 shadow-sm"
+          className="absolute top-full z-30 mt-1.5 max-h-60 min-w-full w-full overflow-y-auto rounded-md border border-border bg-background py-1 shadow-sm"
         >
-          {options.map((option) => {
-            const active = option.value === value;
-            return (
-              <li key={option.value} role="presentation">
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={active}
-                  onClick={() => {
-                    onChange(option.value);
-                    setOpen(false);
-                  }}
-                  className={`flex w-full cursor-pointer whitespace-nowrap px-3 py-2 text-left text-small transition-colors hover:bg-surface focus:outline-none focus-visible:bg-surface ${
-                    active
-                      ? "bg-surface-accent font-medium text-foreground"
-                      : "text-foreground"
-                  }`}
-                >
-                  {option.label}
-                </button>
-              </li>
-            );
-          })}
+          {options.map((option) => (
+            <li key={option.value} role="presentation">
+              <OptionButton
+                option={option}
+                active={option.value === value}
+                onPick={() => {
+                  onChange(option.value);
+                  setOpen(false);
+                }}
+              />
+            </li>
+          ))}
         </ul>
-      )}
+      ) : null}
     </div>
   );
 }

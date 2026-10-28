@@ -35,7 +35,40 @@ export default function DeliveryDetailExtras({ history }: DeliveryDetailExtrasPr
             </p>
             <p className="mt-1 text-caption text-muted-foreground">
               Requested {formatTimestamp(cancellation.requestedAt)}
+              {cancellation.cancelledAt
+                ? ` · Cancelled ${formatTimestamp(cancellation.cancelledAt)}`
+                : ""}
             </p>
+            {cancellation.refund ? (
+              <div className="mt-3 rounded-md border border-border/60 bg-surface/30 px-3 py-2.5">
+                <p className="text-caption font-semibold text-muted-foreground">
+                  Refund (prepaid cancellation)
+                </p>
+                <p className="mt-1 tabular-nums font-medium">
+                  {cancellation.refund.currency} {cancellation.refund.amount.toFixed(2)}{" "}
+                  · {cancellation.refund.status}
+                </p>
+                <p className="mt-1 text-caption text-muted-foreground">
+                  Policy: full remaining prepaid balance (no platform retention fee).
+                </p>
+                {cancellation.refund.gatewayRefundId ? (
+                  <p className="mt-1 break-all font-mono text-caption text-muted-foreground">
+                    Gateway refund: {cancellation.refund.gatewayRefundId}
+                  </p>
+                ) : null}
+                <p className="mt-1 text-caption text-muted-foreground">
+                  Requested {formatTimestamp(cancellation.refund.requestedAt)}
+                  {cancellation.refund.processedAt
+                    ? ` · Processed ${formatTimestamp(cancellation.refund.processedAt)}`
+                    : ""}
+                </p>
+              </div>
+            ) : cancellation.status === "CANCELLED" ? (
+              <p className="mt-2 text-caption text-muted-foreground">
+                No prepaid refund record (payment may be unpaid or already fully
+                refunded).
+              </p>
+            ) : null}
           </div>
         ) : null}
 

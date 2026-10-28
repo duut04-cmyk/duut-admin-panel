@@ -45,7 +45,7 @@ export default function PlatformMetrics({
   };
 
   const gridClassName = trailing
-    ? "grid min-w-0 items-stretch gap-2 sm:gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-[repeat(5,minmax(0,1fr))_minmax(260px,340px)]"
+    ? "grid min-w-0 items-stretch gap-2 sm:gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-[repeat(5,minmax(0,1fr))_340px]"
     : "grid min-w-0 grid-cols-2 gap-2 sm:gap-3 [&>*:last-child]:col-span-2 md:grid-cols-3 md:[&>*:last-child]:col-span-1 xl:grid-cols-5 xl:[&>*:last-child]:col-span-1";
 
   return (
@@ -110,7 +110,7 @@ export default function PlatformMetrics({
           )}
         />
         {trailing ? (
-          <div className="col-span-2 flex min-h-0 min-w-0 md:col-span-3 xl:col-span-1">
+          <div className="col-span-2 flex min-h-0 min-w-0 md:col-span-3 xl:col-span-1 [&>*]:min-w-0 [&>*]:w-full">
             {trailing}
           </div>
         ) : null}

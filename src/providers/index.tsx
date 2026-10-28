@@ -8,7 +8,10 @@ import type { CreateProviderInput, ProviderSummary } from "@/data/providerTypes"
 import AdminContainer from "@/components/AdminContainer";
 import { ADMIN_LIST_PAGE_FILTERS_SECTION } from "@/components/layout";
 import AdminShell from "@/components/AdminShell";
-import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
+import {
+  ListRowsSkeleton,
+  MetricCardsSkeleton,
+} from "@/components/loading/skeletonSections";
 import AddProviderModal from "./components/AddProviderModal";
 import ProviderFilters, {
   DEFAULT_PROVIDER_FILTERS,
@@ -184,7 +187,11 @@ export default function ProvidersPage() {
           </AdminLoadErrorCallout>
         ) : null}
 
-        <ProviderListSummary metrics={metrics} />
+        {loading ? (
+          <MetricCardsSkeleton count={4} />
+        ) : (
+          <ProviderListSummary metrics={metrics} />
+        )}
 
         <div className={ADMIN_LIST_PAGE_FILTERS_SECTION}>
           <ProviderFilters

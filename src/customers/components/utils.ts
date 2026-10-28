@@ -106,11 +106,9 @@ export function formatRoute(
   pickup: { addressText: string },
   drop: { addressText: string },
 ): string {
-  const shorten = (value: string) => {
-    const parts = value.split(",");
-    return parts[0]?.trim() || value;
-  };
-  return `${shorten(pickup.addressText)} → ${shorten(drop.addressText)}`;
+  const from = pickup.addressText.trim();
+  const to = drop.addressText.trim();
+  return `${from} → ${to}`;
 }
 
 export function signInMethods(customer: CustomerDetail | CustomerSummary): string {

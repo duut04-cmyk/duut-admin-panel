@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import type {
   ProviderDetail,
@@ -28,7 +30,11 @@ import { integrationStatusLabel } from "./utils";
 type ProviderCredentialsSectionProps = {
   provider: ProviderDetail;
   onProviderUpdated: (provider: ProviderDetail) => void;
+  mode?: "view" | "edit";
 };
+
+const secondaryLinkClassName =
+  "inline-flex h-11 shrink-0 cursor-pointer items-center justify-center rounded-control border border-border bg-background px-5 text-small font-medium text-foreground transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/30";
 
 function ConfirmRotationModal({
   open,
@@ -76,8 +82,10 @@ function ConfirmRotationModal({
 export default function ProviderCredentialsSection({
   provider,
   onProviderUpdated,
+  mode = "view",
 }: ProviderCredentialsSectionProps) {
-  const [editing, setEditing] = useState(false);
+  const router = useRouter();
+  const isEditPage = mode === "edit";
   const [form, setForm] = useState<CredentialFormValues>(() =>
     emptyCredentialFormValues(),
   );
@@ -100,19 +108,14 @@ export default function ProviderCredentialsSection({
     setRotationFields([]);
   };
 
-  const startEditing = () => {
-    clearSensitiveState();
-    setFormError(null);
-    setSaveStatus("idle");
-    setEditing(true);
-  };
-
   const handleCancel = () => {
     clearSensitiveState();
     setFormError(null);
     setSaveStatus("idle");
     setConfirmOpen(false);
-    setEditing(false);
+    if (isEditPage) {
+      router.push(`/providers/${provider.id}`);
+    }
   };
 
   const submitCredentials = async (body: UpsertProviderCredentialsInput) => {
@@ -150,7 +153,10 @@ export default function ProviderCredentialsSection({
 
     onProviderUpdated(refreshed.data);
     clearSensitiveState();
-    setEditing(false);
+    if (isEditPage) {
+      router.push(`/providers/${provider.id}`);
+      return;
+    }
     setSaveStatus("success");
   };
 
@@ -194,15 +200,18 @@ export default function ProviderCredentialsSection({
             values. Saving does not validate credentials against the provider.
           </p>
         </div>
-        {!editing ? (
-          <Button type="button" variant="secondary" onClick={startEditing}>
+        {!isEditPage ? (
+          <Link
+            href={`/providers/${provider.id}/credentials`}
+            className={secondaryLinkClassName}
+          >
             Update credentials
-          </Button>
+          </Link>
         ) : null}
       </div>
 
       <div className="p-4 sm:p-5 lg:p-6">
-        {saveStatus === "success" ? (
+        {saveStatus === "success" && !isEditPage ? (
           <AdminCallout variant="success" title="Saved" className="mb-4">
             Credential metadata updated. Integration status:{" "}
             {integrationStatusLabel(provider.integrationStatus)} (from server).
@@ -245,10 +254,12 @@ export default function ProviderCredentialsSection({
           </ul>
         )}
 
-        {editing ? (
+        {isEditPage ? (
           <form
             onSubmit={handleSave}
-            className="mt-6 space-y-4 border-t border-border pt-6"
+            className={
+              isEditPage ? "space-y-4" : "mt-6 space-y-4 border-t border-border pt-6"
+            }
           >
             <p className="text-caption text-muted-foreground">
               Leave a field blank to keep its current stored value unchanged.
