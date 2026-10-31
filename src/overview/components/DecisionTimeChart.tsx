@@ -4,8 +4,6 @@ import { useId, useState } from "react";
 import type { DecisionSpeedChartPoint } from "@/data/overviewDisplay";
 import { formatDecisionChartDate, formatDecisionTime } from "@/overview/reportingUi";
 
-const MAX_Y_SECONDS = 8;
-const Y_TICK_STEP = 2;
 const X_TICK_INTERVAL_DAYS = 5;
 const DAY_MS = 86_400_000;
 const PLOT_HEIGHT = 200;
@@ -14,6 +12,17 @@ const Y_AXIS_WIDTH_MOBILE = 24;
 const PLOT_PAD_Y = 8;
 const PLOT_PAD_X_DESKTOP = 12;
 const PLOT_PAD_X_MOBILE = 6;
+
+function resolveYScale(points: DecisionSpeedChartPoint[]): {
+  maxYSeconds: number;
+  tickStep: number;
+} {
+  const maxMs = Math.max(0, ...points.map((point) => point.ms));
+  const rawSeconds = Math.max(2, Math.ceil(maxMs / 1000));
+  const tickStep = rawSeconds <= 8 ? 2 : rawSeconds <= 20 ? 5 : 10;
+  const maxYSeconds = Math.ceil(rawSeconds / tickStep) * tickStep;
+  return { maxYSeconds, tickStep };
+}
 
 const axisTextClass =
   "font-sans text-[10px] font-normal leading-none text-foreground sm:text-small";
@@ -79,18 +88,21 @@ export default function DecisionTimeChart({
   const chartStartMs = parseDateMs(points[0].date);
   const chartEndMs = parseDateMs(points[points.length - 1].date);
   const axisDateRange = chartEndMs - chartStartMs;
+  const { maxYSeconds, tickStep } = resolveYScale(points);
 
   const xTicks = buildXAxisTicks(chartStartMs, chartEndMs);
   const yTicks = Array.from(
-    { length: MAX_Y_SECONDS / Y_TICK_STEP + 1 },
-    (_, index) => index * Y_TICK_STEP,
+    { length: maxYSeconds / tickStep + 1 },
+    (_, index) => index * tickStep,
   );
 
   const yForTick = (tick: number): number =>
-    PLOT_PAD_Y + innerPlotHeight - (tick / MAX_Y_SECONDS) * innerPlotHeight;
+    PLOT_PAD_Y + innerPlotHeight - (tick / maxYSeconds) * innerPlotHeight;
 
   const yForMs = (ms: number): number =>
-    PLOT_PAD_Y + innerPlotHeight - (ms / 1000 / MAX_Y_SECONDS) * innerPlotHeight;
+    PLOT_PAD_Y +
+    innerPlotHeight -
+    (Math.min(ms / 1000, maxYSeconds) / maxYSeconds) * innerPlotHeight;
 
   const xForDateMs = (dateMs: number): number => {
     if (axisDateRange === 0) return plotPadX + innerPlotWidth / 2;

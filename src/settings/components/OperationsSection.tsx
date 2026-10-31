@@ -11,11 +11,7 @@ type OperationsSectionProps = {
 
 export default function OperationsSection({ flags }: OperationsSectionProps) {
   return (
-    <ReportsSection
-      id="settings-operations"
-      title="Operations & flags"
-      description="Runtime toggles visible to operators. These are environment-driven and read-only in the admin panel."
-    >
+    <ReportsSection id="settings-operations" title="Operations" description="Flags">
       <SettingsKeyValueCard
         items={[
           {
@@ -26,7 +22,7 @@ export default function OperationsSection({ flags }: OperationsSectionProps) {
           {
             label: "Development mode",
             value: formatBoolean(flags.developmentMode),
-            hint: "NODE_ENV === development",
+            hint: "NODE_ENV",
           },
         ]}
       />

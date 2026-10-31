@@ -3,6 +3,7 @@ import type {
   ListDeliveriesParams,
   PaginatedDeliveries,
 } from "@/data/deliveryApiTypes";
+import { adminApiFetch } from "@/lib/adminApiFetch";
 
 type ApiResponse<T> = {
   success: boolean;
@@ -45,7 +46,7 @@ function buildListQuery(params: ListDeliveriesParams): string {
 export async function fetchDeliveries(
   params: ListDeliveriesParams = {},
 ): Promise<ApiResponse<PaginatedDeliveries>> {
-  const response = await fetch(`/api/deliveries${buildListQuery(params)}`, {
+  const response = await adminApiFetch(`/api/deliveries${buildListQuery(params)}`, {
     cache: "no-store",
   });
   return parseResponse<PaginatedDeliveries>(response);
@@ -54,7 +55,7 @@ export async function fetchDeliveries(
 export async function fetchDeliveryHistory(
   deliveryId: string,
 ): Promise<ApiResponse<DeliveryHistoryDetail>> {
-  const response = await fetch(
+  const response = await adminApiFetch(
     `/api/deliveries/${encodeURIComponent(deliveryId)}/history`,
     {
       cache: "no-store",

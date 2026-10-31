@@ -8,7 +8,6 @@ import AdminContainer from "@/components/AdminContainer";
 import AdminShell from "@/components/AdminShell";
 import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
 import { SettingsPageSkeleton } from "@/components/loading/skeletonSections";
-import AdminCallout from "@/ui/AdminCallout";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import { fetchAdminAccount, fetchSettingsSnapshot } from "./api";
 import AccountSection from "./components/AccountSection";
@@ -17,7 +16,6 @@ import PlatformSection from "./components/PlatformSection";
 import PoliciesSection from "./components/PoliciesSection";
 import RelatedPagesSection from "./components/RelatedPagesSection";
 import SettingsPageHeader from "./components/SettingsPageHeader";
-import { formatCheckedAt } from "./components/formatters";
 
 export default function SettingsPage() {
   const [snapshot, setSnapshot] = useState<SettingsSnapshot | null>(null);
@@ -88,8 +86,11 @@ export default function SettingsPage() {
   });
 
   return (
-    <AdminShell mainClassName="bg-background" customHeader={<SettingsPageHeader />}>
-      <AdminContainer flushTop className="space-y-8 pb-10">
+    <AdminShell
+      mainClassName="bg-background"
+      customHeader={<SettingsPageHeader checkedAt={snapshot?.checkedAt ?? null} />}
+    >
+      <AdminContainer flushTop className="space-y-6 pb-10">
         {loadError ? (
           <AdminLoadErrorCallout
             title="Unable to load settings"
@@ -111,26 +112,12 @@ export default function SettingsPage() {
         {loading ? <SettingsPageSkeleton /> : null}
 
         {!loading && snapshot ? (
-          <>
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-caption text-muted-foreground">
-                Snapshot from backend · last checked{" "}
-                {formatCheckedAt(snapshot.checkedAt)}
-              </p>
-            </div>
-
-            <AdminCallout variant="neutral" title="Read-only in Admin v1">
-              This page shows effective platform configuration from the backend
-              snapshot. URLs, auth, OTP, orchestration weights, and integration
-              credentials are deployment-managed. Runtime booking and pricing policy
-              editing is not available in this release.
-            </AdminCallout>
-
+          <div className="space-y-7">
             <PlatformSection platform={snapshot.platform} />
             <PoliciesSection policies={snapshot.policies} />
             <OperationsSection flags={snapshot.flags} />
             <RelatedPagesSection />
-          </>
+          </div>
         ) : null}
 
         {!loading && !snapshot && !loadError ? (

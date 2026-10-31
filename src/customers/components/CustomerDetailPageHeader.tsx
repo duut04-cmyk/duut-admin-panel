@@ -34,7 +34,10 @@ export default function CustomerDetailPageHeader({
         Back to customers
       </Link>
 
-      <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <p className="mt-3 text-[0.625rem] font-bold uppercase tracking-[0.14em] text-accent">
+        Customer
+      </p>
+      <div className="mt-1 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <h1 className="text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
             {customer.name}
@@ -61,10 +64,13 @@ export function CustomerDetailLoadingHeader({
     <header
       className={`bg-background pb-4 pt-4 lg:pb-5 lg:pt-5 ${ADMIN_SHELL_CONTENT_PADDING}`}
     >
-      <p className="text-small text-muted-foreground">
+      <p className="text-[0.625rem] font-bold uppercase tracking-[0.14em] text-accent">
+        Customer
+      </p>
+      <p className="mt-1 text-small text-muted-foreground">
         {notFound ? "Customer not found" : "Loading customer…"}
       </p>
-      <h1 className="mt-2 text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
+      <h1 className="mt-1 text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
         Customers
       </h1>
     </header>

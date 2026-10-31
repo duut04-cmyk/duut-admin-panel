@@ -17,7 +17,6 @@ import { mapTimeline } from "../deliveryMappers";
 import DeliveryBooking from "../components/DeliveryBooking";
 import DeliveryDetailPageHeader from "../components/DeliveryDetailPageHeader";
 import DeliveryHeroMetrics from "../components/DeliveryHeroMetrics";
-import DeliveryOrchestrationLink from "../components/DeliveryOrchestrationLink";
 import DeliveryPackage from "../components/DeliveryPackage";
 import DeliveryRequirements from "../components/DeliveryRequirements";
 import DeliveryRoute from "../components/DeliveryRoute";
@@ -194,28 +193,28 @@ export default function DeliveryDetail({ deliveryId }: DeliveryDetailProps) {
 
         <DeliveryHeroMetrics history={history} />
 
-        <div className={`grid min-w-0 gap-6 ${ADMIN_DETAIL_RAIL_GRID} xl:items-start`}>
-          <aside className="min-w-0 space-y-6 xl:order-2 xl:sticky xl:top-6 xl:self-start">
+        <div className={`grid min-w-0 gap-5 ${ADMIN_DETAIL_RAIL_GRID} xl:items-start`}>
+          <aside className="min-w-0 space-y-5 xl:order-2 xl:sticky xl:top-6 xl:self-start">
             <DeliveryRequirements
               schedule={history.schedule}
               specialInstructions={history.delivery.specialInstructions}
             />
             {history.payment ? <DeliveryPayment payment={history.payment} /> : null}
-            {history.booking ? <DeliveryBooking booking={history.booking} /> : null}
+            {history.booking ? (
+              <DeliveryBooking
+                booking={history.booking}
+                orchestration={history.orchestration}
+              />
+            ) : null}
             <DeliveryDetailExtras history={history} />
           </aside>
 
-          <div className="min-w-0 space-y-6 xl:order-1">
+          <div className="min-w-0 space-y-5 xl:order-1">
             <DeliveryRoute pickup={history.pickup} drop={history.drop} />
             <DeliveryPackage package={history.package} />
             <DeliveryTimeline events={timeline} />
           </div>
         </div>
-
-        <DeliveryOrchestrationLink
-          deliveryId={history.delivery.id}
-          orchestration={history.orchestration}
-        />
       </AdminContainer>
     </AdminShell>
   );

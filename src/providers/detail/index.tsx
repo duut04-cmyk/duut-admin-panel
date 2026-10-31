@@ -1,16 +1,13 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import type { ProviderDetail } from "@/data/providerTypes";
 import { ADMIN_DETAIL_RAIL_GRID } from "@/components/layout";
-import AdminStatus from "@/ui/AdminStatus";
 import ProviderCapabilitiesSection from "../components/ProviderCapabilitiesSection";
 import ProviderConfigurationSection from "../components/ProviderConfigurationSection";
 import ProviderCredentialsSection from "../components/ProviderCredentialsSection";
 import ProviderDiagnosticsSection from "../components/ProviderDiagnosticsSection";
 import ProviderStatusSection from "../components/ProviderStatusSection";
-import ProviderServicesSection from "../components/ProviderServicesSection";
-import ProviderVehiclesSection from "../components/ProviderVehiclesSection";
 import {
   formatBoolean,
   formatOptionalNumber,
@@ -18,7 +15,6 @@ import {
   formatProviderDateTime,
 } from "../components/detailFormatting";
 import ProviderDetailPageHeader from "../components/ProviderDetailPageHeader";
-import { healthStatusLabel, healthStatusVariant } from "../components/utils";
 import ProviderDetailRouteShell from "./ProviderDetailRouteShell";
 import { useProviderDetail } from "./useProviderDetail";
 
@@ -28,22 +24,20 @@ type ProviderDetailPageProps = {
 
 function DetailSection({
   title,
-  description,
+  action,
   children,
 }: {
   title: string;
-  description?: string;
+  action?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <section className="min-w-0 overflow-hidden rounded-card border border-border/60 bg-background shadow-sm">
-      <div className="border-b border-border px-4 py-4 sm:px-5 lg:px-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3.5 sm:px-5 lg:px-6">
         <h2 className="text-subheading font-semibold leading-snug text-foreground">
           {title}
         </h2>
-        {description ? (
-          <p className="mt-1 text-small text-muted-foreground">{description}</p>
-        ) : null}
+        {action ? <div className="shrink-0">{action}</div> : null}
       </div>
       <div className="p-4 sm:p-5 lg:p-6">{children}</div>
     </section>
@@ -52,7 +46,7 @@ function DetailSection({
 
 function DefinitionGrid({ children }: { children: ReactNode }) {
   return (
-    <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">{children}</dl>
+    <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">{children}</dl>
   );
 }
 
@@ -65,6 +59,55 @@ function DefinitionItem({ label, value }: { label: string; value: ReactNode }) {
   );
 }
 
+function RecordSection({ provider }: { provider: ProviderDetail }) {
+  const [copied, setCopied] = useState(false);
+
+  const copyId = async () => {
+    try {
+      await navigator.clipboard.writeText(provider.id);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <DetailSection title="Record">
+      <dl className="space-y-2.5 text-small">
+        <div className="flex items-baseline justify-between gap-3">
+          <dt className="text-muted-foreground">Code</dt>
+          <dd className="font-mono text-caption font-medium">{provider.code}</dd>
+        </div>
+        <div className="flex items-baseline justify-between gap-3">
+          <dt className="text-muted-foreground">ID</dt>
+          <dd className="min-w-0 text-right">
+            <button
+              type="button"
+              onClick={() => void copyId()}
+              className="inline-flex max-w-full items-center gap-1.5 font-mono text-caption text-muted-foreground hover:text-foreground"
+              title={provider.id}
+            >
+              <span className="truncate">{provider.id}</span>
+              <span className="shrink-0 font-sans font-medium text-accent">
+                {copied ? "Copied" : "Copy"}
+              </span>
+            </button>
+          </dd>
+        </div>
+        <div className="flex items-baseline justify-between gap-3">
+          <dt className="text-muted-foreground">Created</dt>
+          <dd>{formatProviderDateTime(provider.createdAt)}</dd>
+        </div>
+        <div className="flex items-baseline justify-between gap-3">
+          <dt className="text-muted-foreground">Updated</dt>
+          <dd>{formatProviderDateTime(provider.updatedAt)}</dd>
+        </div>
+      </dl>
+    </DetailSection>
+  );
+}
+
 function ProviderDetailContent({
   provider,
   onProviderUpdated,
@@ -73,8 +116,8 @@ function ProviderDetailContent({
   onProviderUpdated: (provider: ProviderDetail) => void;
 }) {
   return (
-    <div className={`grid min-w-0 gap-6 ${ADMIN_DETAIL_RAIL_GRID} xl:items-start`}>
-      <div className="min-w-0 space-y-6 xl:order-1">
+    <div className={`grid min-w-0 gap-5 ${ADMIN_DETAIL_RAIL_GRID} xl:items-start`}>
+      <div className="min-w-0 space-y-5 xl:order-1">
         <ProviderConfigurationSection
           mode="view"
           provider={provider}
@@ -86,31 +129,6 @@ function ProviderDetailContent({
           onProviderUpdated={onProviderUpdated}
         />
 
-        <DetailSection
-          title="Health"
-          description="Latest connectivity check stored on the provider record."
-        >
-          <DefinitionGrid>
-            <DefinitionItem
-              label="Health status"
-              value={
-                <AdminStatus
-                  variant={healthStatusVariant(provider.health.status)}
-                  label={healthStatusLabel(provider.health.status)}
-                />
-              }
-            />
-            <DefinitionItem
-              label="Last checked"
-              value={formatProviderDateTime(provider.health.lastCheckedAt)}
-            />
-            <DefinitionItem
-              label="Last error"
-              value={provider.health.lastError ?? "—"}
-            />
-          </DefinitionGrid>
-        </DetailSection>
-
         <ProviderDiagnosticsSection
           provider={provider}
           onProviderUpdated={onProviderUpdated}
@@ -121,7 +139,7 @@ function ProviderDetailContent({
           onProviderUpdated={onProviderUpdated}
         />
 
-        <DetailSection title="HTTP settings">
+        <DetailSection title="HTTP">
           <DefinitionGrid>
             <DefinitionItem
               label="Timeout"
@@ -140,22 +158,22 @@ function ProviderDetailContent({
               value={`${provider.settings.retryDelayMs} ms`}
             />
             <DefinitionItem
-              label="Webhooks enabled"
+              label="Webhooks"
               value={formatBoolean(provider.settings.webhookEnabled)}
             />
             <DefinitionItem
-              label="Health check enabled"
-              value={formatBoolean(provider.settings.healthCheckEnabled)}
-            />
-            <DefinitionItem
-              label="Health check interval"
-              value={`${provider.settings.healthCheckIntervalMs} ms`}
+              label="Health checks"
+              value={
+                provider.settings.healthCheckEnabled
+                  ? `Every ${provider.settings.healthCheckIntervalMs} ms`
+                  : "Off"
+              }
             />
           </DefinitionGrid>
         </DetailSection>
 
-        <DetailSection title="Package limits">
-          {provider.packageLimits ? (
+        {provider.packageLimits ? (
+          <DetailSection title="Package limits">
             <DefinitionGrid>
               <DefinitionItem
                 label="Min weight"
@@ -182,57 +200,21 @@ function ProviderDetailContent({
                 value={formatOptionalNumber(provider.packageLimits.maxVolumeCm3, "cm³")}
               />
               <DefinitionItem
-                label="Supported package types"
+                label="Package types"
                 value={formatPackageTypes(provider.packageLimits.supportedPackageTypes)}
               />
             </DefinitionGrid>
-          ) : (
-            <p className="text-small text-muted-foreground">
-              No package limits configured.
-            </p>
-          )}
-        </DetailSection>
-
-        <ProviderServicesSection
-          providerId={provider.id}
-          onServicesChange={(services) => onProviderUpdated({ ...provider, services })}
-        />
-
-        <ProviderVehiclesSection
-          providerId={provider.id}
-          onVehiclesChange={(vehicles) => onProviderUpdated({ ...provider, vehicles })}
-        />
+          </DetailSection>
+        ) : null}
       </div>
 
-      <aside className="min-w-0 space-y-6 xl:order-2 xl:sticky xl:top-6 xl:self-start">
+      <aside className="min-w-0 space-y-5 xl:order-2 xl:sticky xl:top-6 xl:self-start">
         <ProviderCredentialsSection
           mode="view"
           provider={provider}
           onProviderUpdated={onProviderUpdated}
         />
-
-        <DetailSection title="Record">
-          <DefinitionGrid>
-            <DefinitionItem
-              label="Provider ID"
-              value={
-                <span className="break-all font-mono text-caption">{provider.id}</span>
-              }
-            />
-            <DefinitionItem
-              label="Code"
-              value={<span className="font-mono text-caption">{provider.code}</span>}
-            />
-            <DefinitionItem
-              label="Created"
-              value={formatProviderDateTime(provider.createdAt)}
-            />
-            <DefinitionItem
-              label="Updated"
-              value={formatProviderDateTime(provider.updatedAt)}
-            />
-          </DefinitionGrid>
-        </DetailSection>
+        <RecordSection provider={provider} />
       </aside>
     </div>
   );
@@ -252,7 +234,7 @@ export default function ProviderDetailPage({ providerId }: ProviderDetailPagePro
       retryLoad={() => void retryLoad()}
       retrying={retrying}
       mainClassName="bg-background"
-      containerClassName="space-y-6 pb-10 lg:space-y-8"
+      containerClassName="space-y-5 pb-10 lg:space-y-6"
       customHeader={
         provider ? <ProviderDetailPageHeader provider={provider} /> : undefined
       }

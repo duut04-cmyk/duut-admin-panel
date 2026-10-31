@@ -14,8 +14,8 @@ export default function PlatformSection({ platform }: PlatformSectionProps) {
   return (
     <ReportsSection
       id="settings-platform"
-      title="Platform overview"
-      description="Runtime identity and application URLs."
+      title="Platform"
+      description="Runtime"
       action={<EnvironmentBadge nodeEnv={platform.nodeEnv} />}
     >
       <SettingsKeyValueCard

@@ -21,123 +21,113 @@ export default function PoliciesSection({ policies }: PoliciesSectionProps) {
   return (
     <ReportsSection
       id="settings-policies"
-      title="Operational policies"
-      description="Effective business rules from the backend snapshot. Values shown here are read-only in Admin v1; changes require deployment configuration."
+      title="Policies"
+      description="Business rules"
     >
-      <div className="grid min-w-0 gap-4 lg:grid-cols-2">
-        <div className="space-y-2">
-          <h3 className="text-small font-semibold text-foreground">
-            Booking (effective)
-          </h3>
-          <SettingsKeyValueCard
-            items={[
-              {
-                label: "Quote max age",
-                value: formatSeconds(booking.quoteMaxAgeSeconds),
-                hint: "BOOKING_QUOTE_MAX_AGE_SECONDS (env or runtime store)",
-              },
-              {
-                label: "Price tolerance",
-                value: formatPercent(booking.priceTolerancePercent),
-                hint: "BOOKING_PRICE_TOLERANCE_PERCENT (env or runtime store)",
-              },
-            ]}
-          />
-        </div>
+      <div className="grid min-w-0 gap-3 lg:grid-cols-2">
+        <SettingsKeyValueCard
+          title="Booking"
+          items={[
+            {
+              label: "Quote max age",
+              value: formatSeconds(booking.quoteMaxAgeSeconds),
+              hint: "BOOKING_QUOTE_MAX_AGE_SECONDS",
+            },
+            {
+              label: "Price tolerance",
+              value: formatPercent(booking.priceTolerancePercent),
+              hint: "BOOKING_PRICE_TOLERANCE_PERCENT",
+            },
+          ]}
+        />
 
-        <div className="space-y-2">
-          <h3 className="text-small font-semibold text-foreground">
-            Pricing (effective)
-          </h3>
-          <SettingsKeyValueCard
-            items={[
-              {
-                label: "Platform service fee",
-                value: formatPercent(pricing.platformServiceFeePercent),
-                hint: "PLATFORM_SERVICE_FEE_PERCENT (env or runtime store) · GST 18% fixed",
-              },
-            ]}
-          />
-        </div>
+        <SettingsKeyValueCard
+          title="Pricing"
+          items={[
+            {
+              label: "Platform service fee",
+              value: formatPercent(pricing.platformServiceFeePercent),
+              hint: "PLATFORM_SERVICE_FEE_PERCENT",
+            },
+            {
+              label: "GST",
+              value: "18% fixed",
+            },
+          ]}
+        />
 
-        <div className="space-y-2">
-          <h3 className="text-small font-semibold text-foreground">Auth & sessions</h3>
-          <SettingsKeyValueCard
-            items={[
-              {
-                label: "Access token lifetime",
-                value: auth.jwtAccessExpiresIn,
-                hint: "JWT_ACCESS_EXPIRES_IN",
-              },
-              {
-                label: "Refresh token lifetime",
-                value: formatDays(auth.refreshTokenExpiresInDays),
-                hint: "REFRESH_TOKEN_EXPIRES_IN_DAYS",
-              },
-              {
-                label: "Password hashing rounds",
-                value: String(auth.bcryptRounds),
-                hint: "BCRYPT_ROUNDS",
-              },
-              {
-                label: "Password reset window",
-                value: formatSeconds(auth.passwordResetTokenExpirySeconds),
-                hint: "PASSWORD_RESET_VERIFICATION_TOKEN_EXPIRY_SECONDS",
-              },
-              {
-                label: "Email verification OTP",
-                value: formatMinutes(auth.emailVerificationOtpExpiryMinutes),
-                hint: "Hardcoded in auth.constants.ts",
-              },
-              {
-                label: "OTP resend cooldown",
-                value: formatSeconds(auth.otpResendCooldownSeconds),
-                hint: "Hardcoded in auth.constants.ts",
-              },
-            ]}
-          />
-        </div>
+        <SettingsKeyValueCard
+          title="Auth & sessions"
+          items={[
+            {
+              label: "Access token lifetime",
+              value: auth.jwtAccessExpiresIn,
+              hint: "JWT_ACCESS_EXPIRES_IN",
+            },
+            {
+              label: "Refresh token lifetime",
+              value: formatDays(auth.refreshTokenExpiresInDays),
+              hint: "REFRESH_TOKEN_EXPIRES_IN_DAYS",
+            },
+            {
+              label: "Password hashing rounds",
+              value: String(auth.bcryptRounds),
+              hint: "BCRYPT_ROUNDS",
+            },
+            {
+              label: "Password reset window",
+              value: formatSeconds(auth.passwordResetTokenExpirySeconds),
+              hint: "PASSWORD_RESET_TOKEN_EXPIRY",
+            },
+            {
+              label: "Email verification OTP",
+              value: formatMinutes(auth.emailVerificationOtpExpiryMinutes),
+              hint: "Code",
+            },
+            {
+              label: "OTP resend cooldown",
+              value: formatSeconds(auth.otpResendCooldownSeconds),
+              hint: "Code",
+            },
+          ]}
+        />
 
-        <div className="space-y-2">
-          <h3 className="text-small font-semibold text-foreground">Delivery OTP</h3>
-          <SettingsKeyValueCard
-            items={[
-              {
-                label: "OTP expiry",
-                value: formatSeconds(deliveryOtp.expirySeconds),
-                hint: "OTP_EXPIRY_SECONDS",
-              },
-              {
-                label: "Max attempts",
-                value: String(deliveryOtp.maxAttempts),
-                hint: "OTP_MAX_ATTEMPTS",
-              },
-              {
-                label: "Generation cooldown",
-                value: formatSeconds(deliveryOtp.generationCooldownSeconds),
-                hint: "OTP_GENERATION_COOLDOWN_SECONDS",
-              },
-            ]}
-          />
-        </div>
+        <SettingsKeyValueCard
+          title="Delivery OTP"
+          items={[
+            {
+              label: "OTP expiry",
+              value: formatSeconds(deliveryOtp.expirySeconds),
+              hint: "OTP_EXPIRY_SECONDS",
+            },
+            {
+              label: "Max attempts",
+              value: String(deliveryOtp.maxAttempts),
+              hint: "OTP_MAX_ATTEMPTS",
+            },
+            {
+              label: "Generation cooldown",
+              value: formatSeconds(deliveryOtp.generationCooldownSeconds),
+              hint: "OTP_GENERATION_COOLDOWN_SECONDS",
+            },
+          ]}
+        />
 
-        <div className="space-y-2">
-          <h3 className="text-small font-semibold text-foreground">Orchestration</h3>
-          <SettingsKeyValueCard
-            items={[
-              {
-                label: "Require known cancellation policy",
-                value: formatBoolean(orchestration.requireKnownCancellationPolicy),
-                hint: "Hardcoded in orchestration.constants.ts",
-              },
-              {
-                label: "Best-option score weights",
-                value: `Price ${orchestration.scoreWeights.price}, ETA ${orchestration.scoreWeights.eta}, Availability ${orchestration.scoreWeights.availability}, Priority ${orchestration.scoreWeights.providerPriority}, Quality ${orchestration.scoreWeights.serviceQuality}`,
-                hint: "Hardcoded in orchestration.constants.ts",
-              },
-            ]}
-          />
-        </div>
+        <SettingsKeyValueCard
+          title="Orchestration"
+          items={[
+            {
+              label: "Known cancellation policy",
+              value: formatBoolean(orchestration.requireKnownCancellationPolicy),
+              hint: "Code",
+            },
+            {
+              label: "Score weights",
+              value: `Price ${orchestration.scoreWeights.price} · ETA ${orchestration.scoreWeights.eta} · Avail ${orchestration.scoreWeights.availability} · Priority ${orchestration.scoreWeights.providerPriority} · Quality ${orchestration.scoreWeights.serviceQuality}`,
+              hint: "Code",
+            },
+          ]}
+        />
       </div>
     </ReportsSection>
   );

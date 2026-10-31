@@ -1,42 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import type { DeliveryHistoryDetail, DeliveryListItem } from "@/data/deliveryApiTypes";
+import { useState } from "react";
+import type { DeliveryHistoryDetail } from "@/data/deliveryApiTypes";
 import { ADMIN_SHELL_CONTENT_PADDING } from "@/components/layout";
-import { formatListRoute } from "../deliveryMappers";
 import { DeliveryStatusPill } from "./DeliveryStatusPill";
+import { formatTimestamp } from "./utils";
 
 type DeliveryDetailPageHeaderProps = {
   history: DeliveryHistoryDetail;
 };
 
-function routeLabel(history: DeliveryHistoryDetail): string {
-  const item: DeliveryListItem = {
-    id: history.delivery.id,
-    reference: history.delivery.reference,
-    status: history.delivery.status,
-    pickup: {
-      addressText: history.pickup.addressText,
-      contactName: history.pickup.contactName,
-    },
-    drop: {
-      addressText: history.drop.addressText,
-      contactName: history.drop.contactName,
-    },
-    packageType: history.package.packageType,
-    weightKg: history.package.weightKg,
-    sizeTier: history.package.sizeTier,
-    schedule: history.schedule,
-    createdAt: history.delivery.createdAt,
-    updatedAt: history.delivery.updatedAt,
-  };
-  return formatListRoute(item);
-}
-
 export default function DeliveryDetailPageHeader({
   history,
 }: DeliveryDetailPageHeaderProps) {
-  const { delivery } = history;
+  const { delivery, schedule, booking, orchestration } = history;
+  const [copied, setCopied] = useState(false);
+  const provider =
+    booking?.providerCode ?? orchestration?.selectedOption?.providerCode ?? null;
+
+  const metaParts = [
+    provider,
+    schedule.mode,
+    formatTimestamp(delivery.createdAt),
+  ].filter(Boolean);
+
+  const copyId = async () => {
+    try {
+      await navigator.clipboard.writeText(delivery.id);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  };
 
   return (
     <header
@@ -61,20 +58,27 @@ export default function DeliveryDetailPageHeader({
 
       <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
-            {delivery.reference}
-          </h1>
-          <p className="mt-0.5 font-mono text-caption text-muted-foreground">
-            {delivery.id}
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
+              {delivery.reference}
+            </h1>
+            <DeliveryStatusPill status={delivery.status} className="shrink-0" />
+          </div>
+          <p className="mt-1.5 text-small text-muted-foreground">
+            {metaParts.join(" · ")}
           </p>
-          <p className="mt-1 text-small text-muted-foreground">
-            {routeLabel(history)} · Delivery
-          </p>
+          <button
+            type="button"
+            onClick={() => void copyId()}
+            className="mt-1.5 inline-flex items-center gap-1.5 font-mono text-caption text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            title={delivery.id}
+          >
+            <span className="max-w-[14rem] truncate sm:max-w-xs">{delivery.id}</span>
+            <span className="font-sans font-medium text-accent">
+              {copied ? "Copied" : "Copy ID"}
+            </span>
+          </button>
         </div>
-        <DeliveryStatusPill
-          status={delivery.status}
-          className="self-start sm:shrink-0"
-        />
       </div>
     </header>
   );

@@ -34,10 +34,10 @@ export type ReportsLoadFailure = {
 export type ReportsLoadResult = ReportsLoadSuccess | ReportsLoadFailure;
 
 const SECTION_LABELS: Record<ReportsSectionKey, string> = {
-  orchestration: "Orchestration accountability",
-  feedback: "Feedback and quality",
-  providers: "Provider accountability",
-  customers: "Customer accountability",
+  orchestration: "Orchestration signals",
+  feedback: "Feedback",
+  providers: "Provider health",
+  customers: "Customer risk",
 };
 
 export function reportsPartialFailureMessage(

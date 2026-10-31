@@ -29,7 +29,7 @@ export default function ProviderEditPage({ providerId }: ProviderEditPageProps) 
           <ProviderSubpageHeader
             provider={provider}
             title="Edit provider details"
-            description="Update profile fields and orchestration participation. Lifecycle status is managed on the provider overview page."
+            description="Profile and orchestration flags"
           />
         ) : undefined
       }

@@ -50,11 +50,16 @@ function refundStatusVariant(
 
 function Row({ label, value }: { label: string; value: ReactNode }) {
   return (
-    <div className="flex flex-col gap-0.5 xl:flex-row xl:gap-3">
-      <dt className="shrink-0 text-muted-foreground xl:w-36">{label}</dt>
-      <dd className="min-w-0 font-medium">{value}</dd>
+    <div className="flex items-baseline justify-between gap-3">
+      <dt className="shrink-0 text-muted-foreground">{label}</dt>
+      <dd className="min-w-0 text-right font-medium">{value}</dd>
     </div>
   );
+}
+
+function shortId(value: string): string {
+  if (value.length <= 14) return value;
+  return `${value.slice(0, 8)}…${value.slice(-4)}`;
 }
 
 export default function DeliveryPayment({ payment }: DeliveryPaymentProps) {
@@ -62,15 +67,12 @@ export default function DeliveryPayment({ payment }: DeliveryPaymentProps) {
 
   return (
     <section aria-labelledby="delivery-payment-heading">
-      <AdminSectionHeader
-        title="Payment & refunds"
-        description="Customer charge via payment gateway, pricing breakdown, and refund records."
-      />
+      <AdminSectionHeader title="Money" />
 
-      <DeliveryDetailCard className="mt-4 space-y-6 p-4 md:p-5 text-small">
-        <dl className="space-y-2.5">
+      <DeliveryDetailCard className="mt-3 space-y-4 p-4 text-small">
+        <dl className="space-y-2">
           <Row
-            label="Payment status"
+            label="Status"
             value={
               <AdminStatus
                 variant={paymentStatusVariant(payment.status)}
@@ -79,7 +81,7 @@ export default function DeliveryPayment({ payment }: DeliveryPaymentProps) {
             }
           />
           <Row
-            label="Amount charged"
+            label="Charged"
             value={
               <span className="tabular-nums">
                 {money(payment.currency, payment.amount)}
@@ -87,32 +89,12 @@ export default function DeliveryPayment({ payment }: DeliveryPaymentProps) {
             }
           />
           <Row label="Gateway" value={payment.gateway} />
-          {payment.gatewayOrderId ? (
-            <Row
-              label="Gateway order ID"
-              value={
-                <span className="break-all font-mono text-caption">
-                  {payment.gatewayOrderId}
-                </span>
-              }
-            />
-          ) : null}
-          {payment.gatewayPaymentId ? (
-            <Row
-              label="Gateway payment ID"
-              value={
-                <span className="break-all font-mono text-caption">
-                  {payment.gatewayPaymentId}
-                </span>
-              }
-            />
-          ) : null}
           {payment.paidAt ? (
-            <Row label="Paid at" value={formatTimestamp(payment.paidAt)} />
+            <Row label="Paid" value={formatTimestamp(payment.paidAt)} />
           ) : null}
           {payment.refundedAmount > 0 ? (
             <Row
-              label="Refunded total"
+              label="Refunded"
               value={
                 <span className="tabular-nums">
                   {money(payment.currency, payment.refundedAmount)}
@@ -120,22 +102,13 @@ export default function DeliveryPayment({ payment }: DeliveryPaymentProps) {
               }
             />
           ) : null}
-          <Row
-            label="Payment record ID"
-            value={
-              <span className="break-all font-mono text-caption">{payment.id}</span>
-            }
-          />
         </dl>
 
-        <div className="border-t border-border/60 pt-4">
-          <h3 className="text-caption font-semibold text-muted-foreground">
-            Customer pricing breakdown
-          </h3>
-          <p className="mt-1 text-caption text-muted-foreground">
-            Frozen at payment creation from the selected orchestration quote.
+        <div className="border-t border-border/60 pt-3">
+          <p className="mb-2 text-caption font-medium text-muted-foreground">
+            Breakdown
           </p>
-          <dl className="mt-3 space-y-2">
+          <dl className="space-y-1.5">
             <Row
               label="Provider quote"
               value={
@@ -145,35 +118,25 @@ export default function DeliveryPayment({ payment }: DeliveryPaymentProps) {
               }
             />
             <Row
-              label="Platform fee"
+              label={`Fee ${breakdown.platformFeePercent}%`}
               value={
                 <span className="tabular-nums">
-                  {breakdown.platformFeePercent}% ·{" "}
                   {money(breakdown.currency, breakdown.platformFeeAmount)}
                 </span>
               }
             />
             <Row
-              label="Subtotal"
+              label={`GST ${breakdown.gstPercent}%`}
               value={
                 <span className="tabular-nums">
-                  {money(breakdown.currency, breakdown.subtotal)}
-                </span>
-              }
-            />
-            <Row
-              label="GST"
-              value={
-                <span className="tabular-nums">
-                  {breakdown.gstPercent}% ·{" "}
                   {money(breakdown.currency, breakdown.gstAmount)}
                 </span>
               }
             />
             <Row
-              label="Customer payable"
+              label="Payable"
               value={
-                <span className="tabular-nums text-foreground">
+                <span className="tabular-nums font-semibold text-foreground">
                   {money(breakdown.currency, breakdown.customerPayableAmount)}
                 </span>
               }
@@ -182,15 +145,15 @@ export default function DeliveryPayment({ payment }: DeliveryPaymentProps) {
         </div>
 
         {payment.refunds.length > 0 ? (
-          <div className="border-t border-border/60 pt-4">
-            <h3 className="text-caption font-semibold text-muted-foreground">
+          <div className="border-t border-border/60 pt-3">
+            <p className="mb-2 text-caption font-medium text-muted-foreground">
               Refunds
-            </h3>
-            <ul className="mt-3 space-y-3">
+            </p>
+            <ul className="space-y-2">
               {payment.refunds.map((refund) => (
                 <li
                   key={refund.id}
-                  className="rounded-md border border-border/60 px-3 py-2.5"
+                  className="rounded-md border border-border/60 px-3 py-2"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="tabular-nums font-medium">
@@ -204,37 +167,16 @@ export default function DeliveryPayment({ payment }: DeliveryPaymentProps) {
                   {refund.reasonCode ? (
                     <p className="mt-1 text-caption text-muted-foreground">
                       {refund.reasonCode}
-                      {refund.reason ? ` — ${refund.reason}` : ""}
                     </p>
                   ) : null}
                   {refund.gatewayRefundId ? (
-                    <p className="mt-1 break-all font-mono text-caption text-muted-foreground">
-                      Refund ID: {refund.gatewayRefundId}
+                    <p
+                      className="mt-0.5 font-mono text-caption text-muted-foreground"
+                      title={refund.gatewayRefundId}
+                    >
+                      {shortId(refund.gatewayRefundId)}
                     </p>
                   ) : null}
-                  <p className="mt-1 text-caption text-muted-foreground">
-                    Requested {formatTimestamp(refund.requestedAt)}
-                    {refund.processedAt
-                      ? ` · Processed ${formatTimestamp(refund.processedAt)}`
-                      : ""}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-
-        {payment.attempts.length > 1 ? (
-          <div className="border-t border-border/60 pt-4">
-            <h3 className="text-caption font-semibold text-muted-foreground">
-              Payment attempts
-            </h3>
-            <ul className="mt-3 space-y-2 text-caption">
-              {payment.attempts.map((attempt) => (
-                <li key={attempt.id} className="text-muted-foreground">
-                  #{attempt.attemptNumber} {attempt.status}
-                  {attempt.gatewayPaymentId ? ` · ${attempt.gatewayPaymentId}` : ""}
-                  {attempt.paymentMethod ? ` · ${attempt.paymentMethod}` : ""}
                 </li>
               ))}
             </ul>

@@ -156,11 +156,11 @@ export default function OverviewMetricCard({
   );
 
   return (
-    <article className="flex flex-col rounded-card border border-border/60 bg-background shadow-sm">
+    <article className="flex flex-col rounded-[10px] border border-border bg-white shadow-[0_8px_24px_-16px_rgba(23,23,23,0.14)]">
       <div className="flex flex-col px-3 pb-3 pt-3 sm:px-4 sm:pt-4">
         <div className="flex items-center gap-2.5">
           <span
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${styles.iconBg} ${styles.iconColor}`}
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] ${styles.iconBg} ${styles.iconColor}`}
             aria-hidden="true"
           >
             {icon}

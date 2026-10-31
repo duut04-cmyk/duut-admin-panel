@@ -40,7 +40,7 @@ import {
 
 async function loadSecondaryOverviewData(window: { from: string; to: string }) {
   const [recentDeliveriesResult, activityResult] = await Promise.all([
-    fetchRecentDeliveries({ from: window.from, to: window.to, limit: 8 }),
+    fetchRecentDeliveries({ from: window.from, to: window.to, limit: 50 }),
     fetchRecentActivity({ limit: 12, hours: 24 }),
   ]);
 
@@ -103,7 +103,7 @@ export default function OverviewDashboard() {
     setSecondaryLoading(false);
 
     return { success: true as const };
-  }, [window.from, window.to]);
+  }, [window]);
 
   const refresh = useCallback(async () => {
     const result = await loadOverview();
@@ -218,7 +218,10 @@ export default function OverviewDashboard() {
                     <DecisionSpeedReporting summary={summary} />
                   </div>
 
-                  <RecentDeliveriesReportingTable rows={recentRows} />
+                  <RecentDeliveriesReportingTable
+                    rows={recentRows}
+                    listKey={`${window.from}|${window.to}`}
+                  />
                 </div>
 
                 <div className="min-w-0 xl:sticky xl:top-20 xl:self-start">

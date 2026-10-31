@@ -31,7 +31,7 @@ export default function ProviderCredentialsPage({
           <ProviderSubpageHeader
             provider={provider}
             title="Update credentials"
-            description="Secrets are write-only and encrypted. Only fields you enter are updated; blank fields keep their stored values."
+            description="Write-only · blank fields keep stored values"
           />
         ) : undefined
       }
