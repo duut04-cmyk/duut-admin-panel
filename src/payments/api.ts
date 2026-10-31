@@ -67,7 +67,7 @@ export async function fetchPayments(input: {
   const response = await fetch(
     `/api/payments${buildQuery({
       page: input.page?.toString() ?? "1",
-      limit: input.limit?.toString() ?? "25",
+      limit: input.limit?.toString() ?? "10",
       search: input.search,
       status: input.status,
       paidFrom: input.paidFrom,
@@ -97,7 +97,7 @@ export async function fetchRefunds(input: {
   const response = await fetch(
     `/api/refunds${buildQuery({
       page: input.page?.toString() ?? "1",
-      limit: input.limit?.toString() ?? "25",
+      limit: input.limit?.toString() ?? "10",
       status: input.status,
       activityFrom: input.activityFrom,
       activityTo: input.activityTo,

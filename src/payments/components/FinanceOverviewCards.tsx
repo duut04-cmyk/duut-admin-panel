@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { MetricCardsSkeleton } from "@/components/loading/skeletonSections";
 import OverviewMetricCard, {
   type MetricTheme,
 } from "@/overview/components/OverviewMetricCard";
@@ -8,6 +9,7 @@ import { formatInrAmount } from "../lib/formatMoney";
 
 type FinanceOverviewCardsProps = {
   summary: FinanceSummary | null;
+  loading?: boolean;
   trends?: {
     collections?: MetricTrend;
     successfulRefunds?: MetricTrend;
@@ -99,20 +101,12 @@ type CardDef = {
 
 export default function FinanceOverviewCards({
   summary,
+  loading = false,
   trends,
   sparklines,
 }: FinanceOverviewCardsProps) {
-  if (!summary) {
-    return (
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div
-            key={index}
-            className="h-36 animate-pulse rounded-card border border-border/60 bg-muted/40"
-          />
-        ))}
-      </div>
-    );
+  if (loading || !summary) {
+    return <MetricCardsSkeleton count={4} />;
   }
 
   const cards: CardDef[] = [
