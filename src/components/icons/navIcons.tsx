@@ -76,6 +76,17 @@ export function CustomersNavIcon({ className = "h-5 w-5" }: IconProps) {
   );
 }
 
+export function PaymentsNavIcon({ className = "h-5 w-5" }: IconProps) {
+  return icon(
+    className,
+    <>
+      <rect x="3" y="5" width="14" height="10" rx="1.5" />
+      <path d="M3 8.5h14" strokeLinecap="round" />
+      <path d="M6 12h4" strokeLinecap="round" />
+    </>,
+  );
+}
+
 export function ReportsNavIcon({ className = "h-5 w-5" }: IconProps) {
   return icon(
     className,
