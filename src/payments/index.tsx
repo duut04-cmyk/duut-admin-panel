@@ -21,8 +21,8 @@ import ReconciliationPanel from "./components/ReconciliationPanel";
 import RefundSummaryDonut from "./components/RefundSummaryDonut";
 import { fetchPaymentDetail } from "./api";
 import {
-  emptyPaginatedSection,
-  emptySection,
+  initialPaginatedSection,
+  initialSection,
   loadPaymentsSection,
   loadReconciliationSection,
   loadSummarySection,
@@ -45,7 +45,7 @@ const dateOptions: { value: FinanceDateRangeKey; label: string }[] = [
   { value: "custom", label: "Custom" },
 ];
 
-const LIST_LIMIT = 25;
+const LIST_LIMIT = 10;
 
 function CalendarIcon() {
   return (
@@ -95,14 +95,15 @@ export default function PaymentsPage() {
   );
 
   const [summarySection, setSummarySection] =
-    useState<SectionState<FinanceSummary>>(emptySection);
+    useState<SectionState<FinanceSummary>>(initialSection);
   const [previousSummary, setPreviousSummary] = useState<FinanceSummary | null>(null);
   const [timeseriesSection, setTimeseriesSection] =
-    useState<SectionState<FinanceTimeseries>>(emptySection);
-  const [paymentsSection, setPaymentsSection] =
-    useState<PaginatedSectionState<PaymentListResponse>>(emptyPaginatedSection);
+    useState<SectionState<FinanceTimeseries>>(initialSection);
+  const [paymentsSection, setPaymentsSection] = useState<
+    PaginatedSectionState<PaymentListResponse>
+  >(initialPaginatedSection);
   const [reconciliationSection, setReconciliationSection] =
-    useState<SectionState<FinanceReconciliation>>(emptySection);
+    useState<SectionState<FinanceReconciliation>>(initialSection);
   const [reconciliationCheckedAt, setReconciliationCheckedAt] = useState<Date | null>(
     null,
   );
@@ -140,22 +141,21 @@ export default function PaymentsPage() {
     return () => window.clearTimeout(timer);
   }, [paymentSearch]);
 
-  const refreshAllSections = useCallback(async () => {
-    setSummarySection((s) => ({ ...s, loading: true, error: null }));
-    setTimeseriesSection((s) => ({ ...s, loading: true, error: null }));
-    setPaymentsSection((s) => ({ ...s, loading: true, error: null }));
-    setReconciliationSection((s) => ({
-      ...s,
-      loading: true,
-      error: null,
-      data: null,
-    }));
+  const refreshFinanceSections = useCallback(
+    async (isStale: () => boolean) => {
+      setSummarySection((s) => ({ ...s, loading: true, error: null }));
+      setTimeseriesSection((s) => ({ ...s, loading: true, error: null }));
+      setReconciliationSection((s) => ({
+        ...s,
+        loading: true,
+        error: null,
+        data: null,
+      }));
 
-    const granularity = dateRange === "month" ? "week" : "day";
-    const previousWindow = previousFinanceWindow(financeWindow);
+      const granularity = dateRange === "month" ? "week" : "day";
+      const previousWindow = previousFinanceWindow(financeWindow);
 
-    const [summary, previous, timeseries, payments, reconciliation] = await Promise.all(
-      [
+      const [summary, previous, timeseries, reconciliation] = await Promise.all([
         loadSummarySection({ from: financeWindow.from, to: financeWindow.to }),
         loadSummarySection({
           from: previousWindow.from,
@@ -166,42 +166,55 @@ export default function PaymentsPage() {
           to: financeWindow.to,
           granularity,
         }),
-        loadPaymentsSection({
-          from: financeWindow.from,
-          to: financeWindow.to,
-          page: paymentsPage,
-          limit: LIST_LIMIT,
-          search: debouncedPaymentSearch.trim() || undefined,
-          status: statusFilter || undefined,
-        }),
         loadReconciliationSection({
           from: financeWindow.from,
           to: financeWindow.to,
           limit: 100,
         }),
-      ],
-    );
+      ]);
 
-    setSummarySection(summary);
-    setPreviousSummary(previous.data);
-    setTimeseriesSection(timeseries);
-    setPaymentsSection(payments);
-    setReconciliationSection(reconciliation);
-    setReconciliationCheckedAt(new Date());
+      if (isStale()) return;
 
-    if (payments.page !== paymentsPage) {
-      setPaymentsPage(payments.page);
-    }
-  }, [
-    financeWindow.from,
-    financeWindow.to,
-    dateRange,
-    paymentsPage,
-    debouncedPaymentSearch,
-    statusFilter,
-  ]);
+      setSummarySection(summary);
+      setPreviousSummary(previous.data);
+      setTimeseriesSection(timeseries);
+      setReconciliationSection(reconciliation);
+      setReconciliationCheckedAt(new Date());
+    },
+    [financeWindow.from, financeWindow.to, dateRange],
+  );
 
-  useLoadedAsync(refreshAllSections, [refreshAllSections]);
+  const refreshPaymentsSection = useCallback(
+    async (isStale: () => boolean) => {
+      setPaymentsSection((s) => ({ ...s, loading: true, error: null }));
+
+      const payments = await loadPaymentsSection({
+        from: financeWindow.from,
+        to: financeWindow.to,
+        page: paymentsPage,
+        limit: LIST_LIMIT,
+        search: debouncedPaymentSearch.trim() || undefined,
+        status: statusFilter || undefined,
+      });
+
+      if (isStale()) return;
+
+      setPaymentsSection(payments);
+      if (payments.page !== paymentsPage) {
+        setPaymentsPage(payments.page);
+      }
+    },
+    [
+      financeWindow.from,
+      financeWindow.to,
+      paymentsPage,
+      debouncedPaymentSearch,
+      statusFilter,
+    ],
+  );
+
+  useLoadedAsync(refreshFinanceSections, [refreshFinanceSections]);
+  useLoadedAsync(refreshPaymentsSection, [refreshPaymentsSection]);
 
   const retrySummary = useCallback(async () => {
     setSummarySection((s) => ({ ...s, loading: true, error: null }));
@@ -369,7 +382,8 @@ export default function PaymentsPage() {
             </AdminLoadErrorCallout>
           ) : (
             <FinanceOverviewCards
-              summary={summarySection.loading ? null : summarySection.data}
+              summary={summarySection.data}
+              loading={summarySection.loading}
               trends={trends}
               sparklines={sparklines}
             />
