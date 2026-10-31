@@ -5,6 +5,7 @@ import { ACCESS_TOKEN_COOKIE, clearAccessTokenCookieOptions } from "./cookies";
 export const SESSION_INVALID_BACKEND_ERROR_CODES = new Set([
   "UNAUTHORIZED",
   "INVALID_ACCESS_TOKEN",
+  "TOKEN_EXPIRED",
 ]);
 
 export type BackendErrorEnvelope = {

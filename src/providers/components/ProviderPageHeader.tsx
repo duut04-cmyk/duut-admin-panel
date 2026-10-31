@@ -14,7 +14,10 @@ export default function ProviderPageHeader({ onAddProvider }: ProviderPageHeader
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
+          <p className="text-[0.625rem] font-bold uppercase tracking-[0.14em] text-accent">
+            Integrations
+          </p>
+          <h1 className="mt-1 text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
             Providers
           </h1>
           <p className="mt-1.5 max-w-2xl text-small leading-snug text-muted-foreground">
@@ -25,7 +28,7 @@ export default function ProviderPageHeader({ onAddProvider }: ProviderPageHeader
         <Button
           type="button"
           onClick={onAddProvider}
-          className="w-full shrink-0 sm:w-auto"
+          className="w-full shrink-0 rounded-[6px] sm:w-auto"
         >
           Add provider
         </Button>

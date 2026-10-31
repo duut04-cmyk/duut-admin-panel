@@ -22,8 +22,11 @@ export default function OverviewRecentActivityFeed({
   hours,
 }: OverviewRecentActivityFeedProps) {
   return (
-    <article className="flex h-full min-w-0 flex-col rounded-card border border-border/60 bg-background p-3 shadow-sm sm:p-4">
-      <h2 className="text-subheading font-semibold leading-snug text-foreground">
+    <article className="flex h-full min-w-0 flex-col rounded-[10px] border border-border bg-white p-3 shadow-[0_8px_24px_-16px_rgba(23,23,23,0.14)] sm:p-4">
+      <p className="text-[0.625rem] font-bold uppercase tracking-[0.14em] text-accent">
+        Live
+      </p>
+      <h2 className="mt-0.5 text-body font-bold leading-snug text-foreground">
         Live Activity
       </h2>
       <p className="mt-1 text-small text-muted-foreground">

@@ -240,10 +240,6 @@ export default function ProviderServicesSection({
           <h2 className="text-subheading font-semibold leading-snug text-foreground">
             Services
           </h2>
-          <p className="mt-1 text-small text-muted-foreground">
-            Service codes offered by this provider. Create and edit only; removal is not
-            exposed by the admin API.
-          </p>
         </div>
         <Button
           type="button"

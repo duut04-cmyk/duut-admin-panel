@@ -295,7 +295,7 @@ export default function DeliveryFunnel({
     segments.length * SEGMENT_HEIGHT + (segments.length - 1) * SEGMENT_GAP;
   return (
     <article
-      className="@container flex h-full min-w-0 flex-col rounded-card border border-border/60 bg-background p-4 shadow-sm sm:p-5"
+      className="@container flex h-full min-w-0 flex-col rounded-[10px] border border-border bg-white p-4 shadow-[0_8px_24px_-16px_rgba(23,23,23,0.14)] sm:p-5"
       style={{ "--funnel-height": `${funnelHeight}px` } as CSSProperties}
       aria-labelledby="delivery-funnel-heading"
     >

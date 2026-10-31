@@ -32,6 +32,8 @@ import {
   setProviderEnabledFromList,
 } from "./providerListLifecycle";
 
+const PAGE_SIZE = 10;
+
 export default function ProvidersPage() {
   const [providers, setProviders] = useState<ProviderSummary[]>([]);
   const [filters, setFilters] = useState<ProviderFilterState>(DEFAULT_PROVIDER_FILTERS);
@@ -42,6 +44,17 @@ export default function ProvidersPage() {
   const [togglingField, setTogglingField] = useState<
     "enabled" | "orchestrationEnabled" | null
   >(null);
+  const listKey = [
+    filters.search,
+    filters.environment,
+    filters.status,
+    filters.enabled,
+  ].join("|");
+  const [pagination, setPagination] = useState({ key: listKey, page: 1 });
+  const page = pagination.key === listKey ? pagination.page : 1;
+  const setPage = (nextPage: number) => {
+    setPagination({ key: listKey, page: nextPage });
+  };
 
   const loadProviders = useCallback(async (isStale: () => boolean = () => false) => {
     setLoading(true);
@@ -109,6 +122,19 @@ export default function ProvidersPage() {
     () => getProviderMetrics(filteredProviders),
     [filteredProviders],
   );
+
+  const total = filteredProviders.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageProviders = useMemo(
+    () =>
+      filteredProviders.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
+    [filteredProviders, currentPage],
+  );
+
+  const handleFiltersChange = (next: ProviderFilterState) => {
+    setFilters(next);
+  };
 
   const handleCreateProvider = async (input: CreateProviderInput) => {
     const result = await createProvider(input);
@@ -196,15 +222,19 @@ export default function ProvidersPage() {
         <div className={ADMIN_LIST_PAGE_FILTERS_SECTION}>
           <ProviderFilters
             filters={filters}
-            onChange={setFilters}
+            onChange={handleFiltersChange}
             resultCount={filteredProviders.length}
           />
 
           {loading ? (
-            <ListRowsSkeleton rows={8} />
+            <ListRowsSkeleton rows={10} />
           ) : (
             <ProviderList
-              providers={filteredProviders}
+              providers={pageProviders}
+              page={currentPage}
+              pageSize={PAGE_SIZE}
+              total={total}
+              onPageChange={setPage}
               togglingId={togglingId}
               togglingField={togglingField}
               onToggleEnabled={(provider, enabled) =>

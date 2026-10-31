@@ -75,7 +75,7 @@ export default function DecisionSpeedReporting({
 
   return (
     <article
-      className="flex h-full min-w-0 flex-col rounded-card border border-border/60 bg-background p-4 font-sans shadow-sm sm:p-5"
+      className="flex h-full min-w-0 flex-col rounded-[10px] border border-border bg-white p-4 font-sans shadow-[0_8px_24px_-16px_rgba(23,23,23,0.14)] sm:p-5"
       aria-labelledby="decision-speed-heading"
     >
       <h2

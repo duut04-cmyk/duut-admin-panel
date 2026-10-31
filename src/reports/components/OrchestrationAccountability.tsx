@@ -11,9 +11,9 @@ type OrchestrationAccountabilityProps = {
 
 function MetricBlock({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-card border border-border/60 bg-background p-4">
+    <div className="rounded-[10px] border border-border bg-white p-4 shadow-[0_8px_24px_-16px_rgba(23,23,23,0.1)]">
       <p className="text-caption text-muted-foreground">{label}</p>
-      <p className="mt-1 text-body font-semibold tabular-nums text-foreground">
+      <p className="mt-1 text-body font-bold tabular-nums tracking-tight text-foreground">
         {value}
       </p>
     </div>
@@ -28,12 +28,10 @@ function ReasonList({
   items: { label: string; count: number }[];
 }) {
   return (
-    <div className="rounded-card border border-border/60 bg-background p-4 sm:p-5">
+    <div className="rounded-[10px] border border-border bg-white p-4 shadow-[0_8px_24px_-16px_rgba(23,23,23,0.1)] sm:p-5">
       <h3 className="text-small font-semibold text-foreground">{title}</h3>
       {items.length === 0 ? (
-        <p className="mt-2 text-small text-muted-foreground">
-          No issues in this period.
-        </p>
+        <p className="mt-2 text-caption text-muted-foreground">None in this period.</p>
       ) : (
         <ul className="mt-3 space-y-2">
           {items.map((item) => (
@@ -99,8 +97,8 @@ export default function OrchestrationAccountability({
       </div>
 
       <p className="text-caption text-muted-foreground">
-        Slowest decision in period: {formatDecisionTime(metrics.slowestDecisionTimeMs)}{" "}
-        · {metrics.cancelledDeliveries} cancelled deliveries
+        Slowest decision: {formatDecisionTime(metrics.slowestDecisionTimeMs)} ·{" "}
+        {metrics.cancelledDeliveries} cancelled deliveries
       </p>
     </div>
   );

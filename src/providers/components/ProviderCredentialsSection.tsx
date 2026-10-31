@@ -24,7 +24,6 @@ import {
   type CredentialFormFieldErrors,
   type CredentialFormValues,
 } from "../providerCredentialValidation";
-import { formatBoolean } from "./detailFormatting";
 import { integrationStatusLabel } from "./utils";
 
 type ProviderCredentialsSectionProps = {
@@ -98,8 +97,16 @@ export default function ProviderCredentialsSection({
   );
   const [rotationFields, setRotationFields] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
+  const [showUnsetFields, setShowUnsetFields] = useState(false);
 
   const metadata = provider.credentials;
+  const configuredFields = metadata.fields.filter((field) => field.configured);
+  const unsetFields = metadata.fields.filter((field) => !field.configured);
+  const visibleFields = showUnsetFields
+    ? metadata.fields
+    : configuredFields.length > 0
+      ? configuredFields
+      : metadata.fields;
 
   const clearSensitiveState = () => {
     setForm(emptyCredentialFormValues());
@@ -194,18 +201,22 @@ export default function ProviderCredentialsSection({
           <h2 className="text-subheading font-semibold leading-snug text-foreground">
             Credentials
           </h2>
-          <p className="mt-1 text-small text-muted-foreground">
-            Write-only secret storage. Saved values are encrypted and cannot be viewed
-            again. Only fields you enter are updated; omitted fields keep their stored
-            values. Saving does not validate credentials against the provider.
-          </p>
+          {!isEditPage ? (
+            <p className="mt-1 text-caption text-muted-foreground">
+              {configuredFields.length} of {metadata.fields.length} set · write-only
+            </p>
+          ) : (
+            <p className="mt-1 text-caption text-muted-foreground">
+              Blank fields keep stored values
+            </p>
+          )}
         </div>
         {!isEditPage ? (
           <Link
             href={`/providers/${provider.id}/credentials`}
             className={secondaryLinkClassName}
           >
-            Update credentials
+            Update
           </Link>
         ) : null}
       </div>
@@ -213,8 +224,7 @@ export default function ProviderCredentialsSection({
       <div className="p-4 sm:p-5 lg:p-6">
         {saveStatus === "success" && !isEditPage ? (
           <AdminCallout variant="success" title="Saved" className="mb-4">
-            Credential metadata updated. Integration status:{" "}
-            {integrationStatusLabel(provider.integrationStatus)} (from server).
+            Credentials updated · {integrationStatusLabel(provider.integrationStatus)}
           </AdminCallout>
         ) : null}
 
@@ -224,35 +234,41 @@ export default function ProviderCredentialsSection({
           </AdminCallout>
         ) : null}
 
-        <dl className="mb-4 grid gap-x-6 gap-y-4 sm:grid-cols-2">
-          <div>
-            <dt className="text-caption font-medium text-muted-foreground">
-              Configured
-            </dt>
-            <dd className="mt-1 text-small">{formatBoolean(metadata.configured)}</dd>
-          </div>
-        </dl>
-
-        {metadata.fields.length === 0 ? (
-          <p className="text-small text-muted-foreground">
-            No credential fields tracked.
-          </p>
-        ) : (
-          <ul className="space-y-2">
-            {metadata.fields.map((field) => (
-              <li
-                key={field.name}
-                className="flex items-center justify-between gap-3 rounded-md border border-border/60 px-3 py-2 text-small"
-              >
-                <span className="font-mono text-caption">{field.name}</span>
-                <AdminStatus
-                  variant={field.configured ? "success" : "pending"}
-                  label={field.configured ? "Configured" : "Not set"}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+        {!isEditPage ? (
+          metadata.fields.length === 0 ? (
+            <p className="text-small text-muted-foreground">
+              No credential fields tracked.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              <ul className="space-y-1.5">
+                {visibleFields.map((field) => (
+                  <li
+                    key={field.name}
+                    className="flex items-center justify-between gap-3 rounded-md border border-border/60 px-3 py-2 text-small"
+                  >
+                    <span className="font-mono text-caption">{field.name}</span>
+                    <AdminStatus
+                      variant={field.configured ? "success" : "pending"}
+                      label={field.configured ? "Set" : "Not set"}
+                    />
+                  </li>
+                ))}
+              </ul>
+              {unsetFields.length > 0 && configuredFields.length > 0 ? (
+                <button
+                  type="button"
+                  onClick={() => setShowUnsetFields((current) => !current)}
+                  className="text-caption font-medium text-accent hover:underline"
+                >
+                  {showUnsetFields
+                    ? "Hide unset fields"
+                    : `Show ${unsetFields.length} unset`}
+                </button>
+              ) : null}
+            </div>
+          )
+        ) : null}
 
         {isEditPage ? (
           <form

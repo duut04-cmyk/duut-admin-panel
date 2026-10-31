@@ -13,8 +13,9 @@ import {
   sanitizeTestConnectionError,
   testConnectionDisabledReason,
 } from "../providerConnectionDiagnostics";
+import { formatProviderDateTime } from "./detailFormatting";
 import ProviderEnvironmentBadge from "./ProviderEnvironmentBadge";
-import { environmentLabel } from "./utils";
+import { environmentLabel, healthStatusLabel, healthStatusVariant } from "./utils";
 
 type ProviderDiagnosticsSectionProps = {
   provider: ProviderDetail;
@@ -146,45 +147,60 @@ export default function ProviderDiagnosticsSection({
 
   return (
     <section className="min-w-0 overflow-hidden rounded-card border border-border/60 bg-background shadow-sm">
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border px-4 py-4 sm:px-5 lg:px-6">
-        <div>
-          <h2 className="text-subheading font-semibold leading-snug text-foreground">
-            Diagnostics
-          </h2>
-          <p className="mt-1 text-small text-muted-foreground">
-            Manual adapter health check. Results update stored health status after the
-            server responds. Tests are not run automatically.
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <ProviderEnvironmentBadge environment={provider.environment} />
-          <Button
-            type="button"
-            variant="secondary"
-            disabled={!canRun || testing}
-            onClick={() => {
-              setRequestError(null);
-              setConfirmOpen(true);
-            }}
-          >
-            {testing ? "Testing…" : "Test connection"}
-          </Button>
-        </div>
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border px-4 py-3.5 sm:px-5 lg:px-6">
+        <h2 className="text-subheading font-semibold leading-snug text-foreground">
+          Health
+        </h2>
+        <Button
+          type="button"
+          variant="secondary"
+          disabled={!canRun || testing}
+          onClick={() => {
+            setRequestError(null);
+            setConfirmOpen(true);
+          }}
+        >
+          {testing ? "Testing…" : "Test connection"}
+        </Button>
       </div>
 
-      <div className="p-4 sm:p-5 lg:p-6">
+      <div className="space-y-4 p-4 sm:p-5 lg:p-6">
+        <dl className="grid gap-3 sm:grid-cols-3">
+          <div>
+            <dt className="text-caption font-medium text-muted-foreground">Status</dt>
+            <dd className="mt-1">
+              <AdminStatus
+                variant={healthStatusVariant(provider.health.status)}
+                label={healthStatusLabel(provider.health.status)}
+              />
+            </dd>
+          </div>
+          <div>
+            <dt className="text-caption font-medium text-muted-foreground">
+              Last checked
+            </dt>
+            <dd className="mt-1 text-small">
+              {formatProviderDateTime(provider.health.lastCheckedAt)}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-caption font-medium text-muted-foreground">
+              Last error
+            </dt>
+            <dd className="mt-1 text-small text-muted-foreground">
+              {provider.health.lastError ?? "—"}
+            </dd>
+          </div>
+        </dl>
+
         {!canRun && disabledReason ? (
-          <AdminCallout variant="neutral" title="Test unavailable" className="mb-4">
+          <AdminCallout variant="neutral" title="Test unavailable">
             {disabledReason}
           </AdminCallout>
         ) : null}
 
         {requestError ? (
-          <AdminCallout
-            variant="warning"
-            title="Could not complete test"
-            className="mb-4"
-          >
+          <AdminCallout variant="warning" title="Could not complete test">
             {requestError}
             <Button
               type="button"
@@ -202,17 +218,15 @@ export default function ProviderDiagnosticsSection({
         ) : null}
 
         {lastResult ? (
-          <div className="rounded-md border border-border/60 bg-surface/40 p-4">
-            <p className="text-small font-medium text-foreground">Latest test result</p>
-            <p className="mt-1 text-caption text-muted-foreground">
-              A successful authentication or health response does not prove quote,
-              booking, or other operations work.
+          <div className="rounded-md border border-border/60 bg-surface/40 p-3">
+            <p className="text-caption font-medium text-muted-foreground">
+              Latest test
             </p>
             <OutcomeSummary result={lastResult} />
             {lastResult.connected ? null : (
               <Button
                 type="button"
-                className="mt-4"
+                className="mt-3"
                 variant="secondary"
                 disabled={testing || !canRun}
                 onClick={() => setConfirmOpen(true)}
@@ -221,11 +235,7 @@ export default function ProviderDiagnosticsSection({
               </Button>
             )}
           </div>
-        ) : (
-          <p className="text-small text-muted-foreground">
-            No connection test has been run in this session. Confirm before each test.
-          </p>
-        )}
+        ) : null}
       </div>
 
       <ConfirmTestConnectionModal
