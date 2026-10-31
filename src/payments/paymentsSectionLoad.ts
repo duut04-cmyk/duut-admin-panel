@@ -30,8 +30,16 @@ export function emptySection<T>(): SectionState<T> {
   return { loading: false, error: null, data: null };
 }
 
+export function initialSection<T>(): SectionState<T> {
+  return { loading: true, error: null, data: null };
+}
+
 export function emptyPaginatedSection<T>(): PaginatedSectionState<T> {
   return { loading: false, error: null, data: null, page: 1, totalPages: 0 };
+}
+
+export function initialPaginatedSection<T>(): PaginatedSectionState<T> {
+  return { loading: true, error: null, data: null, page: 1, totalPages: 0 };
 }
 
 export function clampPage(page: number, totalPages: number): number {

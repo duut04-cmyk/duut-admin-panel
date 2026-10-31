@@ -53,7 +53,7 @@ export async function handlePaymentsListGet(
   const url = new URL(request.url);
   const params = new URLSearchParams(url.searchParams);
   if (!params.has("page")) params.set("page", "1");
-  if (!params.has("limit")) params.set("limit", "25");
+  if (!params.has("limit")) params.set("limit", "10");
   const path = `/api/v1/admin/payments?${params.toString()}`;
   return proxyBackendJsonGet(path, "Failed to load payments.", deps);
 }
@@ -90,7 +90,7 @@ export async function handleRefundsListGet(
   const url = new URL(request.url);
   const params = new URLSearchParams(url.searchParams);
   if (!params.has("page")) params.set("page", "1");
-  if (!params.has("limit")) params.set("limit", "25");
+  if (!params.has("limit")) params.set("limit", "10");
   const path = `/api/v1/admin/refunds?${params.toString()}`;
   return proxyBackendJsonGet(path, "Failed to load refunds.", deps);
 }

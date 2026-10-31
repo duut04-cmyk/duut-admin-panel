@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
+import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
 import type { PaymentListItem } from "@/data/financeTypes";
 import { formatInrAmount } from "../lib/formatMoney";
 import PaymentStatusPill from "./PaymentStatusPill";
@@ -320,8 +321,8 @@ export default function RecentPaymentsTable({
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="px-3 py-8 text-muted-foreground">
-                    Loading…
+                  <td colSpan={7} className="px-3 py-2">
+                    <ListRowsSkeleton rows={limit} />
                   </td>
                 </tr>
               ) : items.length === 0 ? (
