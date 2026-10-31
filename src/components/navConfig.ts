@@ -5,6 +5,7 @@ import {
   IntegrationsNavIcon,
   OverviewNavIcon,
   ProvidersNavIcon,
+  PaymentsNavIcon,
   ReportsNavIcon,
   SettingsNavIcon,
 } from "./icons/navIcons";
@@ -28,6 +29,7 @@ export const navGroups: NavGroup[] = [
       { label: "Deliveries", href: "/deliveries", icon: DeliveriesNavIcon },
       { label: "Providers", href: "/providers", icon: ProvidersNavIcon },
       { label: "Customers", href: "/customers", icon: CustomersNavIcon },
+      { label: "Payments", href: "/payments", icon: PaymentsNavIcon },
       { label: "Reports", href: "/reports", icon: ReportsNavIcon },
     ],
   },
