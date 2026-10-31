@@ -13,6 +13,7 @@ import {
   fetchPayments,
   fetchRefunds,
 } from "./api";
+import { normalizePaymentSearchTerm } from "./lib/normalizePaymentSearch";
 
 export type SectionState<T> = {
   loading: boolean;
@@ -77,11 +78,17 @@ export async function loadPaymentsSection(input: {
   page: number;
   limit: number;
   search?: string;
+  status?: string;
 }): Promise<PaginatedSectionState<PaymentListResponse>> {
+  const search =
+    input.search != null && input.search.trim()
+      ? normalizePaymentSearchTerm(input.search)
+      : undefined;
   const result = await fetchPayments({
     page: input.page,
     limit: input.limit,
-    search: input.search,
+    search,
+    status: input.status,
     paidFrom: input.from,
     paidTo: input.to,
   });

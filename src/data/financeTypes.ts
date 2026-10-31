@@ -34,6 +34,7 @@ export type PaymentListItem = {
   id: string;
   deliveryId: string;
   deliveryReference: string;
+  customerName: string | null;
   status: string;
   amount: string;
   currency: "INR";
