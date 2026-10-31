@@ -8,7 +8,6 @@ import AdminContainer from "@/components/AdminContainer";
 import AdminShell from "@/components/AdminShell";
 import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
 import { IntegrationStatusSkeleton } from "@/components/loading/skeletonSections";
-import AdminCallout from "@/ui/AdminCallout";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import { fetchIntegrationsStatus } from "./api";
 import IntegrationsCategorySection from "./components/IntegrationsCategorySection";
@@ -51,8 +50,11 @@ export default function IntegrationsPage() {
   });
 
   return (
-    <AdminShell mainClassName="bg-background" customHeader={<IntegrationsPageHeader />}>
-      <AdminContainer flushTop className="space-y-8 pb-10">
+    <AdminShell
+      mainClassName="bg-background"
+      customHeader={<IntegrationsPageHeader checkedAt={status?.checkedAt ?? null} />}
+    >
+      <AdminContainer flushTop className="space-y-6 pb-10">
         {loadError ? (
           <AdminLoadErrorCallout
             title="Unable to load integrations"
@@ -67,23 +69,13 @@ export default function IntegrationsPage() {
 
         {!loading && status ? (
           <>
-            <IntegrationsSummary
-              summary={status.summary}
-              checkedAt={status.checkedAt}
-            />
+            <IntegrationsSummary summary={status.summary} />
 
-            {status.summary.needsAttention > 0 ? (
-              <AdminCallout variant="warning" title="Action recommended">
-                {status.summary.needsAttention} integration
-                {status.summary.needsAttention === 1 ? "" : "s"} need configuration or
-                attention. Review the cards below and update server environment
-                variables.
-              </AdminCallout>
-            ) : null}
-
-            {status.categories.map((category) => (
-              <IntegrationsCategorySection key={category.id} category={category} />
-            ))}
+            <div className="space-y-7">
+              {status.categories.map((category) => (
+                <IntegrationsCategorySection key={category.id} category={category} />
+              ))}
+            </div>
           </>
         ) : null}
 

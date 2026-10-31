@@ -15,7 +15,7 @@ type CustomerAccountCardProps = {
 };
 
 const secondaryLinkClassName =
-  "inline-flex h-11 shrink-0 cursor-pointer items-center justify-center rounded-control border border-border bg-background px-5 text-small font-medium text-foreground transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/30";
+  "inline-flex h-10 shrink-0 cursor-pointer items-center justify-center rounded-[6px] border border-border bg-white px-4 text-small font-semibold text-foreground transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
@@ -39,6 +39,7 @@ export default function CustomerAccountCard({
 
   return (
     <CustomerDetailCard
+      eyebrow="Profile"
       title="Account"
       description={
         isEditPage

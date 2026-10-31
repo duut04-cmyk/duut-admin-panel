@@ -17,7 +17,10 @@ export default function DeliveryPageHeader({
     <header
       className={`bg-background pb-4 pt-4 lg:pb-5 lg:pt-5 ${ADMIN_SHELL_CONTENT_PADDING}`}
     >
-      <h1 className="text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
+      <p className="text-[0.625rem] font-bold uppercase tracking-[0.14em] text-accent">
+        Operations
+      </p>
+      <h1 className="mt-1 text-[1.75rem] font-bold leading-tight tracking-tight text-foreground md:text-heading-md">
         Deliveries
       </h1>
 

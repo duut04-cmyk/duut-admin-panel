@@ -9,12 +9,22 @@ const dootSerif = DM_Serif_Display({
 type DootWordmarkProps = {
   className?: string;
   variant?: "sans" | "serif";
+  /** Light wordmark for dark navy sidebars. */
+  onDark?: boolean;
 };
 
-function SansDootLogo({ className = "" }: { className?: string }) {
+function SansDootLogo({
+  className = "",
+  onDark = false,
+}: {
+  className?: string;
+  onDark?: boolean;
+}) {
   return (
     <span
-      className={`inline-flex items-baseline font-sans font-bold tracking-tight text-foreground ${className}`}
+      className={`inline-flex items-baseline font-sans font-bold tracking-tight ${
+        onDark ? "text-white" : "text-foreground"
+      } ${className}`}
       aria-label="Doot"
     >
       D
@@ -33,14 +43,15 @@ function SansDootLogo({ className = "" }: { className?: string }) {
 export default function DootWordmark({
   className = "",
   variant = "serif",
+  onDark = false,
 }: DootWordmarkProps) {
   if (variant === "sans") {
-    return <SansDootLogo className={className} />;
+    return <SansDootLogo className={className} onDark={onDark} />;
   }
 
   return (
     <span
-      className={`${dootSerif.className} text-foreground ${className}`}
+      className={`${dootSerif.className} ${onDark ? "text-white" : "text-foreground"} ${className}`}
       aria-label="Doot"
     >
       Doot

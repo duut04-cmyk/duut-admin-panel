@@ -21,33 +21,29 @@ export default function DeliveryRequirements({
 
   return (
     <section aria-labelledby="delivery-requirements-heading">
-      <AdminSectionHeader
-        title="Schedule & instructions"
-        description="Timing and special instructions from the delivery request."
-      />
+      <AdminSectionHeader title="Schedule" />
 
-      <DeliveryDetailCard className="mt-4 p-4 md:p-5">
-        <dl className="space-y-3 text-small">
-          <div>
-            <dt className="text-caption text-muted-foreground">Schedule mode</dt>
-            <dd className="mt-0.5 font-medium text-foreground">{schedule.mode}</dd>
-            <dd className="mt-0.5 text-muted-foreground">Timing: {timingLabel}</dd>
-            {schedule.timezone ? (
-              <dd className="mt-0.5 text-muted-foreground">
-                Timezone: {schedule.timezone}
-              </dd>
-            ) : null}
+      <DeliveryDetailCard className="mt-3 space-y-2.5 p-4 text-small">
+        <div className="flex items-baseline justify-between gap-3">
+          <span className="text-muted-foreground">Mode</span>
+          <span className="font-medium text-foreground">{schedule.mode}</span>
+        </div>
+        <div className="flex items-baseline justify-between gap-3">
+          <span className="text-muted-foreground">Timing</span>
+          <span className="text-right font-medium text-foreground">{timingLabel}</span>
+        </div>
+        {schedule.timezone ? (
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="text-muted-foreground">Timezone</span>
+            <span className="font-medium text-foreground">{schedule.timezone}</span>
           </div>
-
-          {specialInstructions ? (
-            <div>
-              <dt className="text-caption text-muted-foreground">
-                Special instructions
-              </dt>
-              <dd className="mt-0.5 text-muted-foreground">{specialInstructions}</dd>
-            </div>
-          ) : null}
-        </dl>
+        ) : null}
+        {specialInstructions ? (
+          <div className="border-t border-border/60 pt-2.5">
+            <p className="text-caption text-muted-foreground">Instructions</p>
+            <p className="mt-1 text-foreground">{specialInstructions}</p>
+          </div>
+        ) : null}
       </DeliveryDetailCard>
     </section>
   );

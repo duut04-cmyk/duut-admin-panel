@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import type { IssueItem, IssueSeverity } from "@/reports/accountability";
-import AdminEmptyState from "@/ui/AdminEmptyState";
+import ListPagination from "@/components/ListPagination";
+
+const PAGE_SIZE = 10;
 
 type IssueQueueProps = {
   issues: IssueItem[];
@@ -14,28 +17,57 @@ const severityStyles: Record<IssueSeverity, { pill: string; label: string }> = {
   low: { pill: "bg-slate-100 text-slate-600", label: "Low" },
 };
 
+const thClass =
+  "px-4 py-3 text-caption font-semibold uppercase tracking-wide text-muted-foreground md:px-5";
+
 export default function IssueQueue({ issues }: IssueQueueProps) {
+  const [page, setPage] = useState(1);
+  const total = issues.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageIssues = issues.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
+
   if (issues.length === 0) {
     return (
-      <AdminEmptyState
-        title="No open issues"
-        description="Everything looks healthy for the selected period."
-      />
+      <div className="flex items-start gap-3 rounded-[10px] border border-emerald-200 bg-emerald-50/70 px-4 py-3.5 sm:px-5">
+        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+          <svg
+            className="h-4 w-4"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            aria-hidden="true"
+          >
+            <path d="M3.5 8.5l3 3 6-6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+        <div>
+          <p className="text-small font-semibold text-foreground">No open issues</p>
+          <p className="mt-0.5 text-caption text-muted-foreground">
+            Nothing needs action for this period — review health metrics below if you
+            want more detail.
+          </p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <article className="min-w-0 overflow-hidden rounded-card border border-border/60 bg-background shadow-sm">
+    <article className="min-w-0 overflow-hidden rounded-[10px] border border-border bg-white shadow-[0_8px_24px_-16px_rgba(23,23,23,0.14)]">
       <div className="space-y-3 p-4 md:hidden">
-        {issues.slice(0, 12).map((issue) => (
+        {pageIssues.map((issue) => (
           <Link
             key={issue.id}
             href={issue.href}
-            className="block rounded-card border border-border/60 p-4 transition-colors hover:border-foreground/20 hover:bg-surface/30"
+            className="block rounded-[10px] border border-border p-4 transition-colors hover:border-foreground/20 hover:bg-surface/30"
           >
             <div className="flex items-start justify-between gap-3">
               <span
-                className={`rounded px-2 py-0.5 text-caption font-semibold ${severityStyles[issue.severity].pill}`}
+                className={`rounded-full px-2 py-0.5 text-caption font-semibold ${severityStyles[issue.severity].pill}`}
               >
                 {severityStyles[issue.severity].label}
               </span>
@@ -53,30 +85,23 @@ export default function IssueQueue({ issues }: IssueQueueProps) {
         <table className="w-full min-w-[880px] text-left text-small">
           <caption className="sr-only">Issue queue</caption>
           <thead>
-            <tr className="border-b border-border">
-              <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
-                Severity
-              </th>
-              <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
-                Source
-              </th>
-              <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
-                Issue
-              </th>
-              <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
-                Entity
-              </th>
-              <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
-                Action
-              </th>
+            <tr className="border-b border-border bg-[#FFFBF5]/60">
+              <th className={thClass}>Severity</th>
+              <th className={thClass}>Source</th>
+              <th className={thClass}>Issue</th>
+              <th className={thClass}>Entity</th>
+              <th className={thClass}>Action</th>
             </tr>
           </thead>
           <tbody>
-            {issues.slice(0, 20).map((issue) => (
-              <tr key={issue.id} className="border-b border-border/60 last:border-b-0">
+            {pageIssues.map((issue) => (
+              <tr
+                key={issue.id}
+                className="border-b border-border last:border-b-0 transition-colors hover:bg-surface/40"
+              >
                 <td className="px-4 py-3 md:px-5">
                   <span
-                    className={`inline-flex rounded px-2 py-0.5 text-caption font-semibold ${severityStyles[issue.severity].pill}`}
+                    className={`inline-flex rounded-full px-2 py-0.5 text-caption font-semibold ${severityStyles[issue.severity].pill}`}
                   >
                     {severityStyles[issue.severity].label}
                   </span>
@@ -91,7 +116,7 @@ export default function IssueQueue({ issues }: IssueQueueProps) {
                 <td className="px-4 py-3 md:px-5">
                   <Link
                     href={issue.href}
-                    className="font-medium text-accent hover:underline"
+                    className="font-semibold text-accent hover:underline"
                   >
                     Review
                   </Link>
@@ -101,6 +126,13 @@ export default function IssueQueue({ issues }: IssueQueueProps) {
           </tbody>
         </table>
       </div>
+
+      <ListPagination
+        page={currentPage}
+        pageSize={PAGE_SIZE}
+        total={total}
+        onPageChange={setPage}
+      />
     </article>
   );
 }

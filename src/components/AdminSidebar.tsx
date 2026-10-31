@@ -15,6 +15,9 @@ import { navGroups } from "./navConfig";
 import SidebarHelpCard from "./SidebarHelpCard";
 import { useDrawerA11y } from "./useDrawerA11y";
 
+const SIDEBAR_BG = "bg-[#0B1F3A]";
+const SIDEBAR_BORDER = "border-white/10";
+
 type AdminSidebarProps = {
   open: boolean;
   onClose: () => void;
@@ -53,30 +56,44 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
   const sidebarContent = (variant: "fixed" | "drawer") => (
     <>
       <div
-        className={`flex shrink-0 items-center justify-between pt-6 pb-4 ${
-          variant === "drawer" ? "px-4 sm:px-5" : "px-5"
+        className={`flex shrink-0 items-center justify-between border-b ${SIDEBAR_BORDER} ${
+          variant === "drawer"
+            ? "px-4 py-4 pt-[max(16px,env(safe-area-inset-top))] sm:px-5"
+            : "px-5 pt-5 pb-6 lg:pt-6 lg:pb-7"
         }`}
       >
         <Link
           href="/overview"
           onClick={handleClose}
-          className="inline-block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/30"
+          className="inline-block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400/50"
         >
-          <DootWordmark variant="sans" className="text-2xl leading-none" />
+          <DootWordmark
+            variant="sans"
+            onDark
+            className={
+              variant === "drawer"
+                ? "text-2xl leading-none"
+                : "text-[1.75rem] leading-none lg:text-[1.85rem]"
+            }
+          />
         </Link>
         {variant === "drawer" && (
           <AdminIconButton
             icon={<CloseIcon />}
             label="Close navigation menu"
             onClick={handleClose}
+            className="text-white hover:bg-white/10 focus-visible:outline-sky-400/50"
           />
         )}
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3" aria-label="Admin navigation">
+      <nav
+        className={`flex-1 overflow-y-auto ${variant === "drawer" ? "px-3 pt-4" : "px-3 pt-1"}`}
+        aria-label="Admin navigation"
+      >
         {navGroups.map((group) => (
           <div key={group.label} className="mb-6">
-            <p className="mb-2 px-3 text-caption font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="mb-1 px-3 text-[0.625rem] font-bold uppercase tracking-[0.16em] text-white/35">
               {group.label}
             </p>
             <ul className="space-y-0.5">
@@ -88,16 +105,14 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
                     <Link
                       href={item.href}
                       onClick={handleClose}
-                      className={`flex items-center gap-3 rounded-r-[var(--radius-control)] py-2.5 pl-3 pr-3 text-small font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                      className={`flex min-h-11 items-center gap-2.5 rounded-[6px] px-3 py-2.5 text-small font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400/50 ${
                         active
-                          ? "-ml-3 border-l-[3px] border-accent bg-nav-active-bg text-nav-active-text"
-                          : "text-muted-foreground hover:bg-surface hover:text-foreground"
+                          ? "bg-[#2B6CB0] text-white shadow-sm"
+                          : "text-white/65 hover:bg-white/5 hover:text-white"
                       }`}
                       aria-current={active ? "page" : undefined}
                     >
-                      <Icon
-                        className={`h-5 w-5 shrink-0 ${active ? "text-nav-active-text" : ""}`}
-                      />
+                      <Icon className="h-[18px] w-[18px] shrink-0" />
                       {item.label}
                     </Link>
                   </li>
@@ -108,7 +123,13 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
         ))}
       </nav>
 
-      <div className="shrink-0 border-t border-border px-4 py-4">
+      <div
+        className={`shrink-0 px-3 ${
+          variant === "drawer"
+            ? "pb-[max(1.25rem,env(safe-area-inset-bottom))]"
+            : "pb-4"
+        }`}
+      >
         <SidebarHelpCard />
       </div>
     </>
@@ -117,7 +138,7 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
   return (
     <>
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex-col border-r border-border bg-background ${ADMIN_SHELL_SIDEBAR_FIXED} ${ADMIN_SHELL_SIDEBAR_WIDTH}`}
+        className={`fixed inset-y-0 left-0 z-40 flex-col border-r ${SIDEBAR_BORDER} ${SIDEBAR_BG} ${ADMIN_SHELL_SIDEBAR_FIXED} ${ADMIN_SHELL_SIDEBAR_WIDTH}`}
       >
         {sidebarContent("fixed")}
       </aside>
@@ -129,7 +150,7 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
         >
           <button
             type="button"
-            className="absolute inset-0 cursor-pointer bg-black/30 motion-safe:animate-[fade-in_0.2s_ease-out]"
+            className="absolute inset-0 cursor-pointer bg-black/50 motion-safe:animate-[fade-in_0.2s_ease-out]"
             aria-label="Close navigation menu"
             onClick={handleClose}
           />
@@ -138,7 +159,7 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
             role="dialog"
             aria-modal="true"
             aria-label="Navigation menu"
-            className="relative flex h-full w-[min(280px,85vw)] flex-col bg-background shadow-md motion-safe:animate-[slide-in-left_0.25s_ease-out]"
+            className={`relative flex h-full w-[min(280px,85vw)] flex-col border-r ${SIDEBAR_BORDER} ${SIDEBAR_BG} shadow-xl motion-safe:animate-[slide-in-left_0.25s_ease-out]`}
           >
             {sidebarContent("drawer")}
           </aside>

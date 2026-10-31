@@ -231,9 +231,6 @@ export default function ProviderVehiclesSection({
           <h2 className="text-subheading font-semibold leading-snug text-foreground">
             Vehicles
           </h2>
-          <p className="mt-1 text-small text-muted-foreground">
-            Per-vehicle-type capacity limits. Each type can appear once per provider.
-          </p>
         </div>
         <Button
           type="button"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import Link from "next/link";
 import { useLoadedAsync } from "@/lib/useLoadedAsync";
 import { useExclusiveAsync } from "@/lib/useExclusiveAsync";
 import AdminLoadErrorCallout from "@/components/AdminLoadErrorCallout";
@@ -17,10 +18,7 @@ import type { CustomerSummary } from "@/data/customerTypes";
 import type { ProviderSummary } from "@/data/providerTypes";
 import AdminContainer from "@/components/AdminContainer";
 import AdminShell from "@/components/AdminShell";
-import {
-  ReportsPageSkeleton,
-  TableCardSkeleton,
-} from "@/components/loading/skeletonSections";
+import { ReportsPageSkeleton } from "@/components/loading/skeletonSections";
 import { fetchCustomers } from "@/customers/api";
 import { fetchProviders } from "@/providers/api";
 import {
@@ -30,26 +28,26 @@ import {
 } from "@/reporting/api";
 import { getAtRiskCustomers, getCustomerAccountabilityRows } from "./accountability";
 import { buildLiveIssueQueue } from "./liveIssueQueue";
-import AccountabilitySnapshot from "./components/AccountabilitySnapshot";
-import CustomerAccountability from "./components/CustomerAccountability";
-import FeedbackQualitySection from "./components/FeedbackQualitySection";
-import IssueQueue from "./components/IssueQueue";
-import OrchestrationAccountability from "./components/OrchestrationAccountability";
-import ProviderAccountabilityTable from "./components/ProviderAccountabilityTable";
 import ReportsPageHeader from "./components/ReportsPageHeader";
-import ReportsSection from "./components/ReportsSection";
-import ServiceOrchestrationTable from "./components/ServiceOrchestrationTable";
-import {
-  mapFeedbackMetrics,
-  mapOrchestrationMetrics,
-  mapProviderRows,
-  mapSnapshotMetrics,
-} from "./liveReportMappers";
+import { ReportsKpiCards } from "./ReportsKpiCards";
+import { ReportsDeliveryDonut } from "./ReportsDeliveryDonut";
+import { ReportsAttentionPanel } from "./ReportsAttentionPanel";
+import { ReportsFeedbackPanel } from "./ReportsFeedbackPanel";
+import { ReportsOpsSignals } from "./ReportsOpsSignals";
 import {
   assembleReportsLoadResult,
   reportsPartialFailureMessage,
   type ReportsSectionKey,
 } from "./reportsLoad";
+
+const DEEP_LINKS = [
+  { href: "/deliveries?status=CANCELLED", label: "Cancelled" },
+  { href: "/deliveries?status=FAILED", label: "Failed" },
+  { href: "/deliveries", label: "All deliveries" },
+  { href: "/providers", label: "Providers" },
+  { href: "/customers", label: "Customers" },
+  { href: "/payments", label: "Payments" },
+] as const;
 
 export default function ReportsPage() {
   const [dateRange, setDateRange] = useState<ReportingDateRangeKey>("30d");
@@ -62,7 +60,6 @@ export default function ReportsPage() {
   const [feedback, setFeedback] = useState<FeedbackReporting | null>(null);
   const [providers, setProviders] = useState<ProviderSummary[] | null>(null);
   const [customerItems, setCustomerItems] = useState<CustomerSummary[] | null>(null);
-  const [customerTotal, setCustomerTotal] = useState<number | null>(null);
   const [failedSections, setFailedSections] = useState<ReportsSectionKey[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -77,7 +74,7 @@ export default function ReportsPage() {
     ] = await Promise.all([
       fetchReportingSummary({ from: window.from, to: window.to }),
       fetchOrchestrationReporting({ from: window.from, to: window.to }),
-      fetchFeedbackReporting({ from: window.from, to: window.to, recentLimit: 5 }),
+      fetchFeedbackReporting({ from: window.from, to: window.to, recentLimit: 20 }),
       fetchProviders(),
       fetchCustomers({ limit: 100 }),
     ]);
@@ -108,7 +105,6 @@ export default function ReportsPage() {
         setFeedback(null);
         setProviders(null);
         setCustomerItems(null);
-        setCustomerTotal(null);
         setFailedSections([]);
         setError(result.error);
         return;
@@ -118,7 +114,6 @@ export default function ReportsPage() {
       setFeedback(result.feedback);
       setProviders(result.providers);
       setCustomerItems(result.customers);
-      setCustomerTotal(result.customerTotal);
       setFailedSections(result.failedSections);
       setError(null);
     },
@@ -156,27 +151,9 @@ export default function ReportsPage() {
       })
     : [];
 
-  const snapshot = summary
-    ? mapSnapshotMetrics(summary, issues.length, {
-        providers,
-        customers: customerItems,
-      })
-    : null;
-
-  const orchestrationMetrics = orchestration
-    ? mapOrchestrationMetrics(summary!, orchestration)
-    : null;
-  const feedbackMetrics = feedback ? mapFeedbackMetrics(feedback) : null;
-  const providerRows = providers ? mapProviderRows(providers) : [];
-  const customerRows = customerItems
-    ? getCustomerAccountabilityRows(customerItems)
+  const atRiskRows = customerItems
+    ? getAtRiskCustomers(getCustomerAccountabilityRows(customerItems))
     : [];
-  const atRiskRows = getAtRiskCustomers(customerRows);
-
-  const customersSectionFailed = failedSections.includes("customers");
-  const providersSectionFailed = failedSections.includes("providers");
-  const orchestrationSectionFailed = failedSections.includes("orchestration");
-  const feedbackSectionFailed = failedSections.includes("feedback");
 
   return (
     <AdminShell
@@ -185,7 +162,7 @@ export default function ReportsPage() {
         <ReportsPageHeader dateRange={dateRange} onDateRangeChange={setDateRange} />
       }
     >
-      <AdminContainer flushTop className="space-y-8 pb-10">
+      <AdminContainer flushTop className="space-y-5 pb-10">
         {error ? (
           <AdminLoadErrorCallout
             title="Unable to load reports"
@@ -198,7 +175,7 @@ export default function ReportsPage() {
 
         {partialFailureMessage ? (
           <AdminLoadErrorCallout
-            title="Some report sections unavailable"
+            title="Some report data unavailable"
             onRetry={() => void retryReports()}
             retrying={retryingReports}
           >
@@ -210,123 +187,46 @@ export default function ReportsPage() {
 
         {summary ? (
           <>
-            {snapshot ? <AccountabilitySnapshot metrics={snapshot} /> : null}
+            <ReportsKpiCards summary={summary} />
 
-            <ReportsSection
-              id="issue-queue-heading"
-              title="Issue queue"
-              description="Actionable problems from live orchestration, delivery, provider, and feedback signals."
-            >
-              <IssueQueue issues={issues} />
-            </ReportsSection>
+            <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.7fr)_minmax(280px,1fr)]">
+              <ReportsOpsSignals summary={summary} orchestration={orchestration} />
 
-            <ReportsSection
-              id="provider-accountability-heading"
-              title="Provider accountability"
-              description="Configured providers and integration health from live provider records."
-            >
-              <ProviderAccountabilityTable
-                rows={providerRows}
-                loading={loading && providers === null && !providersSectionFailed}
-                unavailable={providersSectionFailed}
-              />
-            </ReportsSection>
-
-            <ReportsSection
-              id="orchestration-accountability-heading"
-              title="Orchestration accountability"
-              description="Orchestration runs created in the selected reporting window."
-            >
-              {loading && !orchestrationMetrics && !orchestrationSectionFailed ? (
-                <TableCardSkeleton rows={4} />
-              ) : orchestrationSectionFailed ? (
-                <p className="text-small text-muted-foreground" role="status">
-                  Orchestration accountability could not be loaded. Try refreshing the
-                  page.
+              <section className="rounded-card border border-border/60 bg-background p-4 shadow-sm">
+                <h2 className="text-base font-semibold text-foreground">
+                  Delivery outcomes
+                </h2>
+                <p className="mt-1 text-small text-muted-foreground">
+                  Status mix for deliveries created in this period
                 </p>
-              ) : orchestrationMetrics ? (
-                <>
-                  <OrchestrationAccountability metrics={orchestrationMetrics} />
-                  <div className="mt-4">
-                    <h3 className="mb-3 text-small font-semibold text-foreground">
-                      Service evaluation scorecard
-                    </h3>
-                    <ServiceOrchestrationTable
-                      services={
-                        orchestration?.serviceScorecard.map((row) => ({
-                          serviceId: row.providerServiceCode,
-                          serviceName: row.providerServiceCode,
-                          timesEvaluated: row.evaluatedCount,
-                          timesAvailable: row.eligibleCount,
-                          availabilityRate:
-                            row.evaluatedCount === 0
-                              ? 0
-                              : Math.round(
-                                  (row.eligibleCount / row.evaluatedCount) * 1000,
-                                ) / 10,
-                          timesSelected: row.selectedCount,
-                          selectionRate:
-                            row.eligibleCount === 0
-                              ? 0
-                              : Math.round(
-                                  (row.selectedCount / row.eligibleCount) * 1000,
-                                ) / 10,
-                          bookingAttempts: row.bookingAttemptCount,
-                          bookingSuccessRate: row.bookingSuccessRatePercent ?? 0,
-                          averagePrice: row.averageProviderQuoteAmountInr,
-                          averageEtaMinutes: null,
-                          averageResponseTimeMs: 0,
-                        })) ?? []
-                      }
-                    />
-                  </div>
-                </>
-              ) : (
-                <p className="text-small text-muted-foreground">
-                  No orchestration activity in this period.
-                </p>
-              )}
-            </ReportsSection>
+                <div className="mt-3">
+                  <ReportsDeliveryDonut summary={summary} />
+                </div>
+              </section>
+            </div>
 
-            <ReportsSection
-              id="customer-accountability-heading"
-              title="Customer accountability"
-              description={
-                customerTotal != null
-                  ? `Showing up to 100 of ${customerTotal.toLocaleString()} customers from the admin API. At-risk counts apply to this sample only, not the full platform.`
-                  : "Customer list loaded from the admin API. At-risk counts apply to the loaded sample only."
-              }
-            >
-              <CustomerAccountability
-                rows={customerRows}
-                atRiskRows={atRiskRows}
-                loading={loading && customerItems === null && !customersSectionFailed}
-                unavailable={customersSectionFailed}
-                sampleAtRiskKnown={customerItems != null}
-                sampleAtRiskCount={customerItems != null ? atRiskRows.length : null}
-                platformTotal={customerTotal}
-              />
-            </ReportsSection>
+            <div className="grid items-start gap-4 xl:grid-cols-2">
+              <ReportsAttentionPanel issues={issues} atRiskCustomers={atRiskRows} />
+              <ReportsFeedbackPanel feedback={feedback} />
+            </div>
 
-            <ReportsSection
-              id="feedback-quality-heading"
-              title="Feedback & quality"
-              description="Customer ratings and feedback tags submitted in the selected period."
+            <nav
+              aria-label="Related pages"
+              className="flex flex-wrap items-center gap-2 border-t border-border pt-4"
             >
-              {loading && !feedbackMetrics && !feedbackSectionFailed ? (
-                <TableCardSkeleton titleWidth="w-36" rows={3} />
-              ) : feedbackSectionFailed ? (
-                <p className="text-small text-muted-foreground" role="status">
-                  Feedback reporting could not be loaded. Try refreshing the page.
-                </p>
-              ) : feedbackMetrics ? (
-                <FeedbackQualitySection metrics={feedbackMetrics} />
-              ) : (
-                <p className="text-small text-muted-foreground">
-                  No feedback submitted in this period.
-                </p>
-              )}
-            </ReportsSection>
+              <span className="mr-1 text-caption font-medium text-muted-foreground">
+                Dig deeper
+              </span>
+              {DEEP_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-full border border-border bg-background px-3 py-1 text-caption font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
           </>
         ) : null}
       </AdminContainer>

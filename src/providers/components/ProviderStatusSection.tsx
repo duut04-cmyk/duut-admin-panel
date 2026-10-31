@@ -14,12 +14,7 @@ import {
   sanitizeStatusUpdateError,
   statusChangeRequiresConfirmation,
 } from "../providerStatusValidation";
-import {
-  integrationStatusLabel,
-  integrationStatusVariant,
-  providerStatusLabel,
-  providerStatusVariant,
-} from "./utils";
+import { providerStatusLabel, providerStatusVariant } from "./utils";
 
 type ProviderStatusSectionProps = {
   provider: ProviderDetail;
@@ -126,23 +121,17 @@ export default function ProviderStatusSection({
 
   return (
     <section className="min-w-0 overflow-hidden rounded-card border border-border/60 bg-background shadow-sm">
-      <div className="border-b border-border px-4 py-4 sm:px-5 lg:px-6">
+      <div className="border-b border-border px-4 py-3.5 sm:px-5 lg:px-6">
         <h2 className="text-subheading font-semibold leading-snug text-foreground">
-          Lifecycle status
+          Lifecycle
         </h2>
-        <p className="mt-1 text-small text-muted-foreground">
-          Registry status (Active, Inactive, Suspended). Separate from configuration
-          toggles and connection diagnostics. Suspended applies enabled=false for safe
-          suspension.
-        </p>
       </div>
 
       <div className="p-4 sm:p-5 lg:p-6">
         {saveStatus === "success" ? (
           <AdminCallout variant="success" title="Status updated" className="mb-4">
-            Current status: {providerStatusLabel(provider.status)}. Enabled:{" "}
-            {provider.enabled ? "Yes" : "No"}. Integration:{" "}
-            {integrationStatusLabel(provider.integrationStatus)} (from server).
+            Now {providerStatusLabel(provider.status)}
+            {provider.enabled ? "" : " · disabled"}.
           </AdminCallout>
         ) : null}
 
@@ -167,56 +156,31 @@ export default function ProviderStatusSection({
           </AdminCallout>
         ) : null}
 
-        <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
-          <div>
-            <dt className="text-caption font-medium text-muted-foreground">
-              Current status
-            </dt>
-            <dd className="mt-1">
-              <AdminStatus
-                variant={providerStatusVariant(provider.status)}
-                label={providerStatusLabel(provider.status)}
-              />
-            </dd>
-          </div>
-          <div>
-            <dt className="text-caption font-medium text-muted-foreground">
-              Enabled flag
-            </dt>
-            <dd className="mt-1 text-small">{provider.enabled ? "Yes" : "No"}</dd>
-          </div>
-          <div>
-            <dt className="text-caption font-medium text-muted-foreground">
-              Integration status
-            </dt>
-            <dd className="mt-1">
-              <AdminStatus
-                variant={integrationStatusVariant(provider.integrationStatus)}
-                label={integrationStatusLabel(provider.integrationStatus)}
-              />
-            </dd>
-          </div>
-        </dl>
-
-        {targets.length === 0 ? (
-          <p className="mt-4 text-small text-muted-foreground">
-            No other lifecycle statuses are available to select.
-          </p>
-        ) : (
-          <div className="mt-6 flex flex-wrap gap-3">
-            {targets.map((target) => (
-              <Button
-                key={target}
-                type="button"
-                variant="secondary"
-                disabled={saving}
-                onClick={() => openConfirm(target)}
-              >
-                Set {providerStatusLabel(target)}
-              </Button>
-            ))}
-          </div>
-        )}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <AdminStatus
+            variant={providerStatusVariant(provider.status)}
+            label={providerStatusLabel(provider.status)}
+          />
+          {targets.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {targets.map((target) => (
+                <Button
+                  key={target}
+                  type="button"
+                  variant="secondary"
+                  disabled={saving}
+                  onClick={() => openConfirm(target)}
+                >
+                  Set {providerStatusLabel(target)}
+                </Button>
+              ))}
+            </div>
+          ) : (
+            <p className="text-small text-muted-foreground">
+              No other status available.
+            </p>
+          )}
+        </div>
       </div>
 
       {pendingTarget ? (

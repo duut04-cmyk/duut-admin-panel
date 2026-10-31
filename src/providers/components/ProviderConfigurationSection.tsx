@@ -9,7 +9,6 @@ import Input from "@/common/components/Input";
 import Modal from "@/common/components/Modal";
 import AdminCallout from "@/ui/AdminCallout";
 import AdminCustomSelect from "@/ui/AdminCustomSelect";
-import AdminStatus from "@/ui/AdminStatus";
 import AdminToggle from "@/ui/AdminToggle";
 import { updateProvider } from "../api";
 import {
@@ -22,14 +21,7 @@ import {
   type ProviderConfigurationDraft,
   type ProviderConfigurationFieldErrors,
 } from "../providerUpdateValidation";
-import ProviderEnvironmentBadge from "./ProviderEnvironmentBadge";
 import { formatBoolean } from "./detailFormatting";
-import {
-  integrationStatusLabel,
-  integrationStatusVariant,
-  providerStatusLabel,
-  providerStatusVariant,
-} from "./utils";
 
 type ProviderConfigurationSectionProps = {
   provider: ProviderDetail;
@@ -174,37 +166,18 @@ export default function ProviderConfigurationSection({
   };
 
   const viewGrid = (
-    <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
-      <div>
-        <dt className="text-caption font-medium text-muted-foreground">Display name</dt>
-        <dd className="mt-1 text-small text-foreground">
-          {provider.displayName ?? "—"}
-        </dd>
-      </div>
-      <div className="sm:col-span-2 lg:col-span-3">
-        <dt className="text-caption font-medium text-muted-foreground">Description</dt>
-        <dd className="mt-1 text-small text-foreground">
-          {provider.description ?? "—"}
-        </dd>
-      </div>
-      <div>
-        <dt className="text-caption font-medium text-muted-foreground">Environment</dt>
-        <dd className="mt-1">
-          <ProviderEnvironmentBadge environment={provider.environment} />
-        </dd>
-      </div>
+    <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+      {provider.displayName ? (
+        <div>
+          <dt className="text-caption font-medium text-muted-foreground">
+            Display name
+          </dt>
+          <dd className="mt-1 text-small text-foreground">{provider.displayName}</dd>
+        </div>
+      ) : null}
       <div>
         <dt className="text-caption font-medium text-muted-foreground">Priority</dt>
         <dd className="mt-1 tabular-nums text-small">{provider.priority}</dd>
-      </div>
-      <div>
-        <dt className="text-caption font-medium text-muted-foreground">Status</dt>
-        <dd className="mt-1">
-          <AdminStatus
-            variant={providerStatusVariant(provider.status)}
-            label={providerStatusLabel(provider.status)}
-          />
-        </dd>
       </div>
       <div>
         <dt className="text-caption font-medium text-muted-foreground">Enabled</dt>
@@ -212,29 +185,11 @@ export default function ProviderConfigurationSection({
       </div>
       <div>
         <dt className="text-caption font-medium text-muted-foreground">
-          Orchestration enabled
+          Orchestration
         </dt>
         <dd className="mt-1 text-small">
           {formatBoolean(provider.orchestrationEnabled)}
-        </dd>
-      </div>
-      <div>
-        <dt className="text-caption font-medium text-muted-foreground">
-          Orchestration eligible
-        </dt>
-        <dd className="mt-1 text-small">
-          {formatBoolean(provider.orchestrationEligible)}
-        </dd>
-      </div>
-      <div>
-        <dt className="text-caption font-medium text-muted-foreground">
-          Integration status
-        </dt>
-        <dd className="mt-1">
-          <AdminStatus
-            variant={integrationStatusVariant(provider.integrationStatus)}
-            label={integrationStatusLabel(provider.integrationStatus)}
-          />
+          {provider.orchestrationEligible ? " · eligible" : " · not eligible"}
         </dd>
       </div>
     </dl>
@@ -245,12 +200,8 @@ export default function ProviderConfigurationSection({
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border px-4 py-4 sm:px-5 lg:px-6">
         <div>
           <h2 className="text-subheading font-semibold leading-snug text-foreground">
-            Configuration and operational flags
+            Profile
           </h2>
-          <p className="mt-1 text-small text-muted-foreground">
-            Profile fields and orchestration participation. Activation and lifecycle
-            status are managed in the Lifecycle status section.
-          </p>
         </div>
         {!isEditPage ? (
           <Link

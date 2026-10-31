@@ -17,103 +17,77 @@ export default function DeliveryDetailExtras({ history }: DeliveryDetailExtrasPr
 
   return (
     <section aria-labelledby="delivery-extras-heading">
-      <AdminSectionHeader
-        title="Additional records"
-        description="Cancellation, tracking, and customer feedback when persisted."
-      />
+      <AdminSectionHeader title="Ops" />
 
-      <DeliveryDetailCard className="mt-4 space-y-4 p-4 md:p-5 text-small">
+      <DeliveryDetailCard className="mt-3 space-y-3 p-4 text-small">
         {cancellation ? (
           <div>
-            <h3 className="text-caption font-semibold text-muted-foreground">
+            <p className="text-caption font-medium text-muted-foreground">
               Cancellation
-            </h3>
-            <p className="mt-1 font-medium">{cancellation.status}</p>
-            <p className="text-muted-foreground">
+            </p>
+            <p className="mt-1 font-medium text-foreground">
               {cancellation.reasonCode}
               {cancellation.reasonMessage ? ` — ${cancellation.reasonMessage}` : ""}
             </p>
-            <p className="mt-1 text-caption text-muted-foreground">
+            <p className="mt-0.5 text-caption text-muted-foreground">
+              {cancellation.status}
+              {" · "}
               Requested {formatTimestamp(cancellation.requestedAt)}
               {cancellation.cancelledAt
-                ? ` · Cancelled ${formatTimestamp(cancellation.cancelledAt)}`
+                ? ` · Done ${formatTimestamp(cancellation.cancelledAt)}`
                 : ""}
             </p>
             {cancellation.refund ? (
-              <div className="mt-3 rounded-md border border-border/60 bg-surface/30 px-3 py-2.5">
-                <p className="text-caption font-semibold text-muted-foreground">
-                  Refund (prepaid cancellation)
-                </p>
-                <p className="mt-1 tabular-nums font-medium">
-                  {cancellation.refund.currency} {cancellation.refund.amount.toFixed(2)}{" "}
-                  · {cancellation.refund.status}
-                </p>
-                <p className="mt-1 text-caption text-muted-foreground">
-                  Policy: full remaining prepaid balance (no platform retention fee).
-                </p>
-                {cancellation.refund.gatewayRefundId ? (
-                  <p className="mt-1 break-all font-mono text-caption text-muted-foreground">
-                    Gateway refund: {cancellation.refund.gatewayRefundId}
-                  </p>
-                ) : null}
-                <p className="mt-1 text-caption text-muted-foreground">
-                  Requested {formatTimestamp(cancellation.refund.requestedAt)}
-                  {cancellation.refund.processedAt
-                    ? ` · Processed ${formatTimestamp(cancellation.refund.processedAt)}`
-                    : ""}
-                </p>
-              </div>
-            ) : cancellation.status === "CANCELLED" ? (
-              <p className="mt-2 text-caption text-muted-foreground">
-                No prepaid refund record (payment may be unpaid or already fully
-                refunded).
+              <p className="mt-1.5 tabular-nums text-caption text-muted-foreground">
+                Refund {cancellation.refund.currency}{" "}
+                {cancellation.refund.amount.toFixed(2)} · {cancellation.refund.status}
               </p>
             ) : null}
           </div>
         ) : null}
 
         {tracking.latest ? (
-          <div>
-            <h3 className="text-caption font-semibold text-muted-foreground">
-              Latest tracking
-            </h3>
-            <p className="mt-1 font-medium">
+          <div className={cancellation ? "border-t border-border/60 pt-3" : undefined}>
+            <p className="text-caption font-medium text-muted-foreground">Tracking</p>
+            <p className="mt-1 font-medium text-foreground">
               {tracking.latest.normalizedStatus ??
                 tracking.latest.providerStatus ??
                 "Unknown"}
             </p>
-            <p className="text-caption text-muted-foreground">
+            <p className="mt-0.5 text-caption text-muted-foreground">
               Updated {formatTimestamp(tracking.latest.lastUpdatedAt)}
             </p>
-            {tracking.latest.trackingUrl ? (
-              <p className="mt-1 truncate font-mono text-caption">
-                {tracking.latest.trackingUrl}
-              </p>
-            ) : null}
           </div>
         ) : null}
 
         {rating ? (
-          <div>
-            <h3 className="text-caption font-semibold text-muted-foreground">Rating</h3>
-            <p className="mt-1">
+          <div
+            className={
+              cancellation || tracking.latest
+                ? "border-t border-border/60 pt-3"
+                : undefined
+            }
+          >
+            <p className="text-caption font-medium text-muted-foreground">Rating</p>
+            <p className="mt-1 font-medium text-foreground">
               Driver {rating.driverRating}/5
               {rating.platformRating !== null
                 ? ` · Platform ${rating.platformRating}/5`
                 : ""}
             </p>
-            <p className="text-caption text-muted-foreground">
-              Submitted {formatTimestamp(rating.submittedAt)}
-            </p>
           </div>
         ) : null}
 
         {feedback?.comment ? (
-          <div>
-            <h3 className="text-caption font-semibold text-muted-foreground">
-              Feedback
-            </h3>
-            <p className="mt-1 text-muted-foreground">{feedback.comment}</p>
+          <div
+            className={
+              cancellation || tracking.latest || rating
+                ? "border-t border-border/60 pt-3"
+                : undefined
+            }
+          >
+            <p className="text-caption font-medium text-muted-foreground">Feedback</p>
+            <p className="mt-1 text-foreground">{feedback.comment}</p>
           </div>
         ) : null}
       </DeliveryDetailCard>

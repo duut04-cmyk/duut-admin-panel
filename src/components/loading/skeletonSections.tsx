@@ -198,20 +198,16 @@ export function IssueQueueSkeleton({ rows = 3 }: { rows?: number }) {
 
 export function ReportsPageSkeleton() {
   return (
-    <div className="space-y-8" aria-busy="true">
-      <SnapshotMetricsSkeleton />
-      <div>
-        <AdminSkeleton variant="title" className="mb-3 w-32" />
-        <IssueQueueSkeleton />
+    <div className="space-y-5" aria-busy="true">
+      <MetricCardsSkeleton count={4} />
+      <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.7fr)_minmax(280px,1fr)]">
+        <AdminSkeleton variant="card" className="h-64" />
+        <AdminSkeleton variant="card" className="h-64" />
       </div>
-      <TableCardSkeleton titleWidth="w-48" rows={4} />
-      <div className="space-y-4">
-        <AdminSkeleton variant="title" className="w-56" />
-        <MetricCardsSkeleton count={4} />
-        <TableCardSkeleton rows={4} />
+      <div className="grid items-start gap-4 xl:grid-cols-2">
+        <AdminSkeleton variant="card" className="h-56" />
+        <AdminSkeleton variant="card" className="h-56" />
       </div>
-      <TableCardSkeleton titleWidth="w-44" rows={4} />
-      <TableCardSkeleton titleWidth="w-40" rows={3} />
     </div>
   );
 }

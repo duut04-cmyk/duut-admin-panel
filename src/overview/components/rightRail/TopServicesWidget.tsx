@@ -91,7 +91,7 @@ export default function TopServicesWidget({
 
   return (
     <article
-      className="flex h-full flex-col rounded-card border border-border/60 bg-background shadow-sm"
+      className="flex h-full flex-col rounded-[10px] border border-border bg-white shadow-[0_8px_24px_-16px_rgba(23,23,23,0.14)]"
       aria-labelledby="top-services-heading"
     >
       <div className="flex items-center justify-between gap-3 px-4 pb-2 pt-4 sm:px-5">

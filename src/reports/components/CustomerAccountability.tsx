@@ -1,10 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import type { CustomerAccountabilityRow } from "@/reports/accountability";
+import ListPagination from "@/components/ListPagination";
 import { ListRowsSkeleton } from "@/components/loading/skeletonSections";
 import AdminEmptyState from "@/ui/AdminEmptyState";
 import CustomerStatusPill from "@/customers/components/CustomerStatusPill";
+
+const PAGE_SIZE = 10;
 
 type CustomerAccountabilityProps = {
   rows: CustomerAccountabilityRow[];
@@ -13,7 +17,6 @@ type CustomerAccountabilityProps = {
   unavailable?: boolean;
   sampleAtRiskCount?: number | null;
   sampleAtRiskKnown?: boolean;
-  /** Platform total from list API (unfiltered sample fetch); null if unknown. */
   platformTotal?: number | null;
 };
 
@@ -26,6 +29,9 @@ function formatDate(iso: string | null): string {
   });
 }
 
+const thClass =
+  "px-4 py-3 text-caption font-semibold uppercase tracking-wide text-muted-foreground md:px-5";
+
 export default function CustomerAccountability({
   rows,
   atRiskRows,
@@ -35,6 +41,8 @@ export default function CustomerAccountability({
   sampleAtRiskKnown = false,
   platformTotal = null,
 }: CustomerAccountabilityProps) {
+  const [page, setPage] = useState(1);
+
   if (loading) {
     return <ListRowsSkeleton rows={4} />;
   }
@@ -61,56 +69,59 @@ export default function CustomerAccountability({
   const verified = rows.filter((row) => row.emailVerified).length;
   const withDeliveries = rows.filter((row) => row.totalDeliveries > 0).length;
 
-  const sampleSizeLabel =
-    platformTotal != null
-      ? `${rows.length} of up to ${Math.min(100, platformTotal).toLocaleString()} loaded`
-      : `${rows.length} in sample`;
+  const total = atRiskRows.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageAtRisk = atRiskRows.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
 
   return (
     <div className="space-y-4">
       <p className="text-caption text-muted-foreground">
-        Summary counts below are from the loaded customer sample ({sampleSizeLabel}
+        Sample of {rows.length}
         {platformTotal != null
-          ? `; ${platformTotal.toLocaleString()} customers platform-wide`
+          ? ` (platform total ${platformTotal.toLocaleString()})`
           : ""}
-        ).
+        . At-risk counts apply to this sample only.
       </p>
+
       <div className="grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-4">
         {[
           { label: "In sample", value: rows.length },
-          { label: "Active (sample)", value: active },
-          { label: "Verified (sample)", value: verified },
-          { label: "With deliveries (sample)", value: withDeliveries },
+          { label: "Active", value: active },
+          { label: "Verified", value: verified },
+          { label: "With deliveries", value: withDeliveries },
         ].map((item) => (
           <div
             key={item.label}
-            className="rounded-card border border-border/60 bg-background p-4"
+            className="rounded-[10px] border border-border bg-white p-4 shadow-[0_8px_24px_-16px_rgba(23,23,23,0.1)]"
           >
             <p className="text-caption text-muted-foreground">{item.label}</p>
-            <p className="mt-1 text-body font-semibold tabular-nums">{item.value}</p>
+            <p className="mt-1 text-body font-bold tabular-nums tracking-tight">
+              {item.value}
+            </p>
           </div>
         ))}
       </div>
 
       {suspended > 0 ? (
-        <p className="text-small text-muted-foreground">
+        <p className="text-small text-amber-800">
           {suspended} suspended in this sample require review.
         </p>
       ) : null}
 
-      <article className="min-w-0 overflow-hidden rounded-card border border-border/60 bg-background shadow-sm">
+      <article className="min-w-0 overflow-hidden rounded-[10px] border border-border bg-white shadow-[0_8px_24px_-16px_rgba(23,23,23,0.14)]">
         <div className="border-b border-border px-4 py-4 sm:px-5">
-          <h3 className="text-small font-semibold text-foreground">
-            At-risk customers
-          </h3>
-          <p className="mt-1 text-caption text-muted-foreground">
-            Suspended accounts or unverified users with delivery activity (in the loaded
-            customer sample only).
+          <h3 className="text-small font-bold text-foreground">At-risk customers</h3>
+          <p className="mt-0.5 text-caption text-muted-foreground">
+            Suspended accounts or unverified users with delivery activity.
           </p>
           {sampleAtRiskKnown ? (
             <p className="mt-1 text-caption text-muted-foreground">
               {sampleAtRiskCount === 0
-                ? "No at-risk customers in this sample."
+                ? "None in this sample."
                 : `${sampleAtRiskCount} at-risk in this sample.`}
             </p>
           ) : null}
@@ -121,59 +132,59 @@ export default function CustomerAccountability({
             No at-risk customers in the loaded sample.
           </p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[720px] text-left text-small">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
-                    Customer
-                  </th>
-                  <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
-                    Status
-                  </th>
-                  <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
-                    Deliveries
-                  </th>
-                  <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
-                    Last activity
-                  </th>
-                  <th className="px-4 py-3 text-caption font-semibold text-muted-foreground md:px-5">
-                    Note
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {atRiskRows.map((row) => (
-                  <tr
-                    key={row.id}
-                    className="border-b border-border/60 last:border-b-0"
-                  >
-                    <td className="px-4 py-3 md:px-5">
-                      <Link
-                        href={`/customers/${row.id}`}
-                        className="font-medium text-accent hover:underline"
-                      >
-                        {row.name}
-                      </Link>
-                      <p className="text-caption text-muted-foreground">{row.email}</p>
-                    </td>
-                    <td className="px-4 py-3 md:px-5">
-                      <CustomerStatusPill status={row.status} />
-                    </td>
-                    <td className="px-4 py-3 tabular-nums md:px-5">
-                      {row.totalDeliveries}
-                    </td>
-                    <td className="px-4 py-3 tabular-nums text-muted-foreground md:px-5">
-                      {formatDate(row.lastDeliveryAt)}
-                    </td>
-                    <td className="px-4 py-3 text-muted-foreground md:px-5">
-                      {row.riskNote}
-                    </td>
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px] text-left text-small">
+                <thead>
+                  <tr className="border-b border-border bg-[#FFFBF5]/60">
+                    <th className={thClass}>Customer</th>
+                    <th className={thClass}>Status</th>
+                    <th className={thClass}>Deliveries</th>
+                    <th className={thClass}>Last activity</th>
+                    <th className={thClass}>Note</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {pageAtRisk.map((row) => (
+                    <tr
+                      key={row.id}
+                      className="border-b border-border last:border-b-0 transition-colors hover:bg-surface/40"
+                    >
+                      <td className="px-4 py-3.5 md:px-5">
+                        <Link
+                          href={`/customers/${row.id}`}
+                          className="font-semibold text-accent hover:underline"
+                        >
+                          {row.name}
+                        </Link>
+                        <p className="text-caption text-muted-foreground">
+                          {row.email}
+                        </p>
+                      </td>
+                      <td className="px-4 py-3.5 md:px-5">
+                        <CustomerStatusPill status={row.status} />
+                      </td>
+                      <td className="px-4 py-3.5 tabular-nums md:px-5">
+                        {row.totalDeliveries}
+                      </td>
+                      <td className="px-4 py-3.5 tabular-nums text-muted-foreground md:px-5">
+                        {formatDate(row.lastDeliveryAt)}
+                      </td>
+                      <td className="px-4 py-3.5 text-muted-foreground md:px-5">
+                        {row.riskNote}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <ListPagination
+              page={currentPage}
+              pageSize={PAGE_SIZE}
+              total={total}
+              onPageChange={setPage}
+            />
+          </>
         )}
       </article>
     </div>

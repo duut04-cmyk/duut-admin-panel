@@ -26,10 +26,10 @@ export default function AccountSection({
     <ReportsSection
       id="settings-account"
       title="Admin account"
-      description="Your signed-in administrator profile."
+      description="Signed-in profile"
     >
       {loading ? (
-        <AdminSkeleton variant="card" className="h-28" aria-hidden="true" />
+        <AdminSkeleton variant="card" className="h-24" aria-hidden="true" />
       ) : null}
 
       {error ? (
@@ -49,10 +49,10 @@ export default function AccountSection({
       ) : null}
 
       {!loading && account ? (
-        <article className="flex flex-col gap-4 rounded-card border border-border/60 bg-background p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-5">
-          <div className="flex items-center gap-4">
+        <article className="flex flex-col gap-3 rounded-card border border-border/60 bg-background p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
             <span
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent text-body font-bold text-accent-foreground"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent text-small font-bold text-accent-foreground"
               aria-hidden="true"
             >
               {getInitials(account.name)}
@@ -60,18 +60,17 @@ export default function AccountSection({
             <div className="min-w-0">
               <p className="text-body font-semibold text-foreground">{account.name}</p>
               <p className="text-small text-muted-foreground">{account.email}</p>
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-2 flex flex-wrap gap-1.5">
                 <AdminBadge variant="accent">{account.role}</AdminBadge>
                 <AdminBadge variant={account.emailVerified ? "success" : "warning"}>
-                  {account.emailVerified ? "Email verified" : "Email unverified"}
+                  {account.emailVerified ? "Verified" : "Unverified"}
                 </AdminBadge>
                 <AdminBadge variant="neutral">{account.status}</AdminBadge>
               </div>
             </div>
           </div>
-          <p className="text-caption text-muted-foreground sm:max-w-xs sm:text-right">
-            Password changes and admin user management are not available in this
-            release.
+          <p className="text-caption text-muted-foreground sm:text-right">
+            Password / user admin not available
           </p>
         </article>
       ) : null}

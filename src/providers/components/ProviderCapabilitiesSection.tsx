@@ -176,10 +176,6 @@ export default function ProviderCapabilitiesSection({
           <h2 className="text-subheading font-semibold leading-snug text-foreground">
             Capabilities
           </h2>
-          <p className="mt-1 text-small text-muted-foreground">
-            Adapter capabilities registered for this provider. Saving replaces the full
-            set.
-          </p>
         </div>
         {!editing ? (
           <Button type="button" variant="secondary" onClick={startEditing}>
